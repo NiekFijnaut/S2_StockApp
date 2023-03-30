@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace StockAppForms
 {
@@ -15,6 +16,37 @@ namespace StockAppForms
         public LoginForm()
         {
             InitializeComponent();
+
+            
+
+        }
+        
+        private void btnLoginLog_Click(object sender, EventArgs e)
+        {
+/*            if (txtPasswordLog.Text == null || txtUserNameLog.Text == null)
+            {
+                MessageBox.Show("Not all required fields are filled in");
+            }
+            if (txtUserNameLog.Text != ... && txtPasswordLog.Text != ...)
+            {
+                MessageBox.Show("password or username is incorrect");
+            }
+            else 
+            {*/
+                DashboardForm dashboard = new DashboardForm();
+                dashboard.Show();
+            //}
+        }
+
+        private void LoginForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnCreateAccountLog_Click(object sender, EventArgs e)
+        {
+            AccountForm account = new AccountForm();
+            account.Show();
         }
     }
 }

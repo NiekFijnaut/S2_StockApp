@@ -55,7 +55,6 @@
             this.btnRemoveStocks.TabIndex = 3;
             this.btnRemoveStocks.Text = "Remove Stock";
             this.btnRemoveStocks.UseVisualStyleBackColor = true;
-            this.btnRemoveStocks.Click += new System.EventHandler(this.button2_Click);
             // 
             // AccountStocks
             // 

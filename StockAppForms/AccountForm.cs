@@ -29,15 +29,15 @@ namespace StockAppForms
 
         }
 
-        private void btnLoginAcc_Click(object sender, EventArgs e)
-        {
-            LoginForm login = new LoginForm();
-            login.Show();
-        }
 
         private void btnCreateAccountAcc_Click(object sender, EventArgs e)
         {
-            if (txtPasswordAcc.Text.Length < 8)
+            if (txtPasswordAcc.Text == null || txtPasswordAcc.Text == "" || txtEmailAcc.Text == null || txtEmailAcc.Text == "" || txtUserNameAcc.Text == null || txtUserNameAcc.Text == "" || cbInterestAcc.Text == null || cbInterestAcc.Text == "" || cbRegionAcc.Text == null || cbRegionAcc.Text == "")
+            {
+                MessageBox.Show("not all fields are filled in");
+            }
+
+            else if (txtPasswordAcc.Text.Length < 8)
             {
                 MessageBox.Show("Password must be at least 8 characters");
             }
@@ -55,14 +55,27 @@ namespace StockAppForms
                 {
                     MessageBox.Show("Age must be at least 18 years old");
                 }
+
+                
+
                 else
                 {
+                    AccountContainer accountContainer = new AccountContainer();
+
                     Account account = new Account(txtUserNameAcc.Text, txtEmailAcc.Text, cbRegionAcc.Text, cbInterestAcc.Text, dtpAgeAcc.Value);
+                    accountContainer.CreateAccount(account);
+
                     MessageBox.Show("Account has been created");
                     LoginForm login = new LoginForm();
                     login.Show();
                 }
             }
+        }
+
+        private void btnLoginAcc_Click(object sender, EventArgs e)
+        {
+            LoginForm login = new LoginForm();
+            login.Show();
         }
     }
 }
