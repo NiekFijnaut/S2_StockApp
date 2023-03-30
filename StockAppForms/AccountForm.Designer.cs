@@ -51,7 +51,7 @@
             this.label1.Font = new System.Drawing.Font("Segoe UI", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label1.Location = new System.Drawing.Point(316, 37);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(160, 46);
+            this.label1.Size = new System.Drawing.Size(154, 45);
             this.label1.TabIndex = 0;
             this.label1.Text = "Welcome";
             // 
@@ -161,6 +161,7 @@
             this.btnCreateAccountAcc.TabIndex = 13;
             this.btnCreateAccountAcc.Text = "Create Account";
             this.btnCreateAccountAcc.UseVisualStyleBackColor = true;
+            this.btnCreateAccountAcc.Click += new System.EventHandler(this.btnCreateAccountAcc_Click);
             // 
             // btnLoginAcc
             // 
@@ -170,6 +171,7 @@
             this.btnLoginAcc.TabIndex = 14;
             this.btnLoginAcc.Text = "Login";
             this.btnLoginAcc.UseVisualStyleBackColor = true;
+            this.btnLoginAcc.Click += new System.EventHandler(this.btnLoginAcc_Click);
             // 
             // AccountForm
             // 

@@ -45,6 +45,7 @@
             this.btnLoginLog.TabIndex = 23;
             this.btnLoginLog.Text = "Login";
             this.btnLoginLog.UseVisualStyleBackColor = true;
+            this.btnLoginLog.Click += new System.EventHandler(this.btnLoginLog_Click);
             // 
             // btnCreateAccountLog
             // 
@@ -54,6 +55,7 @@
             this.btnCreateAccountLog.TabIndex = 22;
             this.btnCreateAccountLog.Text = "Create Account";
             this.btnCreateAccountLog.UseVisualStyleBackColor = true;
+            this.btnCreateAccountLog.Click += new System.EventHandler(this.btnCreateAccountLog_Click);
             // 
             // txtPasswordLog
             // 
@@ -93,7 +95,7 @@
             this.label1.Font = new System.Drawing.Font("Segoe UI", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label1.Location = new System.Drawing.Point(319, 42);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(160, 46);
+            this.label1.Size = new System.Drawing.Size(154, 45);
             this.label1.TabIndex = 15;
             this.label1.Text = "Welcome";
             // 
@@ -112,6 +114,7 @@
             this.Name = "LoginForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "LoginForm";
+            this.Load += new System.EventHandler(this.LoginForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
