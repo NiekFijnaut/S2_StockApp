@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Business
 {
-    internal class Stock
+    public class Stock
     {
+        public long StockID { get; set; }
         public string Name { get; set; }
         public string Ticker { get; set; }
         public float Price { get; set; }

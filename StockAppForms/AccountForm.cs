@@ -4,10 +4,14 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Business;
+using Data;
+using Microsoft.Data.SqlClient;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace StockAppForms
 {
@@ -41,6 +45,12 @@ namespace StockAppForms
             {
                 MessageBox.Show("Password must be at least 8 characters");
             }
+
+            else if (!txtEmailAcc.Text.Contains("@"))
+            {
+                MessageBox.Show("Email must contain @");
+            }
+            
             else
             {
                 DateTime selectedDate = dtpAgeAcc.Value;
@@ -60,14 +70,22 @@ namespace StockAppForms
 
                 else
                 {
-                    AccountContainer accountContainer = new AccountContainer();
-
                     Account account = new Account(txtUserNameAcc.Text, txtEmailAcc.Text, cbRegionAcc.Text, cbInterestAcc.Text, dtpAgeAcc.Value);
-                    accountContainer.CreateAccount(account);
+                   
+                    try
+                    {
+                        AccountContainer accountContainer = new AccountContainer();
+                        accountContainer.CreateAccount(account);
 
-                    MessageBox.Show("Account has been created");
-                    LoginForm login = new LoginForm();
-                    login.Show();
+                        MessageBox.Show("Account has been created");
+                        LoginForm login = new LoginForm();
+                        login.Show();
+                    }
+
+                    catch (Exception exmsg)
+                    {
+                        MessageBox.Show(exmsg.Message);
+                    }
                 }
             }
         }
@@ -77,5 +95,6 @@ namespace StockAppForms
             LoginForm login = new LoginForm();
             login.Show();
         }
+
     }
 }

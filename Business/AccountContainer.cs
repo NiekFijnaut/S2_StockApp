@@ -14,8 +14,24 @@ namespace Business
         private AccountDAL accountDAL = new AccountDAL();
         public void CreateAccount(Account account)
         {
-            AccountDTO accountDTO = new AccountDTO(account.AccountID, account.Username, account.Email, account.Region, account.Interest, account.Age, account.StockID);
-            accountDAL.AddAccount(accountDTO);
+            try
+            {
+                AccountDTO accountDTO = new AccountDTO(
+                account.AccountID,
+                account.Username,
+                account.Email,
+                account.Region,
+                account.Interest,
+                account.Age,
+                account.StockID);
+                accountDAL.AddAccount(accountDTO);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            
         }
+
     }
 }

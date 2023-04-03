@@ -134,6 +134,8 @@
             // 
             this.cbInterestAcc.FormattingEnabled = true;
             this.cbInterestAcc.Location = new System.Drawing.Point(415, 136);
+            this.cbInterestAcc.MaxDropDownItems = 12;
+            this.cbInterestAcc.MaxLength = 100;
             this.cbInterestAcc.Name = "cbInterestAcc";
             this.cbInterestAcc.Size = new System.Drawing.Size(185, 28);
             this.cbInterestAcc.TabIndex = 10;

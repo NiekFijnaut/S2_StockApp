@@ -23,19 +23,23 @@ namespace StockAppForms
         
         private void btnLoginLog_Click(object sender, EventArgs e)
         {
-/*            if (txtPasswordLog.Text == null || txtUserNameLog.Text == null)
+          /*if (txtPasswordLog.Text == null || txtUserNameLog.Text == null)
             {
                 MessageBox.Show("Not all required fields are filled in");
             }
             if (txtUserNameLog.Text != ... && txtPasswordLog.Text != ...)
             {
                 MessageBox.Show("password or username is incorrect");
+            }*/
+            if (txtPasswordLog.Text == null || txtPasswordLog.Text == "" || txtUserNameLog.Text == null || txtUserNameLog.Text == "")
+            {
+                MessageBox.Show("Not all fields are filled in");
             }
             else 
-            {*/
+            {
                 DashboardForm dashboard = new DashboardForm();
                 dashboard.Show();
-            //}
+            }
         }
 
         private void LoginForm_Load(object sender, EventArgs e)
