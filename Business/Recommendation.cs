@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Business
 {
-    internal class Recommendation
+    public class Recommendation
     {
+        //public string Interest { get; set; }
     }
 }

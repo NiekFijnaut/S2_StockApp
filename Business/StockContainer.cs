@@ -15,9 +15,14 @@ namespace Business
         {
             StockDTO stockDTO = new StockDTO(
                 stock.StockID, 
-                stock.Name, 
-                stock.Ticker, 
-                stock.Price, 
+                stock.AdjustedClose, 
+                stock.Date,
+                stock.Symbol,
+                stock.Open, 
+                stock.High,
+                stock.Low, 
+                stock.Close,
+                stock.DividendAmount,
                 stock.Volume);
             stockDAL.AddStock(stockDTO);
         }
