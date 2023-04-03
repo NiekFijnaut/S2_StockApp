@@ -6,5 +6,10 @@ using System.Threading.Tasks;
 
 namespace Interface
 {
-    public record StockDTO(string Name, string Ticker, float Price, int Volume);
+    public record StockDTO(
+        long StockID, 
+        string Name, 
+        string Ticker, 
+        float Price, 
+        int Volume);
 }
