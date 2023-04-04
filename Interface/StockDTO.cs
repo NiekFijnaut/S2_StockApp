@@ -8,14 +8,12 @@ using System.Threading.Tasks;
 namespace Interface
 {
     public record StockDTO(
-        long StockID, 
-        double AdjustedClose,
-        string Date,
+        long StockID,
+        DateTime Date,
         string Symbol, 
         double Open,
         double High,
         double Low,
         double Close,
-        double DividendAmount, 
         int Volume);
 }

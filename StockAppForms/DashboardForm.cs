@@ -1,126 +1,130 @@
 ﻿using Business;
-using CsvHelper;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection.Metadata;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
+using System.Text.Json;
+using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
+using System.Windows.Forms;
+using System.Data;
 
 namespace StockAppForms
 {
     public partial class DashboardForm : Form
     {
+        // de constante van de api kunne in een aparte klasse misschien zelfs wel gewoon de hele connectie string dat is afhankelijk van extra bijgevoegde gegevens per functie
+        private const string APIKEY = "ZN0C9Q4C0LG3REEE";
+
+        private const string BaseUrl = "https://www.alphavantage.co/query";
+
+        string ApiFunction = "TIME_SERIES_INTRADAY"; 
         public DashboardForm()
         {
+           
             InitializeComponent();
+            string[] itemsInterest = new string[] { "1min", "5min", "15min", "30min", "60min" };
+            cbinterval.Items.AddRange(itemsInterest);
         }
-
-        
 
         private async void btnAddStocks_Click(object sender, EventArgs e)
         {
+            string Interval = cbinterval.Text;
+            string symbol = txtSymbolAdd.Text.Trim().ToUpper();
+            if (string.IsNullOrEmpty(symbol) )
             {
-                double stock100DayTotal = 0;
-                double stock50DayTotal = 0;
-                double stock20DayTotal = 0;
-                int dayCounter = 0;
-                string printOutSpacer = "  ";
-
-                string Symbol = txtSymbolAdd.Text;
-
-                string APIKEY = "ZN0C9Q4C0LG3REEE";
-
-                string queryURL = $"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol={Symbol}&apikey={APIKEY}&datatype=csv";
-
-                WebClient webClient = new WebClient();
-
-                string dateTime = Symbol + "-" + DateTime.Now.ToString("MM-dd-yyyy");
-
-                string directoryPath = (@"C:\Users\" + Environment.UserName + @"\Desktop\");
-                string fileName = (dateTime + ".csv");
-
-                if (!File.Exists(directoryPath + fileName))
-                {
-                    string data = webClient.DownloadString(queryURL);
-                    Directory.CreateDirectory(directoryPath + fileName);
-                        
-                    string fullPath = Path.Combine(directoryPath, fileName);
-                    using (StreamWriter writer = new StreamWriter(fullPath))
-                    {
-                        File.WriteAllText(directoryPath + fileName, data);
-                    }
-                }
-
-                using (StreamReader reader = new StreamReader(@"C:\Users\" + Environment.UserName + @"\Desktop\" + dateTime + ".csv"))
-                using (CsvReader csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-                {
-                      
-                    List<Stock> stockList = new List<Stock>();
-
-                    csv.Read();
-                    csv.ReadHeader();
-                    while (csv.Read())
-                    {
-
-                    Stock stock = new Stock
-                    (
-                        csv.GetField<double>("adjusted_close"),
-                        DateTime.Parse(csv.GetField<string>("timestamp")).ToString("MM-dd-yyyy"),
-                        Symbol,
-                        csv.GetField<double>("open"),
-                        csv.GetField<double>("high"),
-                        csv.GetField<double>("low"),
-                        csv.GetField<double>("close"),
-                        csv.GetField<double>("dividend_amount"),
-                        csv.GetField<int>("volume")
-                    );
-
-                        stock100DayTotal += stock.AdjustedClose;
-                        dayCounter++;
-
-                        if (dayCounter == 20)
-                        {
-                            stock20DayTotal = stock100DayTotal;
-                        }
-
-                        if (dayCounter == 50)
-                        {
-                            stock50DayTotal = stock100DayTotal;
-                        }
-
-                        stockList.Add(stock);
-                    }
-
-                    foreach (var item in stockList)
-                    {
-                        Console.WriteLine(
-                            $"{item.Symbol}{printOutSpacer}" +
-                            $"Open: ${item.Open.ToString("0.00")}{printOutSpacer}" +
-                            $"High: $ {item.High.ToString("0.00")}{printOutSpacer}" +
-                            $"Low: ${item.Low.ToString("0.00")}{printOutSpacer}" +
-                            $"Close: ${item.Close.ToString("0.00")}{printOutSpacer}" +
-                            $"Adjusted Close: ${item.AdjustedClose.ToString("0.00")}{printOutSpacer}" +
-                            $"Volume: {item.Volume}{printOutSpacer}" +
-                            $"DividendAmount: ${item.DividendAmount.ToString("0.00")}{printOutSpacer}" +
-                            $"{item.Date}");
-
-                        Thread.Sleep(100);
-                    }
-
-                    Console.WriteLine($"{Symbol} 100 Day Moving Average: ${(stock100DayTotal / 100).ToString("0.00")}");
-                    Console.WriteLine($"{Symbol} 50 Day Moving Average: ${(stock50DayTotal / 50).ToString("0.00")}");
-                    Console.WriteLine($"{Symbol} 20 Day Moving Average: ${(stock20DayTotal / 20).ToString("0.00")}");
-                }
-
-                Console.Read();
-
+                MessageBox.Show("Please enter a stock symbol");
             }
 
+            string apiurl = $"{BaseUrl}?function={ApiFunction}&symbol={symbol}&interval={Interval}&apikey={APIKEY}";
+            
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage response = await client.GetAsync(apiurl);
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    var data = JObject.Parse(json);
+
+                    string symbolName = data?["Meta Data"]?["2. Symbol"]?.ToString();
+                    string lastRefreshed = data?["Meta Data"]?["3. Last Refreshed"]?.ToString();
+                    string interval = data?["Meta Data"]?["4. Interval"]?.ToString();
+                    string info = data?["Meta Data"]?["1. Information"]?.ToString();
+
+                    if (!string.IsNullOrEmpty(symbolName))
+                    {
+                        labelSymbolName.Text = symbolName;
+                    }
+
+                    if (!string.IsNullOrEmpty(lastRefreshed))
+                    {
+                        labelLastRefreshed.Text = lastRefreshed;
+                    }
+
+                    if (!string.IsNullOrEmpty(interval))
+                    {
+                        labelInterval.Text = interval;
+                    }
+
+                    var timeSeries = data?["Time Series "+ "(" + Interval + ")"];
+                    if (timeSeries != null)
+                    {
+                       
+                        List<Stock> timeSeriesData = new List<Stock>();
+                        foreach (JProperty property in timeSeries.Children<JProperty>())
+                        {
+                            DateTime date = DateTime.Parse(property.Name);
+                            double open = double.Parse(property.Value["1. open"].ToString(), CultureInfo.GetCultureInfo("en-US"));
+                            double high = double.Parse(property.Value["2. high"].ToString(), CultureInfo.GetCultureInfo("en-US"));
+                            double low = double.Parse(property.Value["3. low"].ToString(), CultureInfo.GetCultureInfo("en-US"));
+                            double close = double.Parse(property.Value["4. close"].ToString(), CultureInfo.GetCultureInfo("en-US"));
+                            int volume = int.Parse(property.Value["5. volume"].ToString());
+
+                            // hier wordt de klasse aangevuld met de gevraagde info
+                            Stock stock = new Stock
+                            (
+                                date,
+                                symbolName,
+                                open,
+                                high,
+                                low,
+                                close,
+                                volume
+                            );
+
+                            timeSeriesData.Add(stock);
+                            
+                        }
+                        /*dit kan later ook met regio vercshillen mocht daar tijd voor zijn
+                        DataGridViewCellStyle cellStyle = new DataGridViewCellStyle();
+                        cellStyle.FormatProvider = CultureInfo.GetCultureInfo("en-US");
+
+                        dataGridView1.DefaultCellStyle = cellStyle;*/
+
+                        dataGridView1.DataSource = timeSeriesData;
+                        dataGridView1.Columns["StockID"].Visible = false;
+
+                       // StockContainer stockContainer = new StockContainer();
+                        // stockContainer.AddStock(stock);
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Time series data not available.");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show($"API request failed with status code: {response.StatusCode}");
+                }
+            }
         }
     }
 }
