@@ -66,11 +66,9 @@ namespace StockAppForms
                     MessageBox.Show("Age must be at least 18 years old");
                 }
 
-                
-
                 else
                 {
-                    Account account = new Account(txtUserNameAcc.Text, txtEmailAcc.Text, cbRegionAcc.Text, cbInterestAcc.Text, dtpAgeAcc.Value);
+                    Account account = new Account(txtUserNameAcc.Text, txtPasswordAcc.Text, txtEmailAcc.Text, cbRegionAcc.Text, cbInterestAcc.Text, dtpAgeAcc.Value);
                    
                     try
                     {

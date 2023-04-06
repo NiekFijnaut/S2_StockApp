@@ -19,6 +19,7 @@ namespace Business
                 AccountDTO accountDTO = new AccountDTO(
                 account.AccountID,
                 account.Username,
+                account.PasswordHash, 
                 account.Email,
                 account.Region,
                 account.Interest,

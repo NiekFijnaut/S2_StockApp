@@ -39,10 +39,11 @@ namespace Data
 
             }
             //using (SqlCommand cmd = new SqlCommand("INSERT INTO Account (Username, Email, Region, Interest, Age, StockID) VALUES (@Username, @Email, @Region, @Interest, @Age, @StockID)", Sqlcon))
-            using (SqlCommand cmd = new SqlCommand("INSERT INTO Account (Username, Email, Region, Interest, Age) VALUES (@Username, @Email, @Region, @Interest, @Age)", Sqlcon))
+            using (SqlCommand cmd = new SqlCommand("INSERT INTO Account (Username, PasswordHash, Email, Region, Interest, Age) VALUES (@Username, @PasswordHash, @Email, @Region, @Interest, @Age)", Sqlcon))
             {
 
                 cmd.Parameters.AddWithValue("@Username", accountDTO.Username);
+                cmd.Parameters.AddWithValue("@PasswordHash", accountDTO.PasswordHash);
                 cmd.Parameters.AddWithValue("@Email", accountDTO.Email);
                 cmd.Parameters.AddWithValue("@Region", accountDTO.Region);
                 cmd.Parameters.AddWithValue("@Interest", accountDTO.Interest);
