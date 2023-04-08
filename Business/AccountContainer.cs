@@ -29,10 +29,15 @@ namespace Business
             }
             catch (Exception ex)
             {
-                throw;
-            }
-            
+                if (ex.Message == "Username has already been chosen")
+                {
+                    throw;
+                }
+                if (ex.Message == "Password doesnt match with the Username")
+                {
+                    throw;
+                }
+            }            
         }
-
     }
 }

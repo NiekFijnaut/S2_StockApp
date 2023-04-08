@@ -8,6 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Security.Cryptography;
+using Interface;
+using Business;
+using Data;
 
 namespace StockAppForms
 {
@@ -23,22 +27,26 @@ namespace StockAppForms
         
         private void btnLoginLog_Click(object sender, EventArgs e)
         {
-          /*if (txtPasswordLog.Text == null || txtUserNameLog.Text == null)
-            {
-                MessageBox.Show("Not all required fields are filled in");
-            }
-            if (txtUserNameLog.Text != ... && txtPasswordLog.Text != ...)
-            {
-                MessageBox.Show("password or username is incorrect");
-            }*/
+
+
             if (txtPasswordLog.Text == null || txtPasswordLog.Text == "" || txtUserNameLog.Text == null || txtUserNameLog.Text == "")
             {
                 MessageBox.Show("Not all fields are filled in");
             }
-            else 
+
+            
+            try
             {
+
+                AccountDTO account = AccountDAL.VerifyPassword();
+
                 DashboardForm dashboard = new DashboardForm();
                 dashboard.Show();
+
+            }
+            catch (Exception exmsg)
+            {
+                MessageBox.Show(exmsg.Message);
             }
         }
 

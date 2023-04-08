@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -36,12 +37,20 @@ namespace StockAppForms
 
         private void btnCreateAccountAcc_Click(object sender, EventArgs e)
         {
-            if (txtPasswordAcc.Text == null || txtPasswordAcc.Text == "" || txtEmailAcc.Text == null || txtEmailAcc.Text == "" || txtUserNameAcc.Text == null || txtUserNameAcc.Text == "" || cbInterestAcc.Text == null || cbInterestAcc.Text == "" || cbRegionAcc.Text == null || cbRegionAcc.Text == "")
+
+            string password = txtPasswordAcc.Text;
+
+            SHA256 sha256 = SHA256.Create();
+            byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+            byte[] hashedBytes = sha256.ComputeHash(passwordBytes);
+            string hashedPassword = Convert.ToBase64String(hashedBytes);
+
+            if (password == null || password == "" || txtEmailAcc.Text == null || txtEmailAcc.Text == "" || txtUserNameAcc.Text == null || txtUserNameAcc.Text == "" || cbInterestAcc.Text == null || cbInterestAcc.Text == "" || cbRegionAcc.Text == null || cbRegionAcc.Text == "")
             {
                 MessageBox.Show("not all fields are filled in");
             }
 
-            else if (txtPasswordAcc.Text.Length < 8)
+            else if (password.Length < 8)
             {
                 MessageBox.Show("Password must be at least 8 characters");
             }
@@ -68,7 +77,7 @@ namespace StockAppForms
 
                 else
                 {
-                    Account account = new Account(txtUserNameAcc.Text, txtPasswordAcc.Text, txtEmailAcc.Text, cbRegionAcc.Text, cbInterestAcc.Text, dtpAgeAcc.Value);
+                    Account account = new Account(txtUserNameAcc.Text, hashedPassword, txtEmailAcc.Text, cbRegionAcc.Text, cbInterestAcc.Text, dtpAgeAcc.Value);
                    
                     try
                     {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Interface;
 using Azure;
 using Microsoft.Identity.Client;
-
+using System.Security.Cryptography;
 
 namespace Data
 {
@@ -21,7 +21,6 @@ namespace Data
 
             using (SqlCommand cmd1 = new SqlCommand(UsernameQuery, Sqlcon))
             {
-                // Add a parameter for the username
                 cmd1.Parameters.AddWithValue("@username", accountDTO.Username);
 
                 Sqlcon.Open();
@@ -30,14 +29,16 @@ namespace Data
 
                 Sqlcon.Close();
 
-                // If count is 0, the username is unique
+                // If count is 0, username is uniek
                 bool isUnique = count == 0;
                 if (!isUnique)
                 {
                     throw new Exception("Username has already been chosen");
                 }
-
             }
+
+            
+
             //using (SqlCommand cmd = new SqlCommand("INSERT INTO Account (Username, Email, Region, Interest, Age, StockID) VALUES (@Username, @Email, @Region, @Interest, @Age, @StockID)", Sqlcon))
             using (SqlCommand cmd = new SqlCommand("INSERT INTO Account (Username, PasswordHash, Email, Region, Interest, Age) VALUES (@Username, @PasswordHash, @Email, @Region, @Interest, @Age)", Sqlcon))
             {
@@ -52,6 +53,30 @@ namespace Data
 
                 Sqlcon.Open();
                 cmd.ExecuteNonQuery();
+            }
+        }
+        public bool VerifyPassword(AccountDTO accountDTO)
+        {
+            string PasswordHashQuery = "SELECT PasswordHash, AccountID FROM Account WHERE Username = @Username";
+
+            using SqlCommand command = new SqlCommand(PasswordHashQuery, Sqlcon);
+            {
+                command.Parameters.AddWithValue("@Username", accountDTO.Username);
+                string hashedPassword = (string)command.ExecuteScalar();
+
+                // ingevoerde wachtwoord hashen en vergelijken
+                SHA256 sha256 = SHA256.Create();
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(accountDTO.PasswordHash);
+                byte[] hashedBytes = sha256.ComputeHash(passwordBytes);
+                string enteredHash = Convert.ToBase64String(hashedBytes);
+                bool passwordMatches = (hashedPassword == enteredHash);
+
+                if (!passwordMatches)
+                {
+                    throw new Exception("Password doesn't match with the Username");
+                }
+
+                return passwordMatches; 
             }
         }
     }
