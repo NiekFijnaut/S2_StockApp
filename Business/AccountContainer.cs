@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Azure;
@@ -19,7 +20,7 @@ namespace Business
                 AccountDTO accountDTO = new AccountDTO(
                 account.AccountID,
                 account.Username,
-                account.PasswordHash, 
+                account.PasswordHash,
                 account.Email,
                 account.Region,
                 account.Interest,
@@ -33,11 +34,24 @@ namespace Business
                 {
                     throw;
                 }
+            }
+        }
+
+        public void passwordMatches(AccountDTO accountDTO)
+        {
+            try
+            {
+                accountDAL.VerifyPassword(accountDTO);
+            }
+           
+            catch (Exception ex)
+            {
                 if (ex.Message == "Password doesnt match with the Username")
                 {
                     throw;
                 }
-            }            
+            }
+            
         }
     }
 }

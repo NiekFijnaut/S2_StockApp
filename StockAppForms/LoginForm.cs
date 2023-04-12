@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
-using Interface;
 using Business;
-using Data;
+
 
 namespace StockAppForms
 {
     public partial class LoginForm : Form
     {
+
         public LoginForm()
         {
             InitializeComponent();
@@ -33,20 +33,28 @@ namespace StockAppForms
             {
                 MessageBox.Show("Not all fields are filled in");
             }
-
             
             try
             {
-
-                AccountDTO account = AccountDAL.VerifyPassword();
-
-                DashboardForm dashboard = new DashboardForm();
-                dashboard.Show();
-
+                if (string.IsNullOrEmpty(exmsg.Message))
+                {
+                    DashboardForm dashboard = new DashboardForm();
+                    dashboard.Show();
+                }
             }
             catch (Exception exmsg)
             {
-                MessageBox.Show(exmsg.Message);
+                if (!string.IsNullOrEmpty(exmsg.Message))
+                {
+                    if (exmsg.Message == "Username has already been chosen")
+                    {
+                        MessageBox.Show(exmsg.Message);
+                    }
+                    else if (exmsg.Message == "Password doesnt match with the Username")
+                    {
+                        MessageBox.Show(exmsg.Message);
+                    }
+                }
             }
         }
 
