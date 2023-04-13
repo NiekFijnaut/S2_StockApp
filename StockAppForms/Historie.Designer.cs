@@ -1,6 +1,6 @@
 ﻿namespace StockAppForms
 {
-    partial class HistroieFrom
+    partial class Historie
     {
         /// <summary>
         /// Required designer variable.
@@ -32,6 +32,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.cbInterval = new System.Windows.Forms.ComboBox();
+            this.cbSlice = new System.Windows.Forms.ComboBox();
+            this.txtSymbolAdd = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -49,7 +52,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(18, 129);
+            this.label1.Location = new System.Drawing.Point(663, 31);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(103, 20);
             this.label1.TabIndex = 1;
@@ -58,26 +61,52 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(18, 257);
+            this.label2.Location = new System.Drawing.Point(18, 30);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(42, 20);
+            this.label2.Size = new System.Drawing.Size(58, 20);
             this.label2.TabIndex = 2;
-            this.label2.Text = "Time";
+            this.label2.Text = "Interval";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(18, 373);
+            this.label3.Location = new System.Drawing.Point(336, 31);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(50, 20);
+            this.label3.Size = new System.Drawing.Size(40, 20);
             this.label3.TabIndex = 3;
-            this.label3.Text = "label3";
+            this.label3.Text = "Slice";
+            // 
+            // comboBox1
+            // 
+            this.cbInterval.FormattingEnabled = true;
+            this.cbInterval.Location = new System.Drawing.Point(18, 53);
+            this.cbInterval.Name = "comboBox1";
+            this.cbInterval.Size = new System.Drawing.Size(151, 28);
+            this.cbInterval.TabIndex = 4;
+            // 
+            // comboBox2
+            // 
+            this.cbSlice.FormattingEnabled = true;
+            this.cbSlice.Location = new System.Drawing.Point(336, 53);
+            this.cbSlice.Name = "comboBox2";
+            this.cbSlice.Size = new System.Drawing.Size(151, 28);
+            this.cbSlice.TabIndex = 5;
+            // 
+            // textBox1
+            // 
+            this.txtSymbolAdd.Location = new System.Drawing.Point(663, 54);
+            this.txtSymbolAdd.Name = "textBox1";
+            this.txtSymbolAdd.Size = new System.Drawing.Size(125, 27);
+            this.txtSymbolAdd.TabIndex = 6;
             // 
             // HistroieFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1076, 555);
+            this.Controls.Add(this.txtSymbolAdd);
+            this.Controls.Add(this.cbSlice);
+            this.Controls.Add(this.cbInterval);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -96,5 +125,8 @@
         private Label label1;
         private Label label2;
         private Label label3;
+        private ComboBox cbInterval;
+        private ComboBox cbSlice;
+        private TextBox txtSymbolAdd;
     }
 }

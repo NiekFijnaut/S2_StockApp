@@ -21,8 +21,6 @@ namespace StockAppForms
         {
             InitializeComponent();
 
-            
-
         }
         
         private void btnLoginLog_Click(object sender, EventArgs e)
