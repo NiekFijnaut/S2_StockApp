@@ -1,6 +1,6 @@
 ﻿namespace StockAppForms
 {
-    partial class Historie
+    partial class HistorieForm
     {
         /// <summary>
         /// Required designer variable.

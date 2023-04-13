@@ -41,7 +41,11 @@
             this.labelLastRefreshed = new System.Windows.Forms.Label();
             this.labelInterval = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.btnHistorie = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.dgvAllStock = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAllStock)).BeginInit();
             this.SuspendLayout();
             // 
             // btnAddStocks
@@ -150,6 +154,7 @@
             // 
             // dataGridView1
             // 
+            this.dataGridView1.BackgroundColor = System.Drawing.Color.White;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(40, 378);
             this.dataGridView1.Name = "dataGridView1";
@@ -158,11 +163,44 @@
             this.dataGridView1.Size = new System.Drawing.Size(1030, 478);
             this.dataGridView1.TabIndex = 16;
             // 
+            // btnHistorie
+            // 
+            this.btnHistorie.Location = new System.Drawing.Point(442, 214);
+            this.btnHistorie.Name = "btnHistorie";
+            this.btnHistorie.Size = new System.Drawing.Size(151, 57);
+            this.btnHistorie.TabIndex = 17;
+            this.btnHistorie.Text = "Historie";
+            this.btnHistorie.UseVisualStyleBackColor = true;
+            this.btnHistorie.Click += new System.EventHandler(this.btnHistorie_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(442, 178);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(97, 20);
+            this.label5.TabIndex = 18;
+            this.label5.Text = "Historie View";
+            // 
+            // dgvAllStock
+            // 
+            this.dgvAllStock.BackgroundColor = System.Drawing.Color.White;
+            this.dgvAllStock.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvAllStock.Location = new System.Drawing.Point(649, 12);
+            this.dgvAllStock.Name = "dgvAllStock";
+            this.dgvAllStock.RowHeadersWidth = 51;
+            this.dgvAllStock.RowTemplate.Height = 29;
+            this.dgvAllStock.Size = new System.Drawing.Size(708, 340);
+            this.dgvAllStock.TabIndex = 19;
+            // 
             // DashboardForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1369, 887);
+            this.Controls.Add(this.dgvAllStock);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.btnHistorie);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.labelInterval);
             this.Controls.Add(this.labelLastRefreshed);
@@ -179,7 +217,9 @@
             this.Name = "DashboardForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DashboardForm";
+            this.Load += new System.EventHandler(this.DashboardForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAllStock)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -199,5 +239,8 @@
         private Label labelLastRefreshed;
         private Label labelInterval;
         private DataGridView dataGridView1;
+        private Button btnHistorie;
+        private Label label5;
+        private DataGridView dgvAllStock;
     }
 }

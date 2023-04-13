@@ -31,8 +31,13 @@ namespace StockAppForms
             {
                 MessageBox.Show("Not all fields are filled in");
             }
+            else
+            {
+                DashboardForm dashboard = new DashboardForm();
+                dashboard.Show();
+            }
             
-            try
+        /*    try
             {
                 if (string.IsNullOrEmpty(exmsg.Message))
                 {
@@ -53,7 +58,7 @@ namespace StockAppForms
                         MessageBox.Show(exmsg.Message);
                     }
                 }
-            }
+            }*/
         }
 
         private void LoginForm_Load(object sender, EventArgs e)

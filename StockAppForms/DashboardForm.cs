@@ -15,6 +15,9 @@ using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 using System.Windows.Forms;
 using System.Data;
+using Microsoft.Data.SqlClient;
+using System.Collections;
+using Data;
 
 namespace StockAppForms
 {
@@ -99,8 +102,13 @@ namespace StockAppForms
                                 volume
                             );
 
+
+                            StockContainer stockContainer = new StockContainer();
+                            stockContainer.AddStock(stock);
+
                             timeSeriesData.Add(stock);
                             
+
                         }
                         /*dit kan later ook met regio vercshillen mocht daar tijd voor zijn
                         DataGridViewCellStyle cellStyle = new DataGridViewCellStyle();
@@ -114,6 +122,7 @@ namespace StockAppForms
                        // StockContainer stockContainer = new StockContainer();
                         // stockContainer.AddStock(stock);
 
+
                     }
                     else
                     {
@@ -125,6 +134,24 @@ namespace StockAppForms
                     MessageBox.Show($"API request failed with status code: {response.StatusCode}");
                 }
             }
+        }
+
+        private void btnHistorie_Click(object sender, EventArgs e)
+        {
+            HistorieForm historie = new HistorieForm();
+            historie.Show();
+        }
+
+        private void DashboardForm_Load(object sender, EventArgs e)
+        {
+            SqlConnection Sqlcon = DataString.connection;
+            string query = "SELECT Date, Symbol FROM stock";
+            SqlCommand command = new SqlCommand(query, Sqlcon);
+            SqlDataAdapter adapter = new SqlDataAdapter(command);
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+            dgvAllStock.DataSource = dataTable;
+            Sqlcon.Close();
         }
     }
 }

@@ -15,7 +15,7 @@ using System.Net.Http;
 
 namespace StockAppForms
 {
-    public partial class Historie : Form
+    public partial class HistorieForm : Form
     {
         private const string APIKEY = "ZN0C9Q4C0LG3REEE";
 
@@ -23,7 +23,7 @@ namespace StockAppForms
 
         string ApiFunction = "TIME_SERIES_INTRADAY_EXTENDED";
 
-        public Historie()
+        public HistorieForm()
         {
             InitializeComponent();
             string[] itemsInterest = new string[] { "1min", "5min", "15min", "30min", "60min" };

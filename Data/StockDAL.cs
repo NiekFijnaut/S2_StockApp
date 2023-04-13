@@ -24,5 +24,12 @@ namespace Data
                 cmd.ExecuteNonQuery();
             }
         }
+        public void ViewStockTable(StockDTO stockDTO)
+        {
+            using (SqlCommand cmd1 = new SqlCommand("SELECT * FROM stock", Sqlcon))
+            {
+                
+            }
+        }
     }
 }
