@@ -32,12 +32,12 @@ namespace StockAppForms
             cbSlice.Items.AddRange(itemsInterest2);
         }
 
-        private async void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private async void btnViewHistorie_Click_1(object sender, EventArgs e)
         {
             string Interval = cbInterval.Text;
             string symbol = txtSymbolAdd.Text.Trim().ToUpper();
             string slice = cbSlice.Text;
-            
+
             string apiurl = $"{BaseUrl}?function={ApiFunction}&symbol={symbol}&interval={Interval}&slice={slice}&apikey={APIKEY}";
             Uri queryUri = new Uri(apiurl);
 

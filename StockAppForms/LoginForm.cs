@@ -37,7 +37,7 @@ namespace StockAppForms
                 dashboard.Show();
             }
             
-        /*    try
+            /*try
             {
                 if (string.IsNullOrEmpty(exmsg.Message))
                 {

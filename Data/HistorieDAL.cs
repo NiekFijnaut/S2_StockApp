@@ -28,5 +28,23 @@ namespace Data
                 cmd.ExecuteNonQuery();
             }
         }
+        
+        public void ViewHistorie(HistorieDTO historieDTO)
+        {
+            using (SqlCommand cmd1 = new SqlCommand("SELECT * FROM historie", Sqlcon))
+            {
+                cmd1.Parameters.AddWithValue("@Date", historieDTO.Date);
+                cmd1.Parameters.AddWithValue("@Symbol", historieDTO.Symbol);
+                cmd1.Parameters.AddWithValue("@Open", historieDTO.Open);
+                cmd1.Parameters.AddWithValue("@High", historieDTO.High);
+                cmd1.Parameters.AddWithValue("@Low", historieDTO.Low);
+                cmd1.Parameters.AddWithValue("@Close", historieDTO.Close);
+                cmd1.Parameters.AddWithValue("@Volume", historieDTO.Volume);
+
+                Sqlcon.Open();
+                cmd1.ExecuteNonQuery();
+            }
+        }
+        
     }
 }
