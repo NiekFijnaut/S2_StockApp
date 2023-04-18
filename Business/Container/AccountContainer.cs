@@ -10,7 +10,7 @@ using Interface;
 
 namespace Business
 {
-    public class AccountContainer: InterfaceAccount
+    public class AccountContainer
     {
         private AccountDAL accountDAL = new AccountDAL();
 

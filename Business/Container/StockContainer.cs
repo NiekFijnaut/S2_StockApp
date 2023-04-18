@@ -25,14 +25,25 @@ namespace Business
             stockDAL.AddStock(stockDTO);
         }
 
-        public void DeleteStock(Stock stock)
+        public void DeleteStock(ulong StockID)
         {
-
+            stockDAL.DeleteStock(StockID);
         }
 
         public void ViewStockBySymbol(string symbol)
         {
-            stockDAL.ViewStockBySymbol(symbol);
+            try
+            {
+                stockDAL.ViewStockBySymbol(symbol);
+            }
+            catch(Exception ex)
+            {
+                if (ex.Message == "There are no stocks added to this account")
+                {
+                    throw;
+                }
+            }
+            
         }
     }
 }

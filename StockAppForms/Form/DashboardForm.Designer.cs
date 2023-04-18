@@ -45,6 +45,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.dgvAllStock = new System.Windows.Forms.DataGridView();
             this.btnUpdateList = new System.Windows.Forms.Button();
+            this.Deletecolumn = new System.Windows.Forms.DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAllStock)).BeginInit();
             this.SuspendLayout();
@@ -187,16 +188,19 @@
             // 
             this.dgvAllStock.BackgroundColor = System.Drawing.Color.White;
             this.dgvAllStock.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvAllStock.Location = new System.Drawing.Point(649, 12);
+            this.dgvAllStock.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Deletecolumn});
+            this.dgvAllStock.Location = new System.Drawing.Point(649, 22);
             this.dgvAllStock.Name = "dgvAllStock";
             this.dgvAllStock.RowHeadersWidth = 51;
             this.dgvAllStock.RowTemplate.Height = 29;
-            this.dgvAllStock.Size = new System.Drawing.Size(344, 340);
+            this.dgvAllStock.Size = new System.Drawing.Size(344, 259);
             this.dgvAllStock.TabIndex = 19;
+            this.dgvAllStock.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAllStock_CellContentClick);
             // 
             // btnUpdateList
             // 
-            this.btnUpdateList.Location = new System.Drawing.Point(1014, 12);
+            this.btnUpdateList.Location = new System.Drawing.Point(649, 300);
             this.btnUpdateList.Name = "btnUpdateList";
             this.btnUpdateList.Size = new System.Drawing.Size(151, 57);
             this.btnUpdateList.TabIndex = 20;
@@ -204,11 +208,18 @@
             this.btnUpdateList.UseVisualStyleBackColor = true;
             this.btnUpdateList.Click += new System.EventHandler(this.btnUpdateList_Click);
             // 
+            // Deletecolumn
+            // 
+            this.Deletecolumn.HeaderText = "Delete";
+            this.Deletecolumn.MinimumWidth = 6;
+            this.Deletecolumn.Name = "Deletecolumn";
+            this.Deletecolumn.Width = 125;
+            // 
             // DashboardForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1369, 887);
+            this.ClientSize = new System.Drawing.Size(1034, 887);
             this.Controls.Add(this.btnUpdateList);
             this.Controls.Add(this.dgvAllStock);
             this.Controls.Add(this.label5);
@@ -229,7 +240,6 @@
             this.Name = "DashboardForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DashboardForm";
-            
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAllStock)).EndInit();
             this.ResumeLayout(false);
@@ -255,5 +265,6 @@
         private Label label5;
         private DataGridView dgvAllStock;
         private Button btnUpdateList;
+        private DataGridViewButtonColumn Deletecolumn;
     }
 }

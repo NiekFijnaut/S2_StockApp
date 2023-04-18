@@ -148,8 +148,33 @@ namespace StockAppForms
 
         private void btnUpdateList_Click(object sender, EventArgs e)
         {
-            StockContainer stockContainer = new StockContainer();
-            stockContainer.ViewStockBySymbol(txtSymbolAdd.Text);
+            if (txtSymbolAdd.Text != "")
+            {
+                StockContainer stockContainer = new StockContainer();
+                stockContainer.ViewStockBySymbol(txtSymbolAdd.Text);
+            }
+            else
+            {
+                MessageBox.Show("Ticker-Symbol is empty!");
+            }
+        }
+
+        private void dgvAllStock_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
+
+                ulong StockID = Convert.ToUInt64(selectedRow.Cells["StockID"].Value);
+
+                StockContainer stockContainer = new StockContainer();
+
+                stockContainer.DeleteStock(StockID);
+
+                dgvAllStock.Rows.Remove(selectedRow);
+            }
+           
+            catch
         }
     }
 }
