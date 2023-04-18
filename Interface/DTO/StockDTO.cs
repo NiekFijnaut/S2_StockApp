@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 namespace Interface
 {
     public record StockDTO(
-        long StockID,
+        long? StockID,
         DateTime Date,
         string Symbol, 
-        double Open,
-        double High,
-        double Low,
-        double Close,
-        int Volume);
+        double? Open,
+        double? High,
+        double? Low,
+        double? Close,
+        int? Volume);
 }

@@ -24,5 +24,15 @@ namespace Business
                 stock.Volume);
             stockDAL.AddStock(stockDTO);
         }
+
+        public void DeleteStock(Stock stock)
+        {
+
+        }
+
+        public void ViewStockBySymbol(string symbol)
+        {
+            stockDAL.ViewStockBySymbol(symbol);
+        }
     }
 }

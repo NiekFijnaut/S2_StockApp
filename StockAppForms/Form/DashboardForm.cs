@@ -18,6 +18,10 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Collections;
 using Data;
+using Microsoft.VisualBasic.Devices;
+using Microsoft.VisualBasic.Logging;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
+using System.Drawing;
 
 namespace StockAppForms
 {
@@ -142,16 +146,10 @@ namespace StockAppForms
             historie.Show();
         }
 
-        private void DashboardForm_Load(object sender, EventArgs e)
+        private void btnUpdateList_Click(object sender, EventArgs e)
         {
-            SqlConnection Sqlcon = DataString.connection;
-            string query = "SELECT Date, Symbol FROM stock";
-            SqlCommand command = new SqlCommand(query, Sqlcon);
-            SqlDataAdapter adapter = new SqlDataAdapter(command);
-            DataTable dataTable = new DataTable();
-            adapter.Fill(dataTable);
-            dgvAllStock.DataSource = dataTable;
-            Sqlcon.Close();
+            StockContainer stockContainer = new StockContainer();
+            stockContainer.ViewStockBySymbol(txtSymbolAdd.Text);
         }
     }
 }

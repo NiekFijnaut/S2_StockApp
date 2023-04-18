@@ -10,9 +10,15 @@ using Interface;
 
 namespace Business
 {
-    public class AccountContainer
+    public class AccountContainer: InterfaceAccount
     {
         private AccountDAL accountDAL = new AccountDAL();
+
+        public AccountContainer()
+        {
+
+        }
+
         public void CreateAccount(Account account)
         {
             try

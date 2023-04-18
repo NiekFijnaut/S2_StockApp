@@ -44,6 +44,7 @@
             this.btnHistorie = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.dgvAllStock = new System.Windows.Forms.DataGridView();
+            this.btnUpdateList = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAllStock)).BeginInit();
             this.SuspendLayout();
@@ -160,7 +161,7 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 29;
-            this.dataGridView1.Size = new System.Drawing.Size(1030, 478);
+            this.dataGridView1.Size = new System.Drawing.Size(953, 478);
             this.dataGridView1.TabIndex = 16;
             // 
             // btnHistorie
@@ -190,14 +191,25 @@
             this.dgvAllStock.Name = "dgvAllStock";
             this.dgvAllStock.RowHeadersWidth = 51;
             this.dgvAllStock.RowTemplate.Height = 29;
-            this.dgvAllStock.Size = new System.Drawing.Size(708, 340);
+            this.dgvAllStock.Size = new System.Drawing.Size(344, 340);
             this.dgvAllStock.TabIndex = 19;
+            // 
+            // btnUpdateList
+            // 
+            this.btnUpdateList.Location = new System.Drawing.Point(1014, 12);
+            this.btnUpdateList.Name = "btnUpdateList";
+            this.btnUpdateList.Size = new System.Drawing.Size(151, 57);
+            this.btnUpdateList.TabIndex = 20;
+            this.btnUpdateList.Text = "Update List";
+            this.btnUpdateList.UseVisualStyleBackColor = true;
+            this.btnUpdateList.Click += new System.EventHandler(this.btnUpdateList_Click);
             // 
             // DashboardForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1369, 887);
+            this.Controls.Add(this.btnUpdateList);
             this.Controls.Add(this.dgvAllStock);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.btnHistorie);
@@ -217,7 +229,7 @@
             this.Name = "DashboardForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DashboardForm";
-            this.Load += new System.EventHandler(this.DashboardForm_Load);
+            
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAllStock)).EndInit();
             this.ResumeLayout(false);
@@ -242,5 +254,6 @@
         private Button btnHistorie;
         private Label label5;
         private DataGridView dgvAllStock;
+        private Button btnUpdateList;
     }
 }
