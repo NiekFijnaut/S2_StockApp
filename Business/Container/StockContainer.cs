@@ -1,7 +1,10 @@
-﻿using Data;
+﻿using Business.Class;
+using Data;
 using Interface;
+using Interface.DTO;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +14,7 @@ namespace Business
     public class StockContainer
     {
         public StockDAL stockDAL = new StockDAL();
-        public void AddStock(Stock stock)
+        public void AddStock(Stock stock, AccountStock accountStock)
         {
             StockDTO stockDTO = new StockDTO(
                 stock.StockID, 
@@ -22,19 +25,20 @@ namespace Business
                 stock.Low, 
                 stock.Close,
                 stock.Volume);
-            stockDAL.AddStock(stockDTO);
+            
+            AccountStockDTO accountStockDTO = new AccountStockDTO(
+                accountStock.StockID,
+                accountStock.Date,
+                accountStock.Symbol,
+                accountStock.AccountID);
+            stockDAL.AddStock(stockDTO, accountStockDTO);
         }
 
         public void DeleteStock(ulong StockID)
         {
-            stockDAL.DeleteStock(StockID);
-        }
-
-        public void ViewStockBySymbol(string symbol)
-        {
             try
             {
-                stockDAL.ViewStockBySymbol(symbol);
+                stockDAL.DeleteStock(StockID);
             }
             catch(Exception ex)
             {
@@ -43,7 +47,16 @@ namespace Business
                     throw;
                 }
             }
-            
+        }
+
+        public void UpdateStockTable(StockDTO stockDTO)
+        {
+            stockDAL.UpdateStockTable(stockDTO);
+        }
+
+        public DataTable ShowAccountStock(AccountStockDTO accountStockDTO)
+        {
+            return stockDAL.ShowAccountStock(accountStockDTO);
         }
     }
 }

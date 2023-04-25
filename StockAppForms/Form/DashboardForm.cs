@@ -22,6 +22,9 @@ using Microsoft.VisualBasic.Devices;
 using Microsoft.VisualBasic.Logging;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 using System.Drawing;
+using Interface;
+using Business.Class;
+using Interface.DTO;
 
 namespace StockAppForms
 {
@@ -106,9 +109,13 @@ namespace StockAppForms
                                 volume
                             );
 
+                            AccountStock accountStock = new AccountStock(
+                                date,
+                                symbolName
+                            );
 
                             StockContainer stockContainer = new StockContainer();
-                            stockContainer.AddStock(stock);
+                            stockContainer.AddStock(stock, accountStock);
 
                             timeSeriesData.Add(stock);
                             
@@ -147,34 +154,23 @@ namespace StockAppForms
         }
 
         private void btnUpdateList_Click(object sender, EventArgs e)
-        {
-            if (txtSymbolAdd.Text != "")
-            {
-                StockContainer stockContainer = new StockContainer();
-                stockContainer.ViewStockBySymbol(txtSymbolAdd.Text);
-            }
-            else
-            {
-                MessageBox.Show("Ticker-Symbol is empty!");
-            }
+        {       
+            StockContainer stockContainer = new StockContainer();
+            stockContainer.UpdateStockTable();
         }
 
-        private void dgvAllStock_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void btnRemoveStocks_Click(object sender, EventArgs e)
         {
-            try
-            {
-                DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
 
-                ulong StockID = Convert.ToUInt64(selectedRow.Cells["StockID"].Value);
+        }
 
-                StockContainer stockContainer = new StockContainer();
+        private void DashboardForm_Load(object sender, EventArgs e)
+        {
+            StockContainer stockContainer = new StockContainer();
+            
+            DataTable accountStockData = stockContainer.ShowAccountStock();
 
-                stockContainer.DeleteStock(StockID);
-
-                dgvAllStock.Rows.Remove(selectedRow);
-            }
-           
-            catch
+            dgvAccountStock.DataSource = accountStockData;
         }
     }
 }

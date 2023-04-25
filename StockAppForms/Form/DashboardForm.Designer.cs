@@ -43,11 +43,10 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.btnHistorie = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
-            this.dgvAllStock = new System.Windows.Forms.DataGridView();
             this.btnUpdateList = new System.Windows.Forms.Button();
-            this.Deletecolumn = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.dgvAccountStock = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvAllStock)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAccountStock)).BeginInit();
             this.SuspendLayout();
             // 
             // btnAddStocks
@@ -68,6 +67,7 @@
             this.btnRemoveStocks.TabIndex = 3;
             this.btnRemoveStocks.Text = "Remove Stock";
             this.btnRemoveStocks.UseVisualStyleBackColor = true;
+            this.btnRemoveStocks.Click += new System.EventHandler(this.btnRemoveStocks_Click);
             // 
             // txtSymbolAdd
             // 
@@ -184,20 +184,6 @@
             this.label5.TabIndex = 18;
             this.label5.Text = "Historie View";
             // 
-            // dgvAllStock
-            // 
-            this.dgvAllStock.BackgroundColor = System.Drawing.Color.White;
-            this.dgvAllStock.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvAllStock.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Deletecolumn});
-            this.dgvAllStock.Location = new System.Drawing.Point(649, 22);
-            this.dgvAllStock.Name = "dgvAllStock";
-            this.dgvAllStock.RowHeadersWidth = 51;
-            this.dgvAllStock.RowTemplate.Height = 29;
-            this.dgvAllStock.Size = new System.Drawing.Size(344, 259);
-            this.dgvAllStock.TabIndex = 19;
-            this.dgvAllStock.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAllStock_CellContentClick);
-            // 
             // btnUpdateList
             // 
             this.btnUpdateList.Location = new System.Drawing.Point(649, 300);
@@ -208,20 +194,23 @@
             this.btnUpdateList.UseVisualStyleBackColor = true;
             this.btnUpdateList.Click += new System.EventHandler(this.btnUpdateList_Click);
             // 
-            // Deletecolumn
+            // dgvAccountStock
             // 
-            this.Deletecolumn.HeaderText = "Delete";
-            this.Deletecolumn.MinimumWidth = 6;
-            this.Deletecolumn.Name = "Deletecolumn";
-            this.Deletecolumn.Width = 125;
+            this.dgvAccountStock.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvAccountStock.Location = new System.Drawing.Point(649, 22);
+            this.dgvAccountStock.Name = "dgvAccountStock";
+            this.dgvAccountStock.RowHeadersWidth = 51;
+            this.dgvAccountStock.RowTemplate.Height = 29;
+            this.dgvAccountStock.Size = new System.Drawing.Size(344, 249);
+            this.dgvAccountStock.TabIndex = 21;
             // 
             // DashboardForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1034, 887);
+            this.Controls.Add(this.dgvAccountStock);
             this.Controls.Add(this.btnUpdateList);
-            this.Controls.Add(this.dgvAllStock);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.btnHistorie);
             this.Controls.Add(this.dataGridView1);
@@ -240,8 +229,9 @@
             this.Name = "DashboardForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DashboardForm";
+            this.Load += new System.EventHandler(this.DashboardForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvAllStock)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAccountStock)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -263,8 +253,7 @@
         private DataGridView dataGridView1;
         private Button btnHistorie;
         private Label label5;
-        private DataGridView dgvAllStock;
         private Button btnUpdateList;
-        private DataGridViewButtonColumn Deletecolumn;
+        private DataGridView dgvAccountStock;
     }
 }

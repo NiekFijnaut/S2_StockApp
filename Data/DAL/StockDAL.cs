@@ -1,5 +1,6 @@
 ﻿using CsvHelper.Configuration.Attributes;
 using Interface;
+using Interface.DTO;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -9,7 +10,7 @@ namespace Data
     {
         SqlConnection Sqlcon = DataString.connection;
         //sql connection string naar een aparte functie zodat deze mee kan veranderen als het wachtwoord veranderd bijvoorbeeld en overal aangeroepen kan worden 
-        public void AddStock(StockDTO stockDTO)
+        public void AddStock(StockDTO stockDTO, AccountStockDTO accountStockDTO)
         {
             string insertquery = "INSERT INTO Stock (Date, Symbol, [Open], High, Low, [Close], Volume) VALUES (@Date, @Symbol, @Open, @High, @Low, @Close, @Volume)";
             using (SqlCommand cmd = new SqlCommand(insertquery, Sqlcon))
@@ -26,26 +27,32 @@ namespace Data
                 cmd.ExecuteNonQuery();
                 Sqlcon.Close();
             }
-        }
-        public StockDTO ViewStockBySymbol(string symbol)
-        {
-            string viewquery = "SELECT TOP 1 Date, Symbol FROM stock WHERE Symbol = @Symbol ORDER BY Date DESC";
-            SqlCommand cmd1 = new SqlCommand(viewquery, Sqlcon);
-            cmd1.Parameters.AddWithValue("@Symbol", symbol);
-            Sqlcon.Open();
-            SqlDataReader reader = cmd1.ExecuteReader();
-            if (reader.HasRows)
+
+            string insertQuery = "INSERT INTO AccountStock (Date, Symbol) " +
+               "SELECT TOP 1 @Date, @Symbol " +
+               "FROM AccountStock " +
+               "ORDER BY Date DESC";
+            using (SqlCommand cmd5 = new SqlCommand(insertQuery, Sqlcon))
             {
-                StockDTO stockDTO1 = new StockDTO(null, reader.GetDateTime("Date"), reader.GetString("Symbol"), null, null, null, null, null);
-                reader.Close();
+                cmd5.Parameters.AddWithValue("@Date", accountStockDTO.Date);
+                cmd5.Parameters.AddWithValue("@Symbol", accountStockDTO.Symbol);
+
+                Sqlcon.Open();
+                cmd5.ExecuteNonQuery();
                 Sqlcon.Close();
-                return stockDTO1;
             }
-            else
-            {
-                throw new Exception("There are no stocks added to this account");
-            }
+        }
+        public DataTable ShowAccountStock(AccountStockDTO accountStockDTO)
+        {
+            string Showquery = "SELECT * FROM AccountStock";
+            SqlCommand cmd1 = new SqlCommand(Showquery, Sqlcon);
+            SqlDataAdapter adapter = new SqlDataAdapter(cmd1);
             
+            DataTable accountstockdataTable = new DataTable();
+            adapter.Fill(accountstockdataTable);
+            
+            return accountstockdataTable;
+
         }
 
         public void UpdateStockTable(StockDTO stockDTO)
@@ -68,12 +75,9 @@ namespace Data
         public void DeleteStock(ulong stockId)
         {
             string deletequery = "DELETE FROM Stock WHERE StockID = @StockID";
-            using (SqlCommand cmd4 = new SqlCommand(deletequery, Sqlcon))
-            {
-                cmd4.Parameters.AddWithValue("@StockID", stockId);
-                Sqlcon.Open();
-                cmd4.ExecuteNonQuery();
-            }
+            SqlCommand cmd4 = new SqlCommand(deletequery, Sqlcon);
+            
+            
         }
     }
 }
