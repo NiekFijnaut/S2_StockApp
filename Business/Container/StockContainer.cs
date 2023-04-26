@@ -54,9 +54,18 @@ namespace Business
             stockDAL.UpdateStockTable(stockDTO);
         }
 
-        public DataTable ShowAccountStock(AccountStockDTO accountStockDTO)
+        public List<AccountStock> GetAccountStockList()
         {
-            return stockDAL.ShowAccountStock(accountStockDTO);
+            List<AccountStock> accountStock = new List<AccountStock>();
+            List<AccountStockDTO> accountStockDTOList = stockDAL.GetAccountStockList();
+            foreach (AccountStockDTO accountStockDTO in accountStockDTOList)
+            {
+                accountStock.Add(
+                    new AccountStock(
+                        accountStockDTO.Date,
+                        accountStockDTO.Symbol));
+            }
+            return accountStock;
         }
     }
 }

@@ -155,8 +155,8 @@ namespace StockAppForms
 
         private void btnUpdateList_Click(object sender, EventArgs e)
         {       
-            StockContainer stockContainer = new StockContainer();
-            stockContainer.UpdateStockTable();
+            //StockContainer stockContainer = new StockContainer();
+            //stockContainer.UpdateStockTable();
         }
 
         private void btnRemoveStocks_Click(object sender, EventArgs e)
@@ -167,10 +167,10 @@ namespace StockAppForms
         private void DashboardForm_Load(object sender, EventArgs e)
         {
             StockContainer stockContainer = new StockContainer();
-            
-            DataTable accountStockData = stockContainer.ShowAccountStock();
-
-            dgvAccountStock.DataSource = accountStockData;
+            foreach (var accountStock in stockContainer.GetAccountStockList())
+            {
+                dgvAccountStock.Rows.Add(accountStock.Date, accountStock.Symbol);
+            }
         }
     }
 }

@@ -12,19 +12,36 @@ namespace Data
         //sql connection string naar een aparte functie zodat deze mee kan veranderen als het wachtwoord veranderd bijvoorbeeld en overal aangeroepen kan worden 
         public void AddStock(StockDTO stockDTO, AccountStockDTO accountStockDTO)
         {
-            string insertquery = "INSERT INTO Stock (Date, Symbol, [Open], High, Low, [Close], Volume) VALUES (@Date, @Symbol, @Open, @High, @Low, @Close, @Volume)";
-            using (SqlCommand cmd = new SqlCommand(insertquery, Sqlcon))
+            string selectQuery = "SELECT TOP 1 StockId, Date, Symbol, [Open], High, Low, [Close] FROM YourAPIResponseTable ORDER BY Date DESC";
+            using (SqlCommand selectCmd = new SqlCommand(selectQuery, Sqlcon))
             {
-                cmd.Parameters.AddWithValue("@Date", stockDTO.Date);
-                cmd.Parameters.AddWithValue("@Symbol", stockDTO.Symbol);
-                cmd.Parameters.AddWithValue("@Open", stockDTO.Open);
-                cmd.Parameters.AddWithValue("@High", stockDTO.High);
-                cmd.Parameters.AddWithValue("@Low", stockDTO.Low);
-                cmd.Parameters.AddWithValue("@Close", stockDTO.Close);
-                cmd.Parameters.AddWithValue("@Volume", stockDTO.Volume);
-
                 Sqlcon.Open();
-                cmd.ExecuteNonQuery();
+                SqlDataReader reader = selectCmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    int stockId = reader.GetInt32(0);
+                    DateTime date = reader.GetDateTime(1);
+                    string symbol = reader.GetString(2);
+                    decimal open = reader.GetDecimal(3);
+                    decimal high = reader.GetDecimal(4);
+                    decimal low = reader.GetDecimal(5);
+                    decimal close = reader.GetDecimal(6);
+
+                    string insertquery = "INSERT INTO Stock (StockId, Date, Symbol, [Open], High, Low, [Close]) VALUES (@StockId, @Date, @Symbol, @Open, @High, @Low, @Close)";
+                    using (SqlCommand insertCmd = new SqlCommand(insertquery, Sqlcon))
+                    {
+                        insertCmd.Parameters.AddWithValue("@StockId", stockId);
+                        insertCmd.Parameters.AddWithValue("@Date", date);
+                        insertCmd.Parameters.AddWithValue("@Symbol", symbol);
+                        insertCmd.Parameters.AddWithValue("@Open", open);
+                        insertCmd.Parameters.AddWithValue("@High", high);
+                        insertCmd.Parameters.AddWithValue("@Low", low);
+                        insertCmd.Parameters.AddWithValue("@Close", close);
+
+                        insertCmd.ExecuteNonQuery();
+                    }
+                }
+                reader.Close();
                 Sqlcon.Close();
             }
 
@@ -42,17 +59,24 @@ namespace Data
                 Sqlcon.Close();
             }
         }
-        public DataTable ShowAccountStock(AccountStockDTO accountStockDTO)
+        
+        public List<AccountStockDTO> GetAccountStockList()
         {
-            string Showquery = "SELECT * FROM AccountStock";
-            SqlCommand cmd1 = new SqlCommand(Showquery, Sqlcon);
-            SqlDataAdapter adapter = new SqlDataAdapter(cmd1);
-            
-            DataTable accountstockdataTable = new DataTable();
-            adapter.Fill(accountstockdataTable);
-            
-            return accountstockdataTable;
-
+            Sqlcon.Open();
+            List<AccountStockDTO> accountStockDTOList = new();
+            using SqlCommand cmd1 = new("SELECT Date, Symbol FROM [dbo].[AccountStock]", Sqlcon);
+            using SqlDataReader reader = cmd1.ExecuteReader();
+            while (reader.Read())
+            {
+                accountStockDTOList.Add(
+                new AccountStockDTO(
+                    null,
+                    reader.GetDateTime("Date"),
+                    reader.GetString("Symbol"),
+                    null));
+            }
+            Sqlcon.Close();
+            return accountStockDTOList;
         }
 
         public void UpdateStockTable(StockDTO stockDTO)
