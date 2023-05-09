@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Interface
 {
-    public interface InterfaceAccount
+    public interface IAccount
     {
         void AddAccount(AccountDTO accountDTO);
+        bool VerifyPassword(AccountDTO accountDTO);
     }
 }
+

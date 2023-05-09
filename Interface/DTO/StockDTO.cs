@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Interface
 {
-    public record StockDTO(
+    public record APIResponseCallDTO(
         long? StockID,
         DateTime Date,
         string Symbol, 

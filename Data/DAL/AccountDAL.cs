@@ -11,7 +11,7 @@ using System.Security.Cryptography;
 
 namespace Data
 {
-    public class AccountDAL
+    public class AccountDAL : Interface.IAccount
     {
         SqlConnection Sqlcon = DataString.connection;
         //sql connection string naar een aparte functie zodat deze mee kan veranderen als het wachtwoord veranderd bijvoorbeeld en overal aangeroepen kan worden 
@@ -59,6 +59,7 @@ namespace Data
 
             using SqlCommand command = new SqlCommand(PasswordHashQuery, Sqlcon);
             {
+                Sqlcon.Open();
                 command.Parameters.AddWithValue("@Username", accountDTO.Username);
                 string hashedPassword = (string)command.ExecuteScalar();
 
@@ -68,11 +69,7 @@ namespace Data
                 byte[] hashedBytes = sha256.ComputeHash(passwordBytes);
                 string enteredHash = Convert.ToBase64String(hashedBytes);
                 bool passwordMatches = (hashedPassword == enteredHash);
-
-                if (!passwordMatches)
-                {
-                    throw new Exception("Password doesn't match with the Username");
-                }
+                Sqlcon.Close();
 
                 return passwordMatches; 
             }

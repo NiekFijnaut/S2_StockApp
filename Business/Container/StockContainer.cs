@@ -14,9 +14,9 @@ namespace Business
     public class StockContainer
     {
         public StockDAL stockDAL = new StockDAL();
-        public void AddStock(Stock stock, AccountStock accountStock)
+        public void AddStock(Stock stock, APIResponseCall aPIResponseCall, AccountStock accountStock)
         {
-            StockDTO stockDTO = new StockDTO(
+            Interface.APIResponseCallDTO stockDTO = new Interface.APIResponseCallDTO(
                 stock.StockID, 
                 stock.Date,
                 stock.Symbol,
@@ -25,13 +25,24 @@ namespace Business
                 stock.Low, 
                 stock.Close,
                 stock.Volume);
-            
+
+            Interface.DTO.APIResponseCallDTO aPIResponseCallDTO = new Interface.DTO.APIResponseCallDTO(
+                aPIResponseCall.StockID,
+                aPIResponseCall.Date,
+                aPIResponseCall.Symbol,
+                aPIResponseCall.Open,
+                aPIResponseCall.High,
+                aPIResponseCall.Low,
+                aPIResponseCall.Close,
+                aPIResponseCall.Volume);
+
             AccountStockDTO accountStockDTO = new AccountStockDTO(
                 accountStock.StockID,
                 accountStock.Date,
                 accountStock.Symbol,
                 accountStock.AccountID);
-            stockDAL.AddStock(stockDTO, accountStockDTO);
+            
+            stockDAL.AddStock(stockDTO, aPIResponseCallDTO, accountStockDTO);
         }
 
         public void DeleteStock(ulong StockID)
@@ -49,7 +60,7 @@ namespace Business
             }
         }
 
-        public void UpdateStockTable(StockDTO stockDTO)
+        public void UpdateStockTable(Interface.APIResponseCallDTO stockDTO)
         {
             stockDAL.UpdateStockTable(stockDTO);
         }

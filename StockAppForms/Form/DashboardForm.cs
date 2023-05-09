@@ -109,13 +109,24 @@ namespace StockAppForms
                                 volume
                             );
 
+                            APIResponseCall aPIResponseCall = new APIResponseCall
+                            (
+                                date,
+                                symbolName,
+                                open,
+                                high,
+                                low,
+                                close,
+                                volume
+                            );
+
                             AccountStock accountStock = new AccountStock(
                                 date,
                                 symbolName
                             );
 
                             StockContainer stockContainer = new StockContainer();
-                            stockContainer.AddStock(stock, accountStock);
+                            stockContainer.AddStock(stock, aPIResponseCall, accountStock);
 
                             timeSeriesData.Add(stock);
                             

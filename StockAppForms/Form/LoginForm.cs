@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
 using Business;
+using Interface;
 
 
 namespace StockAppForms
@@ -25,7 +26,13 @@ namespace StockAppForms
         
         private void btnLoginLog_Click(object sender, EventArgs e)
         {
-
+            Account account = new Account(
+                txtUserNameLog.Text, 
+                txtPasswordLog.Text, 
+                null, 
+                null, 
+                null,
+                null);
 
             if (txtPasswordLog.Text == null || txtPasswordLog.Text == "" || txtUserNameLog.Text == null || txtUserNameLog.Text == "")
             {
@@ -33,32 +40,24 @@ namespace StockAppForms
             }
             else
             {
-                DashboardForm dashboard = new DashboardForm();
-                dashboard.Show();
-            }
-            
-            /*try
-            {
-                if (string.IsNullOrEmpty(exmsg.Message))
+                AccountContainer accountContainer = new AccountContainer();
+                bool PasswordMatches = accountContainer.passwordMatches(account);
+
+
+                if (PasswordMatches == true)
                 {
+                    MessageBox.Show("You are logged in");
                     DashboardForm dashboard = new DashboardForm();
                     dashboard.Show();
                 }
-            }
-            catch (Exception exmsg)
-            {
-                if (!string.IsNullOrEmpty(exmsg.Message))
+                else
                 {
-                    if (exmsg.Message == "Username has already been chosen")
-                    {
-                        MessageBox.Show(exmsg.Message);
-                    }
-                    else if (exmsg.Message == "Password doesnt match with the Username")
-                    {
-                        MessageBox.Show(exmsg.Message);
-                    }
+                    MessageBox.Show("Password or Username is incorrect");
                 }
-            }*/
+                
+            }
+             
+            
         }
 
         private void LoginForm_Load(object sender, EventArgs e)

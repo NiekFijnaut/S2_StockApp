@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewData["Title"] = "StockIntel";
+}
+
+<h1>StockIntel</h1>
+<p>A search bar will appear here to get info of stocks</p>
+
+<input type="text" id="Symbol" name="Symbol">
+
+<asp:DropDownList ID="ddlInterval" runat="server">
+    <asp:ListItem Text="1min" Value="1min"></asp:ListItem>
+    <asp:ListItem Text="5min" Value="5min"></asp:ListItem>
+    <asp:ListItem Text="15min" Value="15min"></asp:ListItem>
+    <asp:ListItem Text="30min" Value="30min"></asp:ListItem>
+    <asp:ListItem Text="60min" Value="60min"></asp:ListItem>
+</asp:DropDownList>
+
+<button type="button" id="AddStock">Add Stock</button>

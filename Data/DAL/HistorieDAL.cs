@@ -1,4 +1,5 @@
 ﻿using Interface;
+using Interface.Interface;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    public class HistorieDAL
+    public class HistorieDAL : IHistorie
     {
         SqlConnection Sqlcon = DataString.connection;
         public void AddHistorie(HistorieDTO historieDTO)

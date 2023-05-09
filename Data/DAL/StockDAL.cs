@@ -1,25 +1,43 @@
 ﻿using CsvHelper.Configuration.Attributes;
 using Interface;
 using Interface.DTO;
+using Interface.Interface;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using System.Runtime.InteropServices;
 
 namespace Data
 {
-    public class StockDAL
+    public class StockDAL : IStock
     {
         SqlConnection Sqlcon = DataString.connection;
         //sql connection string naar een aparte functie zodat deze mee kan veranderen als het wachtwoord veranderd bijvoorbeeld en overal aangeroepen kan worden 
-        public void AddStock(StockDTO stockDTO, AccountStockDTO accountStockDTO)
+        public void AddStock(Interface.APIResponseCallDTO stockDTO, Interface.DTO.APIResponseCallDTO aPIResponseCallDTO, AccountStockDTO accountStockDTO)
         {
-            string selectQuery = "SELECT TOP 1 StockId, Date, Symbol, [Open], High, Low, [Close] FROM YourAPIResponseTable ORDER BY Date DESC";
+            string apiinsertquery = "INSERT INTO APIResponseCall (StockID, Date, Symbol, [Open], High, Low, [Close]) VALUES (@StockID, @Date, @Symbol, @Open, @High, @Low, @Close)";
+            using (SqlCommand apiinsertCmd = new SqlCommand(apiinsertquery, Sqlcon))
+            {
+                Sqlcon.Open();
+                apiinsertCmd.Parameters.AddWithValue("@StockID", aPIResponseCallDTO.StockID);
+                apiinsertCmd.Parameters.AddWithValue("@Date", aPIResponseCallDTO.Date);
+                apiinsertCmd.Parameters.AddWithValue("@Symbol", aPIResponseCallDTO.Symbol);
+                apiinsertCmd.Parameters.AddWithValue("@Open", aPIResponseCallDTO.Open);
+                apiinsertCmd.Parameters.AddWithValue("@High", aPIResponseCallDTO.High);
+                apiinsertCmd.Parameters.AddWithValue("@Low", aPIResponseCallDTO.Low);
+                apiinsertCmd.Parameters.AddWithValue("@Close", aPIResponseCallDTO.Close);
+
+                apiinsertCmd.ExecuteNonQuery();
+                Sqlcon.Close();
+            }
+
+            string selectQuery = "SELECT TOP 1 StockId, Date, Symbol, [Open], High, Low, [Close] FROM Stock ORDER BY Date DESC";
             using (SqlCommand selectCmd = new SqlCommand(selectQuery, Sqlcon))
             {
                 Sqlcon.Open();
                 SqlDataReader reader = selectCmd.ExecuteReader();
                 if (reader.Read())
                 {
-                    int stockId = reader.GetInt32(0);
+                    long stockId = reader.GetInt64(0);
                     DateTime date = reader.GetDateTime(1);
                     string symbol = reader.GetString(2);
                     decimal open = reader.GetDecimal(3);
@@ -79,7 +97,7 @@ namespace Data
             return accountStockDTOList;
         }
 
-        public void UpdateStockTable(StockDTO stockDTO)
+        public void UpdateStockTable(Interface.APIResponseCallDTO stockDTO)
         {
             string updateQuery = "UPDATE stock SET Date = @Date WHERE Symbol = @Symbol";
             SqlCommand cmd2 = new SqlCommand(updateQuery, Sqlcon);
@@ -100,8 +118,21 @@ namespace Data
         {
             string deletequery = "DELETE FROM Stock WHERE StockID = @StockID";
             SqlCommand cmd4 = new SqlCommand(deletequery, Sqlcon);
-            
-            
+        }
+
+        void IStock.GetAccountStockList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteStock(Interface.APIResponseCallDTO stockDTO)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddStock(Interface.APIResponseCallDTO stockDTO, AccountStockDTO accountStockDTO)
+        {
+            throw new NotImplementedException();
         }
     }
 }

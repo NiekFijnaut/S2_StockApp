@@ -43,19 +43,21 @@ namespace Business
             }
         }
 
-        public void passwordMatches(AccountDTO accountDTO)
+        public bool passwordMatches(Account account)
         {
-            try
+            AccountDTO accountDTO = new AccountDTO(null, account.Username, account.PasswordHash, null, null, null, null, null);
+
+            AccountDAL accountDAL = new AccountDAL(); 
+
+            bool passwordMatches = accountDAL.VerifyPassword(accountDTO); 
+
+            if (passwordMatches)
             {
-                accountDAL.VerifyPassword(accountDTO);
+                return true; 
             }
-           
-            catch (Exception ex)
+            else
             {
-                if (ex.Message == "Password doesnt match with the Username")
-                {
-                    throw;
-                }
+                return false; 
             }
         }
     }
