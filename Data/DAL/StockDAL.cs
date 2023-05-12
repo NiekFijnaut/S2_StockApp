@@ -55,6 +55,16 @@ namespace Data
                         insertCmd.Parameters.AddWithValue("@Low", low);
                         insertCmd.Parameters.AddWithValue("@Close", close);
 
+                        //StockDTO stockDTO = new StockDTO(
+                        //    stockDTO.StockID,
+                        //    stockDTO.Date,
+                        //    stockDTO.Symbol,
+                        //    stockDTO.Open,
+                        //    stockDTO.High,
+                        //    stockDTO.Low,
+                        //    stockDTO.Close,
+                        //    stockDTO.Volume);
+
                         insertCmd.ExecuteNonQuery();
                     }
                 }

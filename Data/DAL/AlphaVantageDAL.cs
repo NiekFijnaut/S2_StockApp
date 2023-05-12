@@ -7,21 +7,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using APIResponseCallDTO = Interface.APIResponseCallDTO;
 
 namespace Data
 {
     public class AlphaVantageDAL : IALphaVantage
     {
-        public async void SearchStock(string Symbol, string ddlInterval)
+        public async Task<List<APIResponseCallDTO>> SearchStock(SearchDTO searchDTO)
         {
+            string Symbol = searchDTO.Symbol;
+
+            string Interval = searchDTO.Interval;
+
             const string APIKEY = "ZN0C9Q4C0LG3REEE";
 
             const string BaseUrl = "https://www.alphavantage.co/query";
 
             string ApiFunction = "TIME_SERIES_INTRADAY";
 
-            string apiurl = $"{BaseUrl}?function={ApiFunction}&symbol={Symbol}&interval={ddlInterval}&apikey={APIKEY}";
+            string apiurl = $"{BaseUrl}?function={ApiFunction}&symbol={Symbol}&interval={Interval}&apikey={APIKEY}";
 
             using (HttpClient client = new HttpClient())
             {
@@ -36,7 +39,7 @@ namespace Data
                     string interval = data?["Meta Data"]?["4. Interval"]?.ToString();
                     string info = data?["Meta Data"]?["1. Information"]?.ToString();
 
-                    var timeSeries = data?["Time Series " + "(" + ddlInterval + ")"];
+                    var timeSeries = data?["Time Series " + "(" + Interval + ")"];
                     if (timeSeries != null)
                     {
 
@@ -63,11 +66,13 @@ namespace Data
                                 close,
                                 volume
                             );
-
+                            timeSeriesData.Add(aPIResponseCallDTO);
                         }
+                        return timeSeriesData;
                     }
                 }
             }
+            return new List<APIResponseCallDTO>();
         }
 
         public async void AddStockToAccount(string Symbol, string ddlInterval)

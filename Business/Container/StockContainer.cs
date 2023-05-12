@@ -13,6 +13,7 @@ namespace Business
     public class StockContainer
     {
         public StockDAL stockDAL = new StockDAL();
+        public AlphaVantageDAL alphaVantageDAL = new AlphaVantageDAL();
         public void AddStock(Stock stock, APIResponseCall aPIResponseCall, AccountStock accountStock)
         {
             APIResponseCallDTO aPIResponseCallDTO = new APIResponseCallDTO(aPIResponseCall.StockID,
@@ -43,6 +44,21 @@ namespace Business
                 accountStock.AccountID);
             
             stockDAL.AddStock(stockDTO, aPIResponseCallDTO, accountStockDTO);
+        }
+
+        //public List<APIResponseCall> GetAPIResponse()
+        //{
+        //    List<APIResponseCall> aPIResponseCall = new List<APIResponseCall>();
+        //    List<APIResponseCallDTO> aPIResponseCallDTOs = alphaVantageDAL.GetAPIResponse();
+        //}
+
+        public void SearchStock(Search search)
+        {
+            SearchDTO searchDTO = new SearchDTO(
+                search.Symbol,
+                search.Interval);
+
+            alphaVantageDAL.SearchStock(searchDTO);
         }
 
         public void DeleteStock(ulong StockID)

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.Class
-{
+namespace Business
+{ 
     public class APIResponseCall
     {
         public long StockID { get; set; }
