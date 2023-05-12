@@ -9,17 +9,25 @@ namespace WebApp.Controllers
 {
     public class StockIntelController : Controller
     {
+
         public IActionResult Index()
         {
             return View();
         }
 
+        [HttpPost]
         public IActionResult StockIntel()
         {
             return View();
         }
 
-        //[HttpPost]
+        [HttpPost]
+        public IActionResult SearchStockIntel()
+        {
+
+        }
+
+        
     }
 }
 /*
