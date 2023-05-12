@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Interface.DTO
+namespace Interface
 {
     public record AccountStockDTO(
         long? StockID,

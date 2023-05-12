@@ -1,6 +1,5 @@
 ﻿using CsvHelper.Configuration.Attributes;
 using Interface;
-using Interface.DTO;
 using Interface.Interface;
 using Microsoft.Data.SqlClient;
 using System.Data;
@@ -12,7 +11,7 @@ namespace Data
     {
         SqlConnection Sqlcon = DataString.connection;
         //sql connection string naar een aparte functie zodat deze mee kan veranderen als het wachtwoord veranderd bijvoorbeeld en overal aangeroepen kan worden 
-        public void AddStock(Interface.APIResponseCallDTO stockDTO, Interface.DTO.APIResponseCallDTO aPIResponseCallDTO, AccountStockDTO accountStockDTO)
+        public void AddStock(StockDTO stockDTO, APIResponseCallDTO aPIResponseCallDTO, AccountStockDTO accountStockDTO)
         {
             string apiinsertquery = "INSERT INTO APIResponseCall (StockID, Date, Symbol, [Open], High, Low, [Close]) VALUES (@StockID, @Date, @Symbol, @Open, @High, @Low, @Close)";
             using (SqlCommand apiinsertCmd = new SqlCommand(apiinsertquery, Sqlcon))
@@ -97,7 +96,7 @@ namespace Data
             return accountStockDTOList;
         }
 
-        public void UpdateStockTable(Interface.APIResponseCallDTO stockDTO)
+        public void UpdateStockTable(APIResponseCallDTO stockDTO)
         {
             string updateQuery = "UPDATE stock SET Date = @Date WHERE Symbol = @Symbol";
             SqlCommand cmd2 = new SqlCommand(updateQuery, Sqlcon);
@@ -125,12 +124,22 @@ namespace Data
             throw new NotImplementedException();
         }
 
-        public void DeleteStock(Interface.APIResponseCallDTO stockDTO)
+        public void AddStock(StockDTO stockDTO, AccountStockDTO accountStockDTO, APIResponseCallDTO aPIResponseCallDTO)
         {
             throw new NotImplementedException();
         }
 
-        public void AddStock(Interface.APIResponseCallDTO stockDTO, AccountStockDTO accountStockDTO)
+        public void UpdateStockTable(StockDTO stockDTO)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddStock(APIResponseCallDTO stockDTO, AccountStockDTO accountStockDTO)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteStock(APIResponseCallDTO stockDTO)
         {
             throw new NotImplementedException();
         }

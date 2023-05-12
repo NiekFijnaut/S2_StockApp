@@ -1,5 +1,4 @@
-﻿using Interface.DTO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +12,6 @@ namespace Interface.Interface
         void GetAccountStockList();
         void UpdateStockTable(APIResponseCallDTO stockDTO);
         void DeleteStock(APIResponseCallDTO stockDTO);
+        void DeleteStock(ulong stockId);
     }
 }

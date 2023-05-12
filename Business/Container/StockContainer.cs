@@ -1,7 +1,6 @@
 ﻿using Business.Class;
 using Data;
 using Interface;
-using Interface.DTO;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -16,25 +15,26 @@ namespace Business
         public StockDAL stockDAL = new StockDAL();
         public void AddStock(Stock stock, APIResponseCall aPIResponseCall, AccountStock accountStock)
         {
-            Interface.APIResponseCallDTO stockDTO = new Interface.APIResponseCallDTO(
-                stock.StockID, 
-                stock.Date,
-                stock.Symbol,
-                stock.Open, 
-                stock.High,
-                stock.Low, 
-                stock.Close,
-                stock.Volume);
-
-            Interface.DTO.APIResponseCallDTO aPIResponseCallDTO = new Interface.DTO.APIResponseCallDTO(
-                aPIResponseCall.StockID,
+            APIResponseCallDTO aPIResponseCallDTO = new APIResponseCallDTO(aPIResponseCall.StockID,
                 aPIResponseCall.Date,
                 aPIResponseCall.Symbol,
                 aPIResponseCall.Open,
                 aPIResponseCall.High,
                 aPIResponseCall.Low,
                 aPIResponseCall.Close,
-                aPIResponseCall.Volume);
+                aPIResponseCall.Volume
+                );
+
+            StockDTO stockDTO = new StockDTO(
+                stock.StockID,
+                stock.Date,
+                stock.Symbol,
+                stock.Open,
+                stock.High,
+                stock.Low,
+                stock.Close,
+                stock.Volume
+                );
 
             AccountStockDTO accountStockDTO = new AccountStockDTO(
                 accountStock.StockID,
@@ -60,7 +60,7 @@ namespace Business
             }
         }
 
-        public void UpdateStockTable(Interface.APIResponseCallDTO stockDTO)
+        public void UpdateStockTable(StockDTO stockDTO)
         {
             stockDAL.UpdateStockTable(stockDTO);
         }

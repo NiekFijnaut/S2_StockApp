@@ -1,5 +1,5 @@
-﻿using Business;
-using Business.Class;
+﻿//using Business;
+//using Business.Class;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
@@ -10,6 +10,11 @@ namespace WebApp.Controllers
     public class StockIntelController : Controller
     {
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult StockIntel()
         {
             return View();
         }

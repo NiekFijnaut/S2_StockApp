@@ -11,6 +11,11 @@
         public double Close { get; set; }
         public int Volume { get; set; }
 
+        public APIResponseCallModel()
+        {
+
+        }
+
         public APIResponseCallModel(DateTime date, string symbol, double open, double high, double low, double close, int volume)
         {
             Date = date;

@@ -7,6 +7,8 @@
         public string Symbol { get; set; }
         public long? AccountID { get; set; }
 
+        public AccountStockModel() { }
+
         public AccountStockModel(DateTime date, string symbol)
         {
             Date = date;

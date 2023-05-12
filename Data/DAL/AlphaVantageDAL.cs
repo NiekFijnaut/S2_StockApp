@@ -1,5 +1,4 @@
 ﻿using Interface;
-using Interface.DTO;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -8,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using APIResponseCallDTO = Interface.DTO.APIResponseCallDTO;
+using APIResponseCallDTO = Interface.APIResponseCallDTO;
 
-namespace Data.DAL
+namespace Data
 {
-    public class AlphaVantageDAL
+    public class AlphaVantageDAL : IALphaVantage
     {
         public async void SearchStock(string Symbol, string ddlInterval)
         {
@@ -52,18 +51,7 @@ namespace Data.DAL
                             int volume = int.Parse(property.Value["5. volume"].ToString());
 
                             // hier wordt de klasse aangevuld met de gevraagde info
-                            APIResponseCallDTO stockDTO = new APIResponseCallDTO
-                            (
-                                null,
-                                date,
-                                symbolName,
-                                open,
-                                high,
-                                low,
-                                close,
-                                volume
-                            );
-
+                            
                             APIResponseCallDTO aPIResponseCallDTO = new APIResponseCallDTO
                             (
                                 null,
@@ -120,7 +108,7 @@ namespace Data.DAL
                             int volume = int.Parse(property.Value["5. volume"].ToString());
 
                             // hier wordt de klasse aangevuld met de gevraagde info
-                            
+
                             AccountStockDTO accountStockDTO = new AccountStockDTO
                             (
                                 null,

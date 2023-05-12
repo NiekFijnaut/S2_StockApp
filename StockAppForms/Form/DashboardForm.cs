@@ -24,7 +24,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 using System.Drawing;
 using Interface;
 using Business.Class;
-using Interface.DTO;
+
 
 namespace StockAppForms
 {

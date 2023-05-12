@@ -21,21 +21,6 @@ namespace WebApp.Controllers
             return View();
         }
 
-        public IActionResult StockList() 
-        {
-            return View();
-        }
-
-        public IActionResult StockHistorie()
-        {
-            return View();
-        }
-
-        public IActionResult Favorite()
-        {
-            return View();
-        }
-
         public IActionResult Privacy()
         {
             return View();
