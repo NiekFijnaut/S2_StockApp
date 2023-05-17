@@ -56,13 +56,6 @@ namespace WebApp.Controllers
             return searchModel;
         }
 
-        public Search ToCLass(SearchModel searchModel)
-        {
-            Search search = new Search(
-                searchModel.Symbol,
-                searchModel.Interval);
-            return search;
-        }
         [HttpGet]
         public IActionResult StockIntel()
         {
@@ -70,17 +63,29 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetStockData(string symbol, string interval)
+        public IActionResult SearchStock(SearchModel searchModel)
         {
-            SearchModel searchModel = new SearchModel(symbol, interval )
-            {
-                Symbol = symbol,
-                Interval = interval
-            };
+            // Your code to process the searchDTO if needed
 
-            List<APIResponseCallDTO> data = await stockContainer.SearchStock(searchModel);
 
-            return Ok(data);
+            List<APIResponseCallDTO> apiResponse = new List<APIResponseCallDTO>();
+
+            // Process the apiResponse list based on your specific requirements
+            // ...
+
+            return View(searchModel);
         }
+        //public async Task<List<APIResponseCallDTO>> SearchStock(SearchModel searchModel)
+        //{
+        //    // Your code to process the searchDTO if needed
+
+
+        //    List<APIResponseCallDTO> apiResponse = new List<APIResponseCallDTO>();
+
+        //    // Process the apiResponse list based on your specific requirements
+        //    // ...
+
+        //    return apiResponse;
+        //}
     }
 }

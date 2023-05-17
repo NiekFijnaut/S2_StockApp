@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Interface.Interface
-{
+namespace Interface
+{ 
     public interface IHistorie
     {
         void AddHistorie(HistorieDTO historieDTO);
-        void ViewHistorie(HistorieDTO historieDTO);
+        List<HistorieDTO> ViewHistorie(HistorieDTO historieDTO);
     }
 }

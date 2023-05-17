@@ -9,6 +9,6 @@ namespace Interface
     public interface IALphaVantage
     {
         Task<List<APIResponseCallDTO>> SearchStock(SearchDTO searchDTO);
-        void AddStockToAccount(string Symbol, string ddlInterval);
+        Task<List<AccountStockDTO>> AddStockToAccount(string Symbol, string ddlInterval);
     }
 }

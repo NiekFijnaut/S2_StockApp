@@ -27,25 +27,36 @@ namespace Data
 
                 Sqlcon.Open();
                 cmd.ExecuteNonQuery();
-            }
-        }
-        
-        public void ViewHistorie(HistorieDTO historieDTO)
-        {
-            using (SqlCommand cmd1 = new SqlCommand("SELECT * FROM historie", Sqlcon))
-            {
-                cmd1.Parameters.AddWithValue("@Date", historieDTO.Date);
-                cmd1.Parameters.AddWithValue("@Symbol", historieDTO.Symbol);
-                cmd1.Parameters.AddWithValue("@Open", historieDTO.Open);
-                cmd1.Parameters.AddWithValue("@High", historieDTO.High);
-                cmd1.Parameters.AddWithValue("@Low", historieDTO.Low);
-                cmd1.Parameters.AddWithValue("@Close", historieDTO.Close);
-                cmd1.Parameters.AddWithValue("@Volume", historieDTO.Volume);
 
-                Sqlcon.Open();
-                cmd1.ExecuteNonQuery();
             }
+
         }
-        
+
+        public List<HistorieDTO> ViewHistorie(HistorieDTO historieDTO)
+        {
+            List<HistorieDTO> Historielist = new List<HistorieDTO>();
+            using (SqlCommand cmd1 = new SqlCommand("SELECT Date, Symbol, Open, High, Low, Close, Volume FROM Historie", Sqlcon))
+            {
+                Sqlcon.Open();
+                using (SqlDataReader reader = cmd1.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        HistorieDTO historie = new HistorieDTO();
+                        historie.Date = (DateTime)reader["Date"];
+                        historie.Symbol = (string)reader["Symbol"];
+                        historie.Open = (decimal)reader["Open"];
+                        historie.High = (decimal)reader["High"];
+                        historie.Low = (decimal)reader["Low"];
+                        historie.Close = (decimal)reader["Close"];
+                        historie.Volume = (int)reader["Volume"];
+
+                        Historielist.Add(historie);
+                    }
+                }
+            }
+            return Historielist;
+        }
+
     }
 }

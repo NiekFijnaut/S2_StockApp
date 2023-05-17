@@ -11,7 +11,6 @@ namespace WebApp
         [Required]
         public string Interval { get; set; }
 
-         
         public SearchModel(string symbol, string interval)
         {
             Symbol = symbol;

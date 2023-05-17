@@ -8,7 +8,7 @@ namespace Interface.Interface
 {
     public interface IStock
     {
-        void AddStock(APIResponseCallDTO stockDTO, AccountStockDTO accountStockDTO);
+        void AddStock(APIResponseCallDTO aPIResponseCallDTO, AccountStockDTO accountStockDTO);
         void GetAccountStockList();
         void UpdateStockTable(APIResponseCallDTO stockDTO);
         void DeleteStock(APIResponseCallDTO stockDTO);

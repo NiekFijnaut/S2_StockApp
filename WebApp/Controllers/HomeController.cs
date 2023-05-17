@@ -1,4 +1,5 @@
 ﻿using Business;
+using Interface;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
@@ -15,7 +16,7 @@ namespace WebApp.Controllers
         {
             _logger = logger;
         }
-
+        [HttpGet]
         public IActionResult Index()
         {
             return View();

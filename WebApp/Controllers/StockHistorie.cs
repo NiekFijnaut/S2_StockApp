@@ -11,7 +11,13 @@ namespace WebApp.Controllers
         
         public IActionResult Historie() 
         {
-            return View();
+            private const string APIKEY = "ZN0C9Q4C0LG3REEE";
+
+            private const string BaseUrl = "https://www.alphavantage.co/query";
+
+            string ApiFunction = "TIME_SERIES_INTRADAY_EXTENDED";
+
+            
         }
     }
 }
