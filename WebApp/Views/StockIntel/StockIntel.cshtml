@@ -1,66 +1,81 @@
-﻿@model SearchModel
+﻿@model APIResponseCallViewModel
 
 @{
     ViewData["Title"] = "StockIntel";
 }
 
-
 <h1>StockIntel</h1>
-<form asp-action="SearchStockIntel">
-    <div class="mb-3">
-        <label class="form-label" asp-for="Symbol"></label>
-        <input class="form-control" asp-for="Symbol" />
-        <span asp-validation-for="Symbol" class="text-danger"></span>
+
+<form id="searchForm">
+    <div class="mb-3" id="searchSymbol">
+        <label class="form-label" asp-for="SearchViewModel.Symbol"></label>
+        <input class="form-control" asp-for="SearchViewModel.Symbol" />
+        <span asp-validation-for="SearchViewModel.Symbol" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="Interval">Interval:</label>
-        <select asp-for="Interval" class="form-control">
+    <div class="form-group" id="searchInterval">
+        <label asp-for="SearchViewModel.Interval">Interval:</label>
+        <select asp-for="SearchViewModel.Interval" class="form-control">
             <option value="">--Select an interval--</option>
-            <option value="1 min">1 min</option>
-            <option value="5 min">5 min</option>
-            <option value="15 min">15 min</option>
-            <option value="30 min">30 min</option>
-            <option value="60 min">60 min</option>
+            <option value="1min">1 min</option>
+            <option value="5min">5 min</option>
+            <option value="15min">15 min</option>
+            <option value="30min">30 min</option>
+            <option value="60min">60 min</option>
         </select>
-    </div><br />
-    <button type="submit" class="btn btn-primary">Search</button>
-   
-    <head>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" />
-        <script defer src="https://code.jquery.com/jquery-3.5.1.js"></script>
-        <script defer src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-        <script defer src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-    </head>
-    
-    <table id="example" class="table table-striped" style="width:100%">
-        <thead> 
-            <tr> 
-                <th scope="col">Date</th> 
-                <th scope="col">Symbol</th> 
-                <th scope="col">Open</th> 
-                <th scope="col">High</th> 
-                <th scope="col">Low</th> 
-                <th scope="col">Close</th> 
-                <th scope="col">Volume</th> 
-            </tr> 
-        </thead>
-        @*<tbody> @foreach (var item in APiResponseList)
-            {
-            <tr> 
-                <td>@item.Date</td> 
-                <td>@item.Symbol</td> 
-                <td>@item.Open</td> 
-                <td>@item.High</td> 
-                <td>@item.Low</td> 
-                <td>@item.Close</td> 
-                <td>@item.Volume</td>  
-            </tr>
-            } 
-        </tbody>*@
-    </table>
+    </div>
+    <br />
+    <input type="submit" class="btn btn-primary" value="Search" />
+</form>
+<br />
+<div  id="stockIntelTableContainer">
+    @*hier komt de table*@
+</div>
+<br />
+<form asp-action="AddStockToAccount">
+    <div class="mb-3" id="addSymbol">
+        <label class="form-label" asp-for="SearchViewModel.Symbol"></label>
+        <input class="form-control" asp-for="SearchViewModel.Symbol" />
+        <span asp-validation-for="SearchViewModel.Symbol" class="text-danger"></span>
+    </div>
+    <div class="form-group" id="addInterval">
+        <label asp-for="SearchViewModel.Interval">Interval:</label>
+        <select asp-for="SearchViewModel.Interval" class="form-control">
+            <option value="">--Select an interval--</option>
+            <option value="1min">1 min</option>
+            <option value="5min">5 min</option>
+            <option value="15min">15 min</option>
+            <option value="30min">30 min</option>
+            <option value="60min">60 min</option>
+        </select>
+    </div>
+    <input type="submit" class="btn btn-primary" value="Add Stock" />
+    <p>@ViewBag.Message</p>
 </form>
 
+@section Scripts
+    {
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script>
+        $(document).ready(function () {
+            
+            $("#searchForm").submit(function (event) {
+                event.preventDefault();
 
+                $.ajax({
+                    url: '/StockIntel/GetSearchResults',
 
-
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        
+                        $("#stockIntelTableContainer").html(response);
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Oops something went wrong")
+                        console.log(error);
+                    }
+                });
+            });
+        });
+    </script>
+}

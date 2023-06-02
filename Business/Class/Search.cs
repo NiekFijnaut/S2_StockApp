@@ -16,5 +16,9 @@ namespace Business
             Symbol = symbol;
             Interval = interval;
         }
+
+        public Search()
+        {
+        }
     }
 }

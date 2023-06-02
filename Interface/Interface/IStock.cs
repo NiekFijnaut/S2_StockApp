@@ -9,9 +9,9 @@ namespace Interface.Interface
     public interface IStock
     {
         void AddStock(APIResponseCallDTO aPIResponseCallDTO, AccountStockDTO accountStockDTO);
-        void GetAccountStockList();
-        void UpdateStockTable(APIResponseCallDTO stockDTO);
-        void DeleteStock(APIResponseCallDTO stockDTO);
-        void DeleteStock(ulong stockId);
+        List<AccountStockDTO> GetAccountStockList();
+        //void AddStockToAccount(SearchDTO searchDTO);
+        void UpdateStockTable(APIResponseCallDTO aPIResponseCallDTO);
+        void DeleteStock(string symbol);
     }
 }

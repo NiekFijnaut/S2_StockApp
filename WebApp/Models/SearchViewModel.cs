@@ -3,7 +3,7 @@ using Microsoft.Build.Framework;
 
 namespace WebApp
 {
-    public class SearchModel
+    public class SearchViewModel
     {
         [Required]
         public string Symbol { get; set; }
@@ -11,7 +11,12 @@ namespace WebApp
         [Required]
         public string Interval { get; set; }
 
-        public SearchModel(string symbol, string interval)
+        public SearchViewModel()
+        {
+
+        }
+
+        public SearchViewModel(string symbol, string interval)
         {
             Symbol = symbol;
             Interval = interval;

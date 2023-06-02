@@ -8,6 +8,11 @@ namespace Business
 {
     public class Recommendation
     {
-        //public string Interest { get; set; }
+        public string Interest { get; set; }
+
+        public Recommendation(string interest)
+        {
+            Interest = interest;
+        }
     }
 }

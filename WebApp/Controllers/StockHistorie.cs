@@ -9,15 +9,14 @@ namespace WebApp.Controllers
             return View();
         }
         
-        public IActionResult Historie() 
-        {
-            private const string APIKEY = "ZN0C9Q4C0LG3REEE";
+        //public IActionResult Historie() 
+        //{
+        //    private const string APIKEY = "ZN0C9Q4C0LG3REEE";
 
-            private const string BaseUrl = "https://www.alphavantage.co/query";
+        //    private const string BaseUrl = "https://www.alphavantage.co/query";
 
-            string ApiFunction = "TIME_SERIES_INTRADAY_EXTENDED";
+        //    string ApiFunction = "TIME_SERIES_INTRADAY_EXTENDED";
 
-            
-        }
+        //}
     }
 }

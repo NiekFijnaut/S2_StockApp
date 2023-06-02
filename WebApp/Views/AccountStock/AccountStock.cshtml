@@ -1,0 +1,24 @@
+﻿@model AccountStockViewModel
+@{
+    ViewData["Title"] = "AccountStock";
+}
+
+<h1>AccountStock</h1>
+
+<table class="custom-table">
+    <thead>
+        <tr>
+            <th>Symbol</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.AccountStocks)
+        {
+            <tr>
+                <td>@item.Symbol</td>
+                <td>@item.Date</td>
+            </tr>
+        }
+    </tbody>
+</table>

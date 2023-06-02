@@ -42,16 +42,16 @@ namespace Data
                 {
                     while (reader.Read())
                     {
-                        HistorieDTO historie = new HistorieDTO();
-                        historie.Date = (DateTime)reader["Date"];
-                        historie.Symbol = (string)reader["Symbol"];
-                        historie.Open = (decimal)reader["Open"];
-                        historie.High = (decimal)reader["High"];
-                        historie.Low = (decimal)reader["Low"];
-                        historie.Close = (decimal)reader["Close"];
-                        historie.Volume = (int)reader["Volume"];
+                        //HistorieDTO historie = new HistorieDTO();
+                        //historie.Date = (DateTime)reader["Date"];
+                        //historie.Symbol = (string)reader["Symbol"];
+                        //historie.Open = (decimal)reader["Open"];
+                        //historie.High = (decimal)reader["High"];
+                        //historie.Low = (decimal)reader["Low"];
+                        //historie.Close = (decimal)reader["Close"];
+                        //historie.Volume = (int)reader["Volume"];
 
-                        Historielist.Add(historie);
+                        //Historielist.Add(historie);
                     }
                 }
             }

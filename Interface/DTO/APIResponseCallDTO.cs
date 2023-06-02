@@ -10,9 +10,9 @@ namespace Interface
         long? StockID,
         DateTime Date,
         string Symbol,
-        double? Open,
-        double? High,
-        double? Low,
-        double? Close,
-        int? Volume);
+        double Open,
+        double High,
+        double Low,
+        double Close,
+        int Volume);
 }

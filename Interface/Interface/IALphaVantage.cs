@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Interface
 {
-    public interface IALphaVantage
+    public interface IAlphaVantage
     {
         Task<List<APIResponseCallDTO>> SearchStock(SearchDTO searchDTO);
-        Task<List<AccountStockDTO>> AddStockToAccount(string Symbol, string ddlInterval);
+        List<APIResponseCallDTO> GetAPIResponseCallList();
     }
 }

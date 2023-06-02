@@ -2,18 +2,20 @@
 using Interface;
 using Interface.Interface;
 using Microsoft.Data.SqlClient;
+using Newtonsoft.Json.Linq;
 using System.Data;
+using System.Globalization;
 using System.Runtime.InteropServices;
 
 namespace Data
 {
-    public class StockDAL : IStock
+    public class StockDAL : IStock, IAlphaVantage
     {
         SqlConnection Sqlcon = DataString.connection;
         //sql connection string naar een aparte functie zodat deze mee kan veranderen als het wachtwoord veranderd bijvoorbeeld en overal aangeroepen kan worden 
         public void AddStock(APIResponseCallDTO aPIResponseCallDTO, AccountStockDTO accountStockDTO)
         {
-            string apiinsertquery = "INSERT INTO APIResponseCall (StockID, Date, Symbol, [Open], High, Low, [Close]) VALUES (@StockID, @Date, @Symbol, @Open, @High, @Low, @Close)";
+            string apiinsertquery = "INSERT INTO APIResponseCall (StockID, Date, Symbol, [Open], High, Low, [Close], Volume) VALUES (@StockID, @Date, @Symbol, @Open, @High, @Low, @Close, @Volume)";
             using (SqlCommand apiinsertCmd = new SqlCommand(apiinsertquery, Sqlcon))
             {
                 Sqlcon.Open();
@@ -24,6 +26,7 @@ namespace Data
                 apiinsertCmd.Parameters.AddWithValue("@High", aPIResponseCallDTO.High);
                 apiinsertCmd.Parameters.AddWithValue("@Low", aPIResponseCallDTO.Low);
                 apiinsertCmd.Parameters.AddWithValue("@Close", aPIResponseCallDTO.Close);
+                apiinsertCmd.Parameters.AddWithValue("@Volume", aPIResponseCallDTO.Volume);
 
                 apiinsertCmd.ExecuteNonQuery();
                 Sqlcon.Close();
@@ -34,37 +37,61 @@ namespace Data
                 BEGIN INSERT INTO AccountStock (Date, Symbol) SELECT TOP 1 @Date, @Symbol FROM AccountStock ORDER BY Date DESC END";
             using (SqlCommand cmd5 = new SqlCommand(insertQuery, Sqlcon))
             {
-                cmd5.Parameters.AddWithValue("@Date", accountStockDTO.Date);
-                cmd5.Parameters.AddWithValue("@Symbol", accountStockDTO.Symbol);
+                cmd5.Parameters.AddWithValue("@Date", aPIResponseCallDTO.Date);
+                cmd5.Parameters.AddWithValue("@Symbol", aPIResponseCallDTO.Symbol);
 
                 Sqlcon.Open();
                 cmd5.ExecuteNonQuery();
                 Sqlcon.Close();
             }
         }
-        
-        public List<APIResponseCallDTO> GetAPIResponseCallList()
-        {
-            Sqlcon.Open();
-            List<APIResponseCallDTO> apiResponseList = new List<APIResponseCallDTO>();
-            using SqlCommand cmd6 = new("SELECT Date, Symbol, [Open], High, Low, [Close] FROM [dbo].[AccoutnStock]", Sqlcon);
-            using SqlDataReader reader6 = cmd6.ExecuteReader();
-            while (reader6.Read())
-            {
-                apiResponseList.Add(
-                    new APIResponseCallDTO(
-                        null,
-                        reader6.GetDateTime("Date"),
-                        reader6.GetString("Symbol"),
-                        reader6.GetDouble("Open"),
-                        reader6.GetDouble("High"),
-                        reader6.GetDouble("Low"),
-                        reader6.GetDouble("Close"),
-                        reader6.GetInt32("Volume"));
-            }
-            Sqlcon.Close ();
-            return apiResponseList;
-        }
+
+        //public async void AddStockToAccount(SearchDTO searchDTO)
+        //{
+        //    string Symbol = searchDTO.Symbol;
+
+        //    string Interval = searchDTO.Interval;
+
+        //    const string APIKEY = "ZN0C9Q4C0LG3REEE";
+
+        //    const string BaseUrl = "https://www.alphavantage.co/query";
+
+        //    string ApiFunction = "TIME_SERIES_INTRADAY";
+
+        //    string apiurl = $"{BaseUrl}?function={ApiFunction}&symbol={Symbol}&interval={Interval}&apikey={APIKEY}";
+
+        //    using (HttpClient client = new HttpClient())
+        //    {
+        //        HttpResponseMessage response = await client.GetAsync(apiurl);
+        //        if (response.IsSuccessStatusCode)
+        //        {
+        //            string json = await response.Content.ReadAsStringAsync();
+        //            var data = JObject.Parse(json);
+
+        //            string symbolName = data?["Meta Data"]?["2. Symbol"]?.ToString();
+        //            //string lastRefreshed = data?["Meta Data"]?["3. Last Refreshed"]?.ToString();
+        //            //string interval = data?["Meta Data"]?["4. Interval"]?.ToString();
+        //            //string info = data?["Meta Data"]?["1. Information"]?.ToString();
+
+        //            var timeSeries = data?["Time Series " + "(" + Interval + ")"];
+        //            if (timeSeries != null)
+        //            {
+
+        //                foreach (JProperty property in timeSeries.Children<JProperty>())
+        //                {
+        //                    DateTime date = DateTime.Parse(property.Name);
+        //                    double open = double.Parse(property.Value["1. open"].ToString(), CultureInfo.GetCultureInfo("en-US"));
+        //                    double high = double.Parse(property.Value["2. high"].ToString(), CultureInfo.GetCultureInfo("en-US"));
+        //                    double low = double.Parse(property.Value["3. low"].ToString(), CultureInfo.GetCultureInfo("en-US"));
+        //                    double close = double.Parse(property.Value["4. close"].ToString(), CultureInfo.GetCultureInfo("en-US"));
+        //                    int volume = int.Parse(property.Value["5. volume"].ToString());
+
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
         public List<AccountStockDTO> GetAccountStockList()
         {
             Sqlcon.Open();
@@ -84,51 +111,36 @@ namespace Data
             return accountStockList;
         }
 
-        public void UpdateStockTable(APIResponseCallDTO stockDTO)
+        public void UpdateStockTable(APIResponseCallDTO aPIResponseCallDTO)
         {
             string updateQuery = "UPDATE stock SET Date = @Date WHERE Symbol = @Symbol";
             SqlCommand cmd2 = new SqlCommand(updateQuery, Sqlcon);
-            cmd2.Parameters.AddWithValue("@Symbol", stockDTO.Symbol);
-            cmd2.Parameters.AddWithValue("@Date", stockDTO.Date);
+            cmd2.Parameters.AddWithValue("@Symbol", aPIResponseCallDTO.Symbol);
+            cmd2.Parameters.AddWithValue("@Date", aPIResponseCallDTO.Date);
             int rowsAffected = cmd2.ExecuteNonQuery();
             if (rowsAffected == 0)
             {
                 string insrtQuery = "INSERT INTO AccountStock (Date, Symbol) VALUES (@Date, @Symbol)";
                 SqlCommand cmd3 = new SqlCommand(insrtQuery, Sqlcon);
-                cmd3.Parameters.AddWithValue("@Symbol", stockDTO.Symbol);
-                cmd3.Parameters.AddWithValue("@Date", stockDTO.Date);
+                cmd3.Parameters.AddWithValue("@Symbol", aPIResponseCallDTO.Symbol);
+                cmd3.Parameters.AddWithValue("@Date", aPIResponseCallDTO.Date);
                 cmd3.ExecuteNonQuery();
             }
         }
 
-        public void DeleteStock(ulong stockId)
+        public void DeleteStock(string symbol)
         {
-            string deletequery = "DELETE FROM Stock WHERE StockID = @StockID";
+            string deletequery = "DELETE FROM AccountStock WHERE Symbol = @Symbol";
             SqlCommand cmd4 = new SqlCommand(deletequery, Sqlcon);
             cmd4.ExecuteNonQuery();
         }
 
-        void IStock.GetAccountStockList()
+        public Task<List<APIResponseCallDTO>> SearchStock(SearchDTO searchDTO)
         {
             throw new NotImplementedException();
         }
 
-        public void AddStock(StockDTO stockDTO, AccountStockDTO accountStockDTO, APIResponseCallDTO aPIResponseCallDTO)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateStockTable(StockDTO stockDTO)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddStock(APIResponseCallDTO stockDTO, AccountStockDTO accountStockDTO)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteStock(APIResponseCallDTO stockDTO)
+        public List<APIResponseCallDTO> GetAPIResponseCallList()
         {
             throw new NotImplementedException();
         }

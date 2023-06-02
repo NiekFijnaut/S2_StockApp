@@ -125,7 +125,7 @@ namespace StockAppForms
                                 symbolName
                             );
 
-                            StockContainer stockContainer = new StockContainer();
+                            AlphaVantageContainer stockContainer = new AlphaVantageContainer();
                             stockContainer.AddStock(stock, aPIResponseCall, accountStock);
 
                             timeSeriesData.Add(stock);
@@ -177,7 +177,7 @@ namespace StockAppForms
 
         private void DashboardForm_Load(object sender, EventArgs e)
         {
-            StockContainer stockContainer = new StockContainer();
+            AlphaVantageContainer stockContainer = new AlphaVantageContainer();
             foreach (var accountStock in stockContainer.GetAccountStockList())
             {
                 dgvAccountStock.Rows.Add(accountStock.Date, accountStock.Symbol);

@@ -1,10 +1,13 @@
 ﻿using Business;
+using Business.Class;
 using Data;
 using Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
+using System.Reflection;
 using WebApp.Models;
 
 namespace WebApp.Controllers
@@ -17,39 +20,21 @@ namespace WebApp.Controllers
             return View();
         }
 
-        StockContainer stockContainer = new StockContainer();
-        //new StockDAL(), new AlphaVantageDAL()
-        public StockModel ToModel(Stock stock)
+        AlphaVantageContainer alphaVantageContainer = new AlphaVantageContainer(new AlphaVantageDAL());
+        
+
+        public APIResponseCallViewModel ToModel(List<APIResponseCall> APIResponseList, SearchViewModel searchViewModel)
         {
-            StockModel stockModel = new StockModel(
-                stock.Date,
-                stock.Symbol,
-                stock.Open,
-                stock.High,
-                stock.Low,
-                stock.Close,
-                stock.Volume
+            APIResponseCallViewModel aPIResponseCallViewModel = new APIResponseCallViewModel(
+                APIResponseList,
+                searchViewModel
                 );
-            return stockModel;
+            return aPIResponseCallViewModel;
         }
 
-        public APIResponseCallModel ToModel(APIResponseCall aPIResponseCall)
+        public SearchViewModel ToModel(Search search) 
         {
-            APIResponseCallModel aPIResponseCallModel = new APIResponseCallModel(
-                aPIResponseCall.Date,
-                aPIResponseCall.Symbol,
-                aPIResponseCall.Open,
-                aPIResponseCall.High,
-                aPIResponseCall.Low,
-                aPIResponseCall.Close,
-                aPIResponseCall.Volume
-                );
-            return aPIResponseCallModel;
-        }
-
-        public SearchModel ToModel(Search search) 
-        {
-            SearchModel searchModel = new SearchModel(
+            SearchViewModel searchModel = new SearchViewModel(
                 search.Symbol,
                 search.Interval
                 );
@@ -62,30 +47,63 @@ namespace WebApp.Controllers
             return View();
         }
 
+        List<APIResponseCall > APIResponseList = new List<APIResponseCall>();
+
         [HttpPost]
-        public IActionResult SearchStock(SearchModel searchModel)
+        public async Task<IActionResult> GetSearchResults(SearchViewModel searchViewModel)
         {
-            // Your code to process the searchDTO if needed
+            Search search = new Search()
+            {
+                Symbol = searchViewModel.Symbol,
+                Interval = searchViewModel.Interval
+            };
 
+            APIResponseList = await alphaVantageContainer.SearchStock(search);
 
-            List<APIResponseCallDTO> apiResponse = new List<APIResponseCallDTO>();
+            APIResponseCallViewModel responseViewModel = new APIResponseCallViewModel(APIResponseList, searchViewModel);
 
-            // Process the apiResponse list based on your specific requirements
-            // ...
-
-            return View(searchModel);
+            return PartialView("_StockIntelTable", responseViewModel);
         }
-        //public async Task<List<APIResponseCallDTO>> SearchStock(SearchModel searchModel)
-        //{
-        //    // Your code to process the searchDTO if needed
 
+        [HttpPost]
+        public async Task<IActionResult> AddStockToAccount(AccountStockViewModel accountStockViewModel, APIResponseCallViewModel aPIResponseCallViewModel, SearchViewModel searchViewModel)
+        {
 
-        //    List<APIResponseCallDTO> apiResponse = new List<APIResponseCallDTO>();
+            AccountStock accountStock = new AccountStock()
+            {
+                
+            };
 
-        //    // Process the apiResponse list based on your specific requirements
-        //    // ...
+            Search search = new Search()
+            {
+                Symbol = searchViewModel.Symbol,
+                Interval = searchViewModel.Interval
+            };
 
-        //    return apiResponse;
-        //}
+            APIResponseList = await alphaVantageContainer.SearchStock(search);
+
+            if (APIResponseList.Count > 0)
+            {
+                APIResponseCall aPIResponseCall = new APIResponseCall()
+                {
+                    Date = APIResponseList[APIResponseList.Count - 1].Date,
+                    Symbol = APIResponseList[APIResponseList.Count - 1].Symbol,
+                    Open = APIResponseList[APIResponseList.Count - 1].Open,
+                    High = APIResponseList[APIResponseList.Count - 1].High,
+                    Low = APIResponseList[APIResponseList.Count - 1].Low,
+                    Close = APIResponseList[APIResponseList.Count - 1].Close,
+                    Volume = APIResponseList[APIResponseList.Count - 1].Volume
+                };
+                alphaVantageContainer.AddStock(aPIResponseCall, accountStock);
+                ViewBag.Message = "Stock has been added to account";
+                return View("StockIntel");
+            }
+            else
+            {
+                ViewBag.Message = "Something went wrong";
+                return View("StockIntel");
+            }
+            
+        }      
     }
 }
