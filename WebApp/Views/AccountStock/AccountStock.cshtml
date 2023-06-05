@@ -5,20 +5,25 @@
 
 <h1>AccountStock</h1>
 
-<table class="custom-table">
-    <thead>
-        <tr>
-            <th>Symbol</th>
-            <th>Date</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.AccountStocks)
-        {
-            <tr>
-                <td>@item.Symbol</td>
-                <td>@item.Date</td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div id="accountStockTableContainer">
+    @*hier komt de table*@
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '/AccountStock/GetAccountStock',
+                type: 'GET',
+                success: function (response) {
+                    $("#accountStockTableContainer").html(response);
+                    console.log(response);
+                },
+                error: function (xhr, status, error) {
+                    alert("Oops, something went wrong");
+                    console.log(error);
+                }
+            });
+        });
+    </script>
+}

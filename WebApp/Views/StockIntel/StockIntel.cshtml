@@ -6,8 +6,8 @@
 
 <h1>StockIntel</h1>
 
-<form id="searchForm">
-    <div class="mb-3" id="searchSymbol">
+<form id="searchForm" action="GetSearchResults">
+    <div class="mb-3" id="searchSymbol" method="post">
         <label class="form-label" asp-for="SearchViewModel.Symbol"></label>
         <input class="form-control" asp-for="SearchViewModel.Symbol" />
         <span asp-validation-for="SearchViewModel.Symbol" class="text-danger"></span>
@@ -24,31 +24,17 @@
         </select>
     </div>
     <br />
-    <input type="submit" class="btn btn-primary" value="Search" />
+    <input type="submit" class="btn btn-primary" value="Search" id="Search"  />
 </form>
 <br />
 <div  id="stockIntelTableContainer">
     @*hier komt de table*@
 </div>
 <br />
-<form asp-action="AddStockToAccount">
-    <div class="mb-3" id="addSymbol">
-        <label class="form-label" asp-for="SearchViewModel.Symbol"></label>
-        <input class="form-control" asp-for="SearchViewModel.Symbol" />
-        <span asp-validation-for="SearchViewModel.Symbol" class="text-danger"></span>
-    </div>
-    <div class="form-group" id="addInterval">
-        <label asp-for="SearchViewModel.Interval">Interval:</label>
-        <select asp-for="SearchViewModel.Interval" class="form-control">
-            <option value="">--Select an interval--</option>
-            <option value="1min">1 min</option>
-            <option value="5min">5 min</option>
-            <option value="15min">15 min</option>
-            <option value="30min">30 min</option>
-            <option value="60min">60 min</option>
-        </select>
-    </div>
-    <input type="submit" class="btn btn-primary" value="Add Stock" />
+<form id="addStockForm" action="AddStockToAccount" method="post">
+    <input type="hidden" asp-for="SearchViewModel.Symbol" id="addSymbol" name="symbol"/>
+    <input type="hidden" asp-for="SearchViewModel.Interval" id="addInterval" name="interval">
+    <input type="submit" class="btn btn-primary" value="Add Stock" id="AddStock"/>
     <p>@ViewBag.Message</p>
 </form>
 
@@ -57,21 +43,32 @@
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script>
         $(document).ready(function () {
-            
-            $("#searchForm").submit(function (event) {
+
+            $("#AddStock").click(function (event) {
                 event.preventDefault();
+                var symbol = $('#searchSymbol input').val();
+                var interval = $('#searchInterval select').val();
+
+                $('#addSymbol').val(symbol);
+                $('#addInterval').val(interval);
+                
+                $("#addStockForm").submit()
+            });
+
+            $("#Search").click(function (event) {
+                event.preventDefault();
+
+                $("#searchForm").submit()
 
                 $.ajax({
                     url: '/StockIntel/GetSearchResults',
-
                     type: 'POST',
                     data: $(this).serialize(),
-                    success: function (response) {
-                        
+                    success: function(response) {
                         $("#stockIntelTableContainer").html(response);
                     },
-                    error: function (xhr, status, error) {
-                        alert("Oops something went wrong")
+                    error: function(xhr, status, error) {
+                        alert("Oops something went wrong");
                         console.log(error);
                     }
                 });

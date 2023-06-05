@@ -8,7 +8,8 @@ namespace WebApp.Controllers
 {
     public class AccountStockController : Controller
     {
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult AccountStock()
         {
             return View();
         }
@@ -22,7 +23,7 @@ namespace WebApp.Controllers
 
             AccountStockViewModel accountStockViewModel = new AccountStockViewModel(accountStocks);
 
-            return View("AccountStock", accountStockViewModel);
+            return PartialView("StockAccountTable", accountStockViewModel);
         }
     }
 }

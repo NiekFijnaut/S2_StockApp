@@ -15,10 +15,9 @@ namespace Business
         public string Email { get; set; }
         public string Region { get; set; }
         public string Interest { get; set; }
-        public DateTime? Age { get; set; }
-        public long? StockID { get; set; }
+        public DateTime Age { get; set; }
 
-        public Account(string username, string passwordHash, string email, string region, string interest, DateTime? age)
+        public Account(string username, string passwordHash, string email, string region, string interest, DateTime age)
         {
             Username= username;
             PasswordHash= passwordHash;

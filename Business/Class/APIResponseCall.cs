@@ -22,8 +22,9 @@ namespace Business
 
         }
 
-        public APIResponseCall(DateTime date, string symbol, double open, double high, double low, double close, int volume)
+        public APIResponseCall(long? stockID, DateTime date, string symbol, double open, double high, double low, double close, int volume)
         {
+            StockID = stockID;
             Date = date;
             Symbol = symbol;
             Open = open;

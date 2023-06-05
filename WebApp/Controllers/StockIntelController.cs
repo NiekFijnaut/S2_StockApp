@@ -71,7 +71,7 @@ namespace WebApp.Controllers
 
             AccountStock accountStock = new AccountStock()
             {
-                
+                 
             };
 
             Search search = new Search()
@@ -103,7 +103,6 @@ namespace WebApp.Controllers
                 ViewBag.Message = "Something went wrong";
                 return View("StockIntel");
             }
-            
         }      
     }
 }

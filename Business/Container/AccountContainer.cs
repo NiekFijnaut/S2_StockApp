@@ -12,6 +12,12 @@ namespace Business
 {
     public class AccountContainer
     {
+        private IAccount _account;
+
+        public AccountContainer(IAccount account)
+        {
+            _account = account;
+        }
         private AccountDAL accountDAL = new AccountDAL();
 
         public AccountContainer()
@@ -30,8 +36,7 @@ namespace Business
                 account.Email,
                 account.Region,
                 account.Interest,
-                account.Age,
-                account.StockID);
+                account.Age);
                 accountDAL.AddAccount(accountDTO);
             }
             catch (Exception ex)
@@ -45,9 +50,7 @@ namespace Business
 
         public bool passwordMatches(Account account)
         {
-            AccountDTO accountDTO = new AccountDTO(null, account.Username, account.PasswordHash, null, null, null, null, null);
-
-            AccountDAL accountDAL = new AccountDAL(); 
+            AccountDTO accountDTO = new AccountDTO(null, account.Username, account.PasswordHash, null, null, null, account.Age); 
 
             bool passwordMatches = accountDAL.VerifyPassword(accountDTO); 
 

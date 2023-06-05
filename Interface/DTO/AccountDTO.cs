@@ -7,6 +7,5 @@
         string Email, 
         string Region, 
         string Interest, 
-        DateTime? Age, 
-        long? StockID);
+        DateTime Age);
 }

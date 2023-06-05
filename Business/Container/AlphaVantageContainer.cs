@@ -27,21 +27,22 @@ namespace Business
         {
 
             APIResponseCallDTO aPIResponseCallDTO = new APIResponseCallDTO(
-            aPIResponseCall.StockID,
-            aPIResponseCall.Date,
-            aPIResponseCall.Symbol,
-            aPIResponseCall.Open,
-            aPIResponseCall.High,
-            aPIResponseCall.Low,
-            aPIResponseCall.Close,
-            aPIResponseCall.Volume
-            );
+                null,
+                aPIResponseCall.Date,
+                aPIResponseCall.Symbol,
+                aPIResponseCall.Open,
+                aPIResponseCall.High,
+                aPIResponseCall.Low,
+                aPIResponseCall.Close,
+                aPIResponseCall.Volume
+                );
 
             AccountStockDTO accountStockDTO = new AccountStockDTO(
                 aPIResponseCall.StockID,
                 aPIResponseCall.Date,
                 aPIResponseCall.Symbol,
-                accountStock.AccountID);
+                accountStock.AccountID
+                );
             
             stockDAL.AddStock(aPIResponseCallDTO, accountStockDTO);
         }
@@ -54,6 +55,7 @@ namespace Business
             {
                 aPIResponseCall.Add(
                     new APIResponseCall(
+                        null,
                         aPIResponseCallDTO.Date,
                         aPIResponseCallDTO.Symbol,
                         aPIResponseCallDTO.Open,
@@ -75,7 +77,8 @@ namespace Business
                 accountStocks.Add(
                     new AccountStock(
                         accountStockDTO.Date,
-                        accountStockDTO.Symbol));
+                        accountStockDTO.Symbol
+                        ));
             }
             return accountStocks;
         }
@@ -92,6 +95,7 @@ namespace Business
             {
                 aPIResponses.Add(
                     new APIResponseCall(
+                        null,
                         aPIResponseCallDTO.Date,
                         aPIResponseCallDTO.Symbol,
                         aPIResponseCallDTO.Open,
@@ -100,7 +104,6 @@ namespace Business
                         aPIResponseCallDTO.Close,
                         aPIResponseCallDTO.Volume
                         ));
-
             }
             return aPIResponses;
             
@@ -136,7 +139,8 @@ namespace Business
                 accountStock.Add(
                     new AccountStock(
                         accountStockDTO.Date,
-                        accountStockDTO.Symbol));
+                        accountStockDTO.Symbol
+                        ));
             }
             return accountStock;
         }

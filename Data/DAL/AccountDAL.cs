@@ -47,7 +47,6 @@ namespace Data
                 cmd.Parameters.AddWithValue("@Region", accountDTO.Region);
                 cmd.Parameters.AddWithValue("@Interest", accountDTO.Interest);
                 cmd.Parameters.AddWithValue("@Age", accountDTO.Age);
-                //cmd.Parameters.AddWithValue("@StockID", DBNull.Value);
 
                 Sqlcon.Open();
                 cmd.ExecuteNonQuery();

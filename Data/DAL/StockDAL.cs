@@ -15,11 +15,10 @@ namespace Data
         //sql connection string naar een aparte functie zodat deze mee kan veranderen als het wachtwoord veranderd bijvoorbeeld en overal aangeroepen kan worden 
         public void AddStock(APIResponseCallDTO aPIResponseCallDTO, AccountStockDTO accountStockDTO)
         {
-            string apiinsertquery = "INSERT INTO APIResponseCall (StockID, Date, Symbol, [Open], High, Low, [Close], Volume) VALUES (@StockID, @Date, @Symbol, @Open, @High, @Low, @Close, @Volume)";
+            string apiinsertquery = "INSERT INTO APIResponseCall (Date, Symbol, [Open], High, Low, [Close], Volume) VALUES (@Date, @Symbol, @Open, @High, @Low, @Close, @Volume)";
             using (SqlCommand apiinsertCmd = new SqlCommand(apiinsertquery, Sqlcon))
             {
                 Sqlcon.Open();
-                apiinsertCmd.Parameters.AddWithValue("@StockID", aPIResponseCallDTO.StockID);
                 apiinsertCmd.Parameters.AddWithValue("@Date", aPIResponseCallDTO.Date);
                 apiinsertCmd.Parameters.AddWithValue("@Symbol", aPIResponseCallDTO.Symbol);
                 apiinsertCmd.Parameters.AddWithValue("@Open", aPIResponseCallDTO.Open);
@@ -32,13 +31,24 @@ namespace Data
                 Sqlcon.Close();
             }
 
+            // Retrieve the newly inserted StockID from the APIResponseCall table
+            int stockID;
+            using (SqlCommand getStockIDCmd = new SqlCommand("SELECT IDENT_CURRENT('APIResponseCall')", Sqlcon))
+            {
+                Sqlcon.Open();
+                stockID = Convert.ToInt32(getStockIDCmd.ExecuteScalar());
+                Sqlcon.Close();
+            }
+
             string insertQuery = 
                 @"IF NOT EXISTS (SELECT 1 FROM AccountStock WHERE Symbol = @Symbol) 
-                BEGIN INSERT INTO AccountStock (Date, Symbol) SELECT TOP 1 @Date, @Symbol FROM AccountStock ORDER BY Date DESC END";
+                BEGIN INSERT INTO AccountStock (StockID, Date, Symbol) SELECT TOP 1 @StockID, @Date, @Symbol FROM APIResponseCall ORDER BY Date DESC END";
             using (SqlCommand cmd5 = new SqlCommand(insertQuery, Sqlcon))
             {
+                cmd5.Parameters.AddWithValue("@StockID", stockID);
                 cmd5.Parameters.AddWithValue("@Date", aPIResponseCallDTO.Date);
                 cmd5.Parameters.AddWithValue("@Symbol", aPIResponseCallDTO.Symbol);
+
 
                 Sqlcon.Open();
                 cmd5.ExecuteNonQuery();
@@ -46,51 +56,7 @@ namespace Data
             }
         }
 
-        //public async void AddStockToAccount(SearchDTO searchDTO)
-        //{
-        //    string Symbol = searchDTO.Symbol;
-
-        //    string Interval = searchDTO.Interval;
-
-        //    const string APIKEY = "ZN0C9Q4C0LG3REEE";
-
-        //    const string BaseUrl = "https://www.alphavantage.co/query";
-
-        //    string ApiFunction = "TIME_SERIES_INTRADAY";
-
-        //    string apiurl = $"{BaseUrl}?function={ApiFunction}&symbol={Symbol}&interval={Interval}&apikey={APIKEY}";
-
-        //    using (HttpClient client = new HttpClient())
-        //    {
-        //        HttpResponseMessage response = await client.GetAsync(apiurl);
-        //        if (response.IsSuccessStatusCode)
-        //        {
-        //            string json = await response.Content.ReadAsStringAsync();
-        //            var data = JObject.Parse(json);
-
-        //            string symbolName = data?["Meta Data"]?["2. Symbol"]?.ToString();
-        //            //string lastRefreshed = data?["Meta Data"]?["3. Last Refreshed"]?.ToString();
-        //            //string interval = data?["Meta Data"]?["4. Interval"]?.ToString();
-        //            //string info = data?["Meta Data"]?["1. Information"]?.ToString();
-
-        //            var timeSeries = data?["Time Series " + "(" + Interval + ")"];
-        //            if (timeSeries != null)
-        //            {
-
-        //                foreach (JProperty property in timeSeries.Children<JProperty>())
-        //                {
-        //                    DateTime date = DateTime.Parse(property.Name);
-        //                    double open = double.Parse(property.Value["1. open"].ToString(), CultureInfo.GetCultureInfo("en-US"));
-        //                    double high = double.Parse(property.Value["2. high"].ToString(), CultureInfo.GetCultureInfo("en-US"));
-        //                    double low = double.Parse(property.Value["3. low"].ToString(), CultureInfo.GetCultureInfo("en-US"));
-        //                    double close = double.Parse(property.Value["4. close"].ToString(), CultureInfo.GetCultureInfo("en-US"));
-        //                    int volume = int.Parse(property.Value["5. volume"].ToString());
-
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+       
 
         public List<AccountStockDTO> GetAccountStockList()
         {
@@ -146,6 +112,52 @@ namespace Data
         }
     }
 }
+
+//public async void AddStockToAccount(SearchDTO searchDTO)
+//{
+//    string Symbol = searchDTO.Symbol;
+
+//    string Interval = searchDTO.Interval;
+
+//    const string APIKEY = "ZN0C9Q4C0LG3REEE";
+
+//    const string BaseUrl = "https://www.alphavantage.co/query";
+
+//    string ApiFunction = "TIME_SERIES_INTRADAY";
+
+//    string apiurl = $"{BaseUrl}?function={ApiFunction}&symbol={Symbol}&interval={Interval}&apikey={APIKEY}";
+
+//    using (HttpClient client = new HttpClient())
+//    {
+//        HttpResponseMessage response = await client.GetAsync(apiurl);
+//        if (response.IsSuccessStatusCode)
+//        {
+//            string json = await response.Content.ReadAsStringAsync();
+//            var data = JObject.Parse(json);
+
+//            string symbolName = data?["Meta Data"]?["2. Symbol"]?.ToString();
+//            //string lastRefreshed = data?["Meta Data"]?["3. Last Refreshed"]?.ToString();
+//            //string interval = data?["Meta Data"]?["4. Interval"]?.ToString();
+//            //string info = data?["Meta Data"]?["1. Information"]?.ToString();
+
+//            var timeSeries = data?["Time Series " + "(" + Interval + ")"];
+//            if (timeSeries != null)
+//            {
+
+//                foreach (JProperty property in timeSeries.Children<JProperty>())
+//                {
+//                    DateTime date = DateTime.Parse(property.Name);
+//                    double open = double.Parse(property.Value["1. open"].ToString(), CultureInfo.GetCultureInfo("en-US"));
+//                    double high = double.Parse(property.Value["2. high"].ToString(), CultureInfo.GetCultureInfo("en-US"));
+//                    double low = double.Parse(property.Value["3. low"].ToString(), CultureInfo.GetCultureInfo("en-US"));
+//                    double close = double.Parse(property.Value["4. close"].ToString(), CultureInfo.GetCultureInfo("en-US"));
+//                    int volume = int.Parse(property.Value["5. volume"].ToString());
+
+//                }
+//            }
+//        }
+//    }
+//}
 
 
 //string selectQuery = "SELECT TOP 1 StockId, Date, Symbol, [Open], High, Low, [Close] FROM Stock ORDER BY Date DESC";
