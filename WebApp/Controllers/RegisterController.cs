@@ -1,4 +1,5 @@
-﻿using Business;
+﻿using Azure.Messaging;
+using Business;
 using Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
@@ -12,7 +13,7 @@ namespace WebApp.Controllers
         AccountContainer accountContainer = new AccountContainer(new AccountDAL());
 
         [HttpGet]
-        public IActionResult Account()
+        public IActionResult CreateAccount()
         {
             return View();
         }
@@ -31,7 +32,7 @@ namespace WebApp.Controllers
             return accountViewModel;
         }
 
-        public IActionResult CreateAccount(AccountViewModel accountViewModel)
+        public IActionResult AddAccount(AccountViewModel accountViewModel)
         {
             string password = accountViewModel.PasswordHash;
 
@@ -68,6 +69,7 @@ namespace WebApp.Controllers
                 else
                 {
                     Account account = new Account(
+                        accountViewModel.AccountID,
                         accountViewModel.Username, 
                         hashedPassword, 
                         accountViewModel.Email, 
@@ -80,7 +82,6 @@ namespace WebApp.Controllers
                     {
                         
                         accountContainer.CreateAccount(account);
-
                         //show succes message
                        
                     }
@@ -91,13 +92,7 @@ namespace WebApp.Controllers
                     }
                 }
             }
-            return View("Login");
-        }
-
-        [HttpPost]
-        public IActionResult OpenLogin()
-        {
-            return View("Login");
+            return View("CreateAccount");
         }
     }
 }

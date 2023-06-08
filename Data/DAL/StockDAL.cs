@@ -5,6 +5,7 @@ using Microsoft.Data.SqlClient;
 using Newtonsoft.Json.Linq;
 using System.Data;
 using System.Globalization;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 
 namespace Data
@@ -13,7 +14,7 @@ namespace Data
     {
         SqlConnection Sqlcon = DataString.connection;
         //sql connection string naar een aparte functie zodat deze mee kan veranderen als het wachtwoord veranderd bijvoorbeeld en overal aangeroepen kan worden 
-        public void AddStock(APIResponseCallDTO aPIResponseCallDTO, AccountStockDTO accountStockDTO)
+        public void AddStock(APIResponseCallDTO aPIResponseCallDTO, int? AccountID)
         {
             string apiinsertquery = "INSERT INTO APIResponseCall (Date, Symbol, [Open], High, Low, [Close], Volume) VALUES (@Date, @Symbol, @Open, @High, @Low, @Close, @Volume)";
             using (SqlCommand apiinsertCmd = new SqlCommand(apiinsertquery, Sqlcon))
@@ -32,13 +33,16 @@ namespace Data
             }
 
             // Retrieve the newly inserted StockID from the APIResponseCall table
-            int stockID;
+            long stockID;
             using (SqlCommand getStockIDCmd = new SqlCommand("SELECT IDENT_CURRENT('APIResponseCall')", Sqlcon))
             {
                 Sqlcon.Open();
                 stockID = Convert.ToInt32(getStockIDCmd.ExecuteScalar());
                 Sqlcon.Close();
             }
+
+            //long accountID = long.Parse(HttpContext.Session.GetString("AccountID"));
+
 
             string insertQuery = 
                 @"IF NOT EXISTS (SELECT 1 FROM AccountStock WHERE Symbol = @Symbol) 
@@ -48,7 +52,7 @@ namespace Data
                 cmd5.Parameters.AddWithValue("@StockID", stockID);
                 cmd5.Parameters.AddWithValue("@Date", aPIResponseCallDTO.Date);
                 cmd5.Parameters.AddWithValue("@Symbol", aPIResponseCallDTO.Symbol);
-
+                cmd5.Parameters.AddWithValue("@AccountID", AccountID);
 
                 Sqlcon.Open();
                 cmd5.ExecuteNonQuery();
@@ -58,7 +62,7 @@ namespace Data
 
        
 
-        public List<AccountStockDTO> GetAccountStockList()
+        public List<AccountStockDTO> GetAccountStockList(int AccountID)
         {
             Sqlcon.Open();
             List<AccountStockDTO> accountStockList = new();
@@ -71,28 +75,28 @@ namespace Data
                     null,
                     reader1.GetDateTime("Date"),
                     reader1.GetString("Symbol"),
-                    null));
+                    AccountID));
             }
             Sqlcon.Close();
             return accountStockList;
         }
 
-        public void UpdateStockTable(APIResponseCallDTO aPIResponseCallDTO)
-        {
-            string updateQuery = "UPDATE stock SET Date = @Date WHERE Symbol = @Symbol";
-            SqlCommand cmd2 = new SqlCommand(updateQuery, Sqlcon);
-            cmd2.Parameters.AddWithValue("@Symbol", aPIResponseCallDTO.Symbol);
-            cmd2.Parameters.AddWithValue("@Date", aPIResponseCallDTO.Date);
-            int rowsAffected = cmd2.ExecuteNonQuery();
-            if (rowsAffected == 0)
-            {
-                string insrtQuery = "INSERT INTO AccountStock (Date, Symbol) VALUES (@Date, @Symbol)";
-                SqlCommand cmd3 = new SqlCommand(insrtQuery, Sqlcon);
-                cmd3.Parameters.AddWithValue("@Symbol", aPIResponseCallDTO.Symbol);
-                cmd3.Parameters.AddWithValue("@Date", aPIResponseCallDTO.Date);
-                cmd3.ExecuteNonQuery();
-            }
-        }
+        //public void UpdateStockTable(APIResponseCallDTO aPIResponseCallDTO)
+        //{
+        //    string updateQuery = "UPDATE stock SET Date = @Date WHERE Symbol = @Symbol";
+        //    SqlCommand cmd2 = new SqlCommand(updateQuery, Sqlcon);
+        //    cmd2.Parameters.AddWithValue("@Symbol", aPIResponseCallDTO.Symbol);
+        //    cmd2.Parameters.AddWithValue("@Date", aPIResponseCallDTO.Date);
+        //    int rowsAffected = cmd2.ExecuteNonQuery();
+        //    if (rowsAffected == 0)
+        //    {
+        //        string insrtQuery = "INSERT INTO AccountStock (Date, Symbol) VALUES (@Date, @Symbol)";
+        //        SqlCommand cmd3 = new SqlCommand(insrtQuery, Sqlcon);
+        //        cmd3.Parameters.AddWithValue("@Symbol", aPIResponseCallDTO.Symbol);
+        //        cmd3.Parameters.AddWithValue("@Date", aPIResponseCallDTO.Date);
+        //        cmd3.ExecuteNonQuery();
+        //    }
+        //}
 
         public void DeleteStock(string symbol)
         {

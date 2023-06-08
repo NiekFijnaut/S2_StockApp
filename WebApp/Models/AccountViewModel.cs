@@ -5,7 +5,7 @@ namespace WebApp.Models
 {
     public class AccountViewModel
     {
-        public long? AccountID { get; set; }
+        public int AccountID { get; set; }
         public string Username { get; set; }
         public string PasswordHash { get; set; }
         public string Email { get; set; }
@@ -13,7 +13,12 @@ namespace WebApp.Models
         public string Interest { get; set; }
         public DateTime Age { get; set; }
 
-        public AccountViewModel(long? accountID, string username, string passwordHash, string email, string region, string interest, DateTime age) 
+        public AccountViewModel()
+        {
+
+        }
+
+        public AccountViewModel(int accountID, string username, string passwordHash, string email, string region, string interest, DateTime age) 
         {
             AccountID = accountID;
             Username = username;

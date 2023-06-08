@@ -1,7 +1,7 @@
 ﻿namespace Interface
 {
     public record AccountDTO(
-        long? AccountID, 
+        int? AccountID, 
         string Username, 
         string PasswordHash,
         string Email, 

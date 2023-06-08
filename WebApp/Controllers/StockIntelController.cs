@@ -47,7 +47,7 @@ namespace WebApp.Controllers
             return View();
         }
 
-        List<APIResponseCall > APIResponseList = new List<APIResponseCall>();
+        List<APIResponseCall> APIResponseList = new List<APIResponseCall>();
 
         [HttpPost]
         public async Task<IActionResult> GetSearchResults(SearchViewModel searchViewModel)
@@ -66,19 +66,16 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddStockToAccount(AccountStockViewModel accountStockViewModel, APIResponseCallViewModel aPIResponseCallViewModel, SearchViewModel searchViewModel)
+        public async Task<IActionResult> AddStockToAccount(SearchViewModel searchViewModel, AccountViewModel accountViewModel)
         {
-
-            AccountStock accountStock = new AccountStock()
-            {
-                 
-            };
-
+            //TODO fix accountID value
             Search search = new Search()
             {
                 Symbol = searchViewModel.Symbol,
                 Interval = searchViewModel.Interval
             };
+
+            int AccountID = accountViewModel.AccountID;
 
             APIResponseList = await alphaVantageContainer.SearchStock(search);
 
@@ -86,6 +83,7 @@ namespace WebApp.Controllers
             {
                 APIResponseCall aPIResponseCall = new APIResponseCall()
                 {
+                    
                     Date = APIResponseList[APIResponseList.Count - 1].Date,
                     Symbol = APIResponseList[APIResponseList.Count - 1].Symbol,
                     Open = APIResponseList[APIResponseList.Count - 1].Open,
@@ -94,7 +92,7 @@ namespace WebApp.Controllers
                     Close = APIResponseList[APIResponseList.Count - 1].Close,
                     Volume = APIResponseList[APIResponseList.Count - 1].Volume
                 };
-                alphaVantageContainer.AddStock(aPIResponseCall, accountStock);
+                alphaVantageContainer.AddStock(aPIResponseCall, AccountID);
                 ViewBag.Message = "Stock has been added to account";
                 return View("StockIntel");
             }

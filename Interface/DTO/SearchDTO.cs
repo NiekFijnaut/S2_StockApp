@@ -8,6 +8,7 @@ namespace Interface
 {
     public record SearchDTO(
         string Symbol,
-        string Interval
+        string Interval,
+        string Slice
         );
 }

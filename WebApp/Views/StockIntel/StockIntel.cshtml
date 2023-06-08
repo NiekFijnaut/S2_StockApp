@@ -6,7 +6,7 @@
 
 <h1>StockIntel</h1>
 
-<form id="searchForm" action="GetSearchResults">
+<form id="searchForm" asp-action="GetSearchResults">
     <div class="mb-3" id="searchSymbol" method="post">
         <label class="form-label" asp-for="SearchViewModel.Symbol"></label>
         <input class="form-control" asp-for="SearchViewModel.Symbol" />
@@ -31,7 +31,7 @@
     @*hier komt de table*@
 </div>
 <br />
-<form id="addStockForm" action="AddStockToAccount" method="post">
+<form id="addStockForm" asp-action="AddStockToAccount" method="post">
     <input type="hidden" asp-for="SearchViewModel.Symbol" id="addSymbol" name="symbol"/>
     <input type="hidden" asp-for="SearchViewModel.Interval" id="addInterval" name="interval">
     <input type="submit" class="btn btn-primary" value="Add Stock" id="AddStock"/>
@@ -58,7 +58,8 @@
             $("#Search").click(function (event) {
                 event.preventDefault();
 
-                $("#searchForm").submit()
+                $("#searchForm").submit(function (event) {
+                    event.preventDefault();
 
                 $.ajax({
                     url: '/StockIntel/GetSearchResults',

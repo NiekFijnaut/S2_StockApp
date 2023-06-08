@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Interface
 {
     public record HistorieDTO
-        (long HistorieID,
+        (long? HistorieID,
         DateTime Date,
         string Symbol,
         double Open,

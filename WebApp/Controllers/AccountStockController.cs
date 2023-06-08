@@ -17,9 +17,10 @@ namespace WebApp.Controllers
         AlphaVantageContainer alphaVantageContainer = new AlphaVantageContainer(new StockDAL());
 
         [HttpGet]
-        public IActionResult GetAccountStock() 
+        public IActionResult GetAccountStock(AccountViewModel accountViewModel) 
         {
-            List<AccountStock> accountStocks = alphaVantageContainer.GetAccountStockList();
+            int AccountID = accountViewModel.AccountID;
+            List<AccountStock> accountStocks = alphaVantageContainer.GetAccountStockList(AccountID);
 
             AccountStockViewModel accountStockViewModel = new AccountStockViewModel(accountStocks);
 

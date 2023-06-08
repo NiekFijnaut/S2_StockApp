@@ -4,7 +4,7 @@
 *@
 @{
 }
-<form id="CreateAccount" action="CreateAccount">
+<form id="CreateAccount" asp-action="AddAccount">
     <div class="mb-3">
         <label class="form-label" asp-for="Username"></label>
         <input class="form-control" asp-for="Username" />
@@ -48,14 +48,7 @@
         <label class="form-label" asp-for="Age"></label>
         <input type="date" class="form-control" asp-for="Age" />
     </div>
-    <input type="submit" class="btn btn-primary" value="Create account" id="CreateAccount"
-    
-</form>
-<br />
-<form id="GoToLogin" action="OpenLogin">
-    <div class="mb-3">
-        <input type="submit" class="btn btn-primary" value="Login" id="Login"
-    </div>
+    <input type="submit" class="btn btn-primary" value="Create account" id="CreateAccount" />
 </form>
 
 @*@section Scripts

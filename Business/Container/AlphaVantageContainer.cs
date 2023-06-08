@@ -1,6 +1,7 @@
 ﻿using Business.Class;
 using Data;
 using Interface;
+using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -23,7 +24,7 @@ namespace Business
         public StockDAL stockDAL = new StockDAL();
         public AlphaVantageDAL alphaVantageDAL = new AlphaVantageDAL();
 
-        public void AddStock(APIResponseCall aPIResponseCall, AccountStock accountStock)
+        public void AddStock(APIResponseCall aPIResponseCall, int? AccountID)
         {
 
             APIResponseCallDTO aPIResponseCallDTO = new APIResponseCallDTO(
@@ -36,15 +37,8 @@ namespace Business
                 aPIResponseCall.Close,
                 aPIResponseCall.Volume
                 );
-
-            AccountStockDTO accountStockDTO = new AccountStockDTO(
-                aPIResponseCall.StockID,
-                aPIResponseCall.Date,
-                aPIResponseCall.Symbol,
-                accountStock.AccountID
-                );
             
-            stockDAL.AddStock(aPIResponseCallDTO, accountStockDTO);
+            stockDAL.AddStock(aPIResponseCallDTO, AccountID);
         }
 
         public List<APIResponseCall> GetAPIResponseCalls()
@@ -68,10 +62,10 @@ namespace Business
             return aPIResponseCall;
         }
 
-        public List<AccountStock> GetAccountStock()
+        public List<AccountStock> GetAccountStock(int AccountID)
         {
             List<AccountStock> accountStocks= new List<AccountStock>();
-            List<AccountStockDTO> accountStockDTOs= stockDAL.GetAccountStockList();
+            List<AccountStockDTO> accountStockDTOs= stockDAL.GetAccountStockList(AccountID);
             foreach (AccountStockDTO accountStockDTO in accountStockDTOs)
             {
                 accountStocks.Add(
@@ -87,7 +81,8 @@ namespace Business
         {
             SearchDTO searchDTO = new SearchDTO(
                 search.Symbol,
-                search.Interval);
+                search.Interval,
+                null);
 
             List<APIResponseCall> aPIResponses = new List<APIResponseCall>();
             List<APIResponseCallDTO> aPIResponseCallDTOs = await alphaVantageDAL.SearchStock(searchDTO);
@@ -125,15 +120,15 @@ namespace Business
             }
         }
 
-        public void UpdateStockTable(APIResponseCallDTO aPIResponseCallDTO)
-        {
-            stockDAL.UpdateStockTable(aPIResponseCallDTO);
-        }
+        //public void UpdateStockTable(APIResponseCallDTO aPIResponseCallDTO)
+        //{
+        //    stockDAL.UpdateStockTable(aPIResponseCallDTO);
+        //}
 
-        public List<AccountStock> GetAccountStockList()
+        public List<AccountStock> GetAccountStockList(int AccountID)
         {
             List<AccountStock> accountStock = new List<AccountStock>();
-            List<AccountStockDTO> accountStockDTOList = stockDAL.GetAccountStockList();
+            List<AccountStockDTO> accountStockDTOList = stockDAL.GetAccountStockList(AccountID);
             foreach (AccountStockDTO accountStockDTO in accountStockDTOList)
             {
                 accountStock.Add(

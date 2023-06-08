@@ -10,11 +10,13 @@ namespace Business
     {
         public string Symbol { get; set; }
         public string Interval { get; set; }
+        public string Slice { get; set; }
 
-        public Search(string symbol, string interval)
+        public Search(string symbol, string interval, string slice)
         {
             Symbol = symbol;
             Interval = interval;
+            Slice = slice;
         }
 
         public Search()

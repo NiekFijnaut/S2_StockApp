@@ -17,10 +17,6 @@ namespace Business
         public double Close { get; set; }
         public int Volume { get; set; }
 
-        public APIResponseCall()
-        {
-
-        }
 
         public APIResponseCall(long? stockID, DateTime date, string symbol, double open, double high, double low, double close, int volume)
         {
@@ -32,6 +28,10 @@ namespace Business
             Low = low;
             Close = close;
             Volume = volume;
+        }
+
+        public APIResponseCall()
+        {
         }
     }
 }

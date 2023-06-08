@@ -8,7 +8,7 @@ namespace Business
 {
     public class Historie
     {
-        public long HistorieID { get; set; }
+        public long? HistorieID { get; set; }
         public DateTime Date { get; set; }
         public string Symbol { get; set; }
         public double Open { get; set; }
