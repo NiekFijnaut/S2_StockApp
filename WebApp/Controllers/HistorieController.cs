@@ -7,7 +7,7 @@ namespace WebApp.Controllers
 {
     public class HistorieController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Historie()
         {
             return View();
         }

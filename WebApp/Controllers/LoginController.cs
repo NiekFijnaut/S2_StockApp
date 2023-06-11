@@ -1,5 +1,6 @@
 ﻿using Business;
 using Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
 
@@ -18,23 +19,18 @@ namespace WebApp.Controllers
         [HttpPost]
         public IActionResult UserLogin(AccountViewModel accountViewModel)
         {
-            HttpContext.Session.SetString("Username", accountViewModel.Username);
-            HttpContext.Session.SetString("Interest", accountViewModel.Interest);
-            HttpContext.Session.SetInt32("AccountID", accountViewModel.AccountID);
+            string passwordhash = accountViewModel.PasswordHash;
+            string username = accountViewModel.Username;
 
-            Account account = new Account(
-                accountViewModel.AccountID,
-                accountViewModel.Username,
-                accountViewModel.PasswordHash,
-                null,
-                null,
-                null,
-                accountViewModel.Age
-                );  
+            Account account = accountContainer.GetAccount(passwordhash, username);
 
-            if (accountContainer.passwordMatches(account))
+            if (account != null)
             {
                 HttpContext.Session.SetString("IsLoggedIn", "true");
+                HttpContext.Session.SetString("Username", account.Username);
+                HttpContext.Session.SetString("Interest", account.Interest);
+                HttpContext.Session.SetInt32("AccountID", account.AccountID);
+                
                 // Redirect to the desired page
                 return RedirectToAction("Index", "Home");
             }

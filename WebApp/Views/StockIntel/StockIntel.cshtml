@@ -24,7 +24,7 @@
         </select>
     </div>
     <br />
-    <input type="submit" class="btn btn-primary" value="Search" id="Search"  />
+    <input type="button" class="btn btn-primary" value="Search" id="Search"/>
 </form>
 <br />
 <div  id="stockIntelTableContainer">
@@ -44,16 +44,16 @@
     <script>
         $(document).ready(function () {
 
-            $("#AddStock").click(function (event) {
-                event.preventDefault();
-                var symbol = $('#searchSymbol input').val();
-                var interval = $('#searchInterval select').val();
+        $("#AddStock").click(function (event) {
+            event.preventDefault();
+            var symbol = $('#searchSymbol input').val();
+            var interval = $('#searchInterval select').val();
 
-                $('#addSymbol').val(symbol);
-                $('#addInterval').val(interval);
+            $('#addSymbol').val(symbol);
+            $('#addInterval').val(interval);
                 
-                $("#addStockForm").submit()
-            });
+            $("#addStockForm").submit()
+        });
 
             $("#Search").click(function (event) {
                 event.preventDefault();
@@ -61,19 +61,22 @@
                 $("#searchForm").submit(function (event) {
                     event.preventDefault();
 
-                $.ajax({
-                    url: '/StockIntel/GetSearchResults',
-                    type: 'POST',
-                    data: $(this).serialize(),
-                    success: function(response) {
-                        $("#stockIntelTableContainer").html(response);
-                    },
-                    error: function(xhr, status, error) {
-                        alert("Oops something went wrong");
-                        console.log(error);
-                    }
+                    $.ajax({
+                        url: '/StockIntel/GetSearchResults',
+                        type: 'POST',
+                        data: $(this).serialize(),
+                        success: function (response) {
+                            $("#stockIntelTableContainer").html(response);
+                        },
+                        error: function (xhr, status, error) {
+                            alert("Oops something went wrong");
+                            console.log(error);
+                        }
+                    });
                 });
+                $("#searchForm").submit();
             });
+
         });
     </script>
 }

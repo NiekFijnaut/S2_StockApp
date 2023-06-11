@@ -1,6 +1,7 @@
 ﻿using Business.Class;
 using Data;
 using Interface;
+using Interface.DTO;
 using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace Business
         public StockDAL stockDAL = new StockDAL();
         public AlphaVantageDAL alphaVantageDAL = new AlphaVantageDAL();
 
-        public void AddStock(APIResponseCall aPIResponseCall, int? AccountID)
+        public void AddStock(APIResponseCall aPIResponseCall, int AccountID)
         {
 
             APIResponseCallDTO aPIResponseCallDTO = new APIResponseCallDTO(
@@ -62,19 +63,23 @@ namespace Business
             return aPIResponseCall;
         }
 
-        public List<AccountStock> GetAccountStock(int AccountID)
+        public void AddToFavorite(int AccountID, string Symbol)
         {
-            List<AccountStock> accountStocks= new List<AccountStock>();
-            List<AccountStockDTO> accountStockDTOs= stockDAL.GetAccountStockList(AccountID);
-            foreach (AccountStockDTO accountStockDTO in accountStockDTOs)
+            stockDAL.AddToFavorite(AccountID, Symbol);
+        }
+
+        public List<Favorite> GetFavoriteList(int AccountID)
+        {
+            List<Favorite> favorites = new List<Favorite>();
+            List<FavoriteDTO> favoriteDTOs = stockDAL.GetFavoriteList(AccountID);
+            foreach (FavoriteDTO favoriteDTO in favoriteDTOs)
             {
-                accountStocks.Add(
-                    new AccountStock(
-                        accountStockDTO.Date,
-                        accountStockDTO.Symbol
+                favorites.Add(
+                    new Favorite(
+                        favoriteDTO.Symbol
                         ));
             }
-            return accountStocks;
+            return favorites;
         }
 
         public async Task<List<APIResponseCall>> SearchStock(Search search)
@@ -105,11 +110,11 @@ namespace Business
         }
 
          
-        public void DeleteStock(string Symbol)
+        public void DeleteStock(string Symbol, int AccountID)
         {
             try
             {
-                stockDAL.DeleteStock(Symbol);
+                stockDAL.DeleteStock(Symbol, AccountID);
             }
             catch(Exception ex)
             {
@@ -120,10 +125,6 @@ namespace Business
             }
         }
 
-        //public void UpdateStockTable(APIResponseCallDTO aPIResponseCallDTO)
-        //{
-        //    stockDAL.UpdateStockTable(aPIResponseCallDTO);
-        //}
 
         public List<AccountStock> GetAccountStockList(int AccountID)
         {

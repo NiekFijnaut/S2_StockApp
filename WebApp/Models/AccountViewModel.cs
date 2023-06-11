@@ -1,16 +1,26 @@
 ﻿using Microsoft.Build.Framework;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using RequiredAttribute = Microsoft.Build.Framework.RequiredAttribute;
 
 namespace WebApp.Models
 {
     public class AccountViewModel
     {
+        
         public int AccountID { get; set; }
+        [Required]
         public string Username { get; set; }
+        [Required]
+        [DisplayName("Password")]
         public string PasswordHash { get; set; }
+        [Required]
         public string Email { get; set; }
+        [Required]
         public string Region { get; set; }
+        [Required]
         public string Interest { get; set; }
+        [Required]
         public DateTime Age { get; set; }
 
         public AccountViewModel()

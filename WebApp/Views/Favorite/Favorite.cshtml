@@ -1,0 +1,30 @@
+﻿@model FavoriteViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<h1>AccountStock</h1>
+
+<div id="FavoriteTableContainer">
+    @*hier komt de table*@
+</div>
+
+@section Scripts{
+        <script>
+            $(document).ready(function () {
+                $.ajax({
+                    url: '/Favorite/GetFavorite',
+                    type: 'GET',
+                    success: function (response) {
+                        $("#FavoriteTableContainer").html(response);
+                        console.log(response);
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Oops, something went wrong");
+                        console.log(error);
+                    }
+                });
+            });
+        </script>
+}

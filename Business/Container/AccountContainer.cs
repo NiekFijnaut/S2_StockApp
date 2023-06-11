@@ -20,11 +20,6 @@ namespace Business
         }
         private AccountDAL accountDAL = new AccountDAL();
 
-        public AccountContainer()
-        {
-
-        }
-
         public void CreateAccount(Account account)
         {
             try
@@ -48,20 +43,25 @@ namespace Business
             }
         }
 
-        public bool passwordMatches(Account account)
+        public Account GetAccount(string passwordhash, string username)
         {
-            AccountDTO accountDTO = new AccountDTO(null, account.Username, account.PasswordHash, null, null, null, account.Age); 
+            AccountDTO accountDTO = accountDAL.Login(passwordhash, username); 
 
-            bool passwordMatches = accountDAL.VerifyPassword(accountDTO); 
-
-            if (passwordMatches)
+            if (accountDTO != null)
             {
-                return true; 
+                Account account = new Account(
+                    accountDTO.AccountID,
+                    accountDTO.Username,
+                    accountDTO.PasswordHash,
+                    accountDTO.Email,
+                    accountDTO.Region,
+                    accountDTO.Interest,
+                    accountDTO.Age);
+                return account; 
             }
-            else
-            {
-                return false; 
-            }
+            return null; 
         }
+
+      
     }
 }

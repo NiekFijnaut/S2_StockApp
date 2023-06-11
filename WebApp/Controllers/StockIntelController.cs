@@ -68,14 +68,14 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddStockToAccount(SearchViewModel searchViewModel, AccountViewModel accountViewModel)
         {
-            //TODO fix accountID value
+            
             Search search = new Search()
             {
                 Symbol = searchViewModel.Symbol,
                 Interval = searchViewModel.Interval
             };
 
-            int AccountID = accountViewModel.AccountID;
+            int AccountID = HttpContext.Session.GetInt32("AccountID") ?? 0;
 
             APIResponseList = await alphaVantageContainer.SearchStock(search);
 

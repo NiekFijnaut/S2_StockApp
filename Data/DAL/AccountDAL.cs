@@ -52,26 +52,44 @@ namespace Data
                 cmd.ExecuteNonQuery();
             }
         }
-        public bool VerifyPassword(AccountDTO accountDTO)
-        {
-            string PasswordHashQuery = "SELECT PasswordHash, AccountID FROM Account WHERE Username = @Username";
 
-            using SqlCommand command = new SqlCommand(PasswordHashQuery, Sqlcon);
+        public AccountDTO Login(string passwordhash, string username)
+        {
+            string PasswordHashQuery = "SELECT * FROM Account WHERE Username = @Username";
+
+            using (SqlCommand command = new SqlCommand(PasswordHashQuery, Sqlcon))
             {
                 Sqlcon.Open();
-                command.Parameters.AddWithValue("@Username", accountDTO.Username);
-                string hashedPassword = (string)command.ExecuteScalar();
+                command.Parameters.AddWithValue("@Username", username);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    int accountId = reader.GetInt32(0);
+                    string username1 = reader.GetString(1);
+                    string hashedPassword = reader.GetString(2);
+                    string email = reader.GetString(3);
+                    string region = reader.GetString(4);
+                    string interest = reader.GetString(5);
+                    DateTime age = reader.GetDateTime(6);
 
-                // ingevoerde wachtwoord hashen en vergelijken
-                SHA256 sha256 = SHA256.Create();
-                byte[] passwordBytes = Encoding.UTF8.GetBytes(accountDTO.PasswordHash);
-                byte[] hashedBytes = sha256.ComputeHash(passwordBytes);
-                string enteredHash = Convert.ToBase64String(hashedBytes);
-                bool passwordMatches = (hashedPassword == enteredHash);
-                Sqlcon.Close();
+                    // ingevoerde wachtwoord hashen en vergelijken
+                    SHA256 sha256 = SHA256.Create();
+                    byte[] passwordBytes = Encoding.UTF8.GetBytes(passwordhash);
+                    byte[] hashedBytes = sha256.ComputeHash(passwordBytes);
+                    string enteredHash = Convert.ToBase64String(hashedBytes);
+                    bool passwordMatches = (hashedPassword == enteredHash);
 
-                return passwordMatches; 
+                    Sqlcon.Close();
+
+                    if (passwordMatches)
+                    {
+                        AccountDTO accountDTO = new AccountDTO(accountId, username1, hashedPassword, email, region, interest, age);
+
+                        return accountDTO;
+                    }
+                }
             }
+            return null;
         }
     }
 }

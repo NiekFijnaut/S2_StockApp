@@ -19,9 +19,10 @@ namespace WebApp.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            AccountViewModel accountViewModel = new();
-            accountViewModel.Username = HttpContext.Session.GetString("Username");
-            accountViewModel.Interest = HttpContext.Session.GetString("Interest");
+            AccountViewModel accountViewModel = new AccountViewModel();
+            string Username = HttpContext.Session.GetString("Username");
+            accountViewModel.Username = Username;
+            
             return View(accountViewModel);
         }
 

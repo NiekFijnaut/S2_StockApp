@@ -9,7 +9,7 @@ namespace Interface
     public interface IAccount
     {
         void AddAccount(AccountDTO accountDTO);
-        bool VerifyPassword(AccountDTO accountDTO);
+        AccountDTO Login(string passwordhash, string username);
     }
 }
 

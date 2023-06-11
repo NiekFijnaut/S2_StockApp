@@ -11,9 +11,11 @@ namespace WebApp.Controllers
         RecommendationContainer recommendationContainer = new RecommendationContainer(new RecommendationDAL());
 
         [HttpGet]
-        public IActionResult GetRecommendation(AccountViewModel accountViewModel)
+        public IActionResult GetRecommendation()
         {
-            string interest = accountViewModel.Interest;
+            AccountViewModel accountViewModel = new AccountViewModel();
+            string interest = HttpContext.Session.GetString("Interest");
+            accountViewModel.Interest = interest;
             List<Recommendation> recommendations = recommendationContainer.GetRecommandation(interest);
 
             RecommendationViewModel recommendationViewModel = new RecommendationViewModel(null, recommendations);

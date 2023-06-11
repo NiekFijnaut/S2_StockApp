@@ -9,6 +9,8 @@
         <tr>
             <th>Symbol</th>
             <th>Date</th>
+            <th>Add to Favorite</th>
+            <th>Delete Stock</th>
         </tr>
     </thead>
     <tbody>
@@ -17,6 +19,16 @@
             <tr>
                 <td>@item.Symbol</td>
                 <td>@item.Date</td>
+                <td>
+                    <form method="post" asp-area="" asp-controller="Favorite" asp-action="AddToFavorite" asp-route-symbol="@item.Symbol">
+                        <button type="submit" class="btn btn-primary">Add Stock</button>
+                    </form>
+                </td>
+                <td>
+                    <form method="post" asp-area="" asp-controller="AccountStock" asp-action="DeleteStock" asp-route-symbol="@item.Symbol">
+                        <button type="submit" class="btn btn-primary">Delete Stock</button>
+                    </form>
+                </td>
             </tr>
         }
     </tbody>
