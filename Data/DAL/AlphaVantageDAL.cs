@@ -1,4 +1,5 @@
-﻿using Interface;
+﻿using CsvHelper;
+using Interface;
 using Interface.Interface;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json.Linq;
@@ -17,104 +18,170 @@ namespace Data
     public class AlphaVantageDAL : IAlphaVantage
     {
         SqlConnection Sqlcon = DataString.connection;
+
+        const string APIKEY = "ZN0C9Q4C0LG3REEE";
+
+        const string BaseUrl = "https://www.alphavantage.co/query";
+
         public async Task<List<APIResponseCallDTO>> SearchStock(SearchDTO searchDTO)
-        {            
-            string searchquery = "INSERT INTO SearchStock (Symbol, Interval) VALUES (@Symbol, @Interval)";
-            
-            using (SqlCommand searchcmd = new SqlCommand(searchquery, Sqlcon))
+        {
+            try
             {
-                Sqlcon.Open();
-                searchcmd.Parameters.AddWithValue("@Symbol", searchDTO.Symbol);
-                searchcmd.Parameters.AddWithValue("@Interval", searchDTO.Interval);
+                string searchquery = "INSERT INTO SearchStock (Symbol, Interval) VALUES (@Symbol, @Interval)";
 
-                searchcmd.ExecuteNonQuery();
-                Sqlcon.Close();
-            }
-
-            string Symbol = searchDTO.Symbol;
-
-            string Interval = searchDTO.Interval;
-
-            const string APIKEY = "ZN0C9Q4C0LG3REEE";
-
-            const string BaseUrl = "https://www.alphavantage.co/query";
-
-            string ApiFunction = "TIME_SERIES_INTRADAY";
-
-            string apiurl = $"{BaseUrl}?function={ApiFunction}&symbol={Symbol}&interval={Interval}&apikey={APIKEY}";
-
-            using (HttpClient client = new HttpClient())
-            {
-                HttpResponseMessage response = await client.GetAsync(apiurl);
-                if (response.IsSuccessStatusCode)
+                using (SqlCommand searchcmd = new SqlCommand(searchquery, Sqlcon))
                 {
-                    string json = await response.Content.ReadAsStringAsync();
-                    var data = JObject.Parse(json);
+                    Sqlcon.Open();
+                    searchcmd.Parameters.AddWithValue("@Symbol", searchDTO.Symbol);
+                    searchcmd.Parameters.AddWithValue("@Interval", searchDTO.Interval);
 
-                    string symbolName = data?["Meta Data"]?["2. Symbol"]?.ToString();
-                    //string lastRefreshed = data?["Meta Data"]?["3. Last Refreshed"]?.ToString();
-                    //string interval = data?["Meta Data"]?["4. Interval"]?.ToString();
-                    //string info = data?["Meta Data"]?["1. Information"]?.ToString();
+                    searchcmd.ExecuteNonQuery();
+                    Sqlcon.Close();
+                }
 
-                    var timeSeries = data?["Time Series " + "(" + Interval + ")"];
-                    if (timeSeries != null)
+                string Symbol = searchDTO.Symbol;
+
+                string Interval = searchDTO.Interval;
+
+                string ApiFunction = "TIME_SERIES_INTRADAY";
+
+                string apiurl = $"{BaseUrl}?function={ApiFunction}&symbol={Symbol}&interval={Interval}&apikey={APIKEY}";
+
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage response = await client.GetAsync(apiurl);
+                    if (response.IsSuccessStatusCode)
                     {
+                        string json = await response.Content.ReadAsStringAsync();
+                        var data = JObject.Parse(json);
 
-                        List<APIResponseCallDTO> ApiResponse = new List<APIResponseCallDTO>();
-                        foreach (JProperty property in timeSeries.Children<JProperty>())
+                        string symbolName = data?["Meta Data"]?["2. Symbol"]?.ToString();
+                        //string lastRefreshed = data?["Meta Data"]?["3. Last Refreshed"]?.ToString();
+                        //string interval = data?["Meta Data"]?["4. Interval"]?.ToString();
+                        //string info = data?["Meta Data"]?["1. Information"]?.ToString();
+
+                        var timeSeries = data?["Time Series " + "(" + Interval + ")"];
+                        if (timeSeries != null)
                         {
-                            DateTime date = DateTime.Parse(property.Name);
-                            double open = double.Parse(property.Value["1. open"].ToString(), CultureInfo.GetCultureInfo("en-US"));
-                            double high = double.Parse(property.Value["2. high"].ToString(), CultureInfo.GetCultureInfo("en-US"));
-                            double low = double.Parse(property.Value["3. low"].ToString(), CultureInfo.GetCultureInfo("en-US"));
-                            double close = double.Parse(property.Value["4. close"].ToString(), CultureInfo.GetCultureInfo("en-US"));
-                            int volume = int.Parse(property.Value["5. volume"].ToString());
 
-                            // hier wordt de klasse aangevuld met de gevraagde info
-                            
-                            APIResponseCallDTO aPIResponseCallDTO = new APIResponseCallDTO
-                            (
-                                null,
-                                date,
-                                symbolName,
-                                open,
-                                high,
-                                low,
-                                close,
-                                volume
-                            );
-                            ApiResponse.Add(aPIResponseCallDTO);
+                            List<APIResponseCallDTO> ApiResponse = new List<APIResponseCallDTO>();
+                            foreach (JProperty property in timeSeries.Children<JProperty>())
+                            {
+                                DateTime date = DateTime.Parse(property.Name);
+                                double open = double.Parse(property.Value["1. open"].ToString(), CultureInfo.GetCultureInfo("en-US"));
+                                double high = double.Parse(property.Value["2. high"].ToString(), CultureInfo.GetCultureInfo("en-US"));
+                                double low = double.Parse(property.Value["3. low"].ToString(), CultureInfo.GetCultureInfo("en-US"));
+                                double close = double.Parse(property.Value["4. close"].ToString(), CultureInfo.GetCultureInfo("en-US"));
+                                int volume = int.Parse(property.Value["5. volume"].ToString());
+
+                                APIResponseCallDTO aPIResponseCallDTO = new APIResponseCallDTO
+                                (
+                                    null,
+                                    date,
+                                    symbolName,
+                                    open,
+                                    high,
+                                    low,
+                                    close,
+                                    volume
+                                );
+                                ApiResponse.Add(aPIResponseCallDTO);
+                            }
+                            return ApiResponse;
                         }
-                        return ApiResponse;
                     }
                 }
+                return new List<APIResponseCallDTO>();
             }
-            return new List<APIResponseCallDTO>();
-
-            
+            catch
+            {
+                throw new Exception("StockIntel cannot be received");
+            }
         }
 
-        public List<APIResponseCallDTO> GetAPIResponseCallList()
+
+        public async Task<List<HistorieDTO>> SearchHistorieStock(SearchDTO searchDTO)
         {
-            Sqlcon.Open();
-            List<APIResponseCallDTO> apiResponseList = new List<APIResponseCallDTO>();
-            using SqlCommand cmd6 = new("SELECT * FROM APIResponseCall WHERE Symbol = @Symbol", Sqlcon);
-            using SqlDataReader reader6 = cmd6.ExecuteReader();
-            while (reader6.Read())
+            try
             {
-                apiResponseList.Add(
-                    new APIResponseCallDTO(
-                        null,
-                        reader6.GetDateTime("Date"),
-                        reader6.GetString("Symbol"),
-                        reader6.GetDouble("Open"),
-                        reader6.GetDouble("High"),
-                        reader6.GetDouble("Low"),
-                        reader6.GetDouble("Close"),
-                        reader6.GetInt32("Volume")));
+                string searchquery = "INSERT INTO SearchStock (Symbol, Interval, Slice) VALUES (@Symbol, @Interval, @Slice)";
+
+                using (SqlCommand searchcmd = new SqlCommand(searchquery, Sqlcon))
+                {
+                    Sqlcon.Open();
+                    searchcmd.Parameters.AddWithValue("@Symbol", searchDTO.Symbol);
+                    searchcmd.Parameters.AddWithValue("@Interval", searchDTO.Interval);
+                    searchcmd.Parameters.AddWithValue("@Slice", searchDTO.Slice);
+
+                    searchcmd.ExecuteNonQuery();
+                    Sqlcon.Close();
+                }
+
+                string symbol = searchDTO.Symbol;
+
+                string Interval = searchDTO.Interval;
+
+                string slice = searchDTO.Slice;
+
+                string ApiFunction = "TIME_SERIES_INTRADAY_EXTENDED";
+
+                string apiurl = $"{BaseUrl}?function={ApiFunction}&symbol={symbol}&interval={Interval}&slice={slice}&apikey={APIKEY}";
+
+                Uri queryUri = new Uri(apiurl);
+
+                CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
+                List<HistorieDTO> historielist = new List<HistorieDTO>(); // List to store the historical data
+
+                using (HttpClient client = new HttpClient())
+                {
+                    using (MemoryStream memStream = new MemoryStream())
+                    {
+                        using (Stream stream = await client.GetStreamAsync(queryUri))
+                        {
+                            await stream.CopyToAsync(memStream);
+                        }
+
+                        memStream.Position = 0;
+
+                        using (StreamReader reader = new StreamReader(memStream))
+                        {
+                            using (CsvReader csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                            {
+                                csv.Read();
+                                csv.ReadHeader();
+
+                                while (csv.Read())
+                                {
+                                    DateTime date = DateTime.Parse(csv.GetField<string>("Date"));
+                                    double open = csv.GetField<double>("Open");
+                                    double high = csv.GetField<double>("High");
+                                    double low = csv.GetField<double>("Low");
+                                    double close = csv.GetField<double>("Close");
+                                    int volume = csv.GetField<int>("Volume");
+
+                                    HistorieDTO history = new HistorieDTO(
+                                        null,
+                                        date,
+                                        symbol,
+                                        open,
+                                        high,
+                                        low,
+                                        close,
+                                        volume
+                                    );
+
+                                    historielist.Add(history);
+                                }
+                            }
+                        }
+                    }
+                }
+                return historielist;
             }
-            Sqlcon.Close();
-            return apiResponseList;
+            catch
+            {
+                throw new Exception("History Intel cannot be received");
+            }
         }
     }
 }

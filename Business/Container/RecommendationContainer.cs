@@ -24,19 +24,29 @@ namespace Business.Container
 
         public List<Recommendation> GetRecommandation(string interest)
         {
-            //TODO make session interest
-            List<Recommendation> recommendations = new List<Recommendation>();
-            List<RecommendationDTO> recommendationDTOs = recommendationDAL.GetRecommendations(interest);
-            foreach (RecommendationDTO recommendationDTO in recommendationDTOs)
+            try
             {
-                recommendations.Add(
-                    new Recommendation(
-                        null,
-                        recommendationDTO.Interest,
-                        recommendationDTO.Name
-                        ));
+                List<Recommendation> recommendations = new List<Recommendation>();
+                List<RecommendationDTO> recommendationDTOs = recommendationDAL.GetRecommendations(interest);
+                foreach (RecommendationDTO recommendationDTO in recommendationDTOs)
+                {
+                    recommendations.Add(
+                        new Recommendation(
+                            null,
+                            recommendationDTO.Interest,
+                            recommendationDTO.Name
+                            ));
+                }
+                return recommendations;
             }
-            return recommendations;
+            catch(Exception ex)
+            {
+                if(ex.Message == "Recommendation cannot be received")
+                {
+                    throw;
+                }
+                return null;
+            }
         }
     }
 }

@@ -93,13 +93,13 @@
             });
         });
 
-        $("#Histroybtn").click(function () {
+        $("#Historybtn").click(function () {
             $.ajax({
-                url: '/Historie/GetStockHistorie',
+                url: '/Historie/Historie',
                 type: 'GET',
                success: function (response) {
                     // Redirect to the new page
-                        window.location.href = '/Historie/GetStockHistorie';
+                        window.location.href = '/Historie/Historie';
                 },
                 error: function (xhr, status, error) {
                     alert("Oops, something went wrong");

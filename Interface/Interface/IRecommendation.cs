@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Interface.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace Interface.Interface
 {
     public interface IRecommendation
     {
-        List<IRecommendation> GetRecommendations(string interest); 
+        List<RecommendationDTO> GetRecommendations(string interest);
     }
 }

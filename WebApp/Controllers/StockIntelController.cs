@@ -20,7 +20,7 @@ namespace WebApp.Controllers
             return View();
         }
 
-        AlphaVantageContainer alphaVantageContainer = new AlphaVantageContainer(new AlphaVantageDAL());
+        AlphaVantageContainer alphaVantageContainer = new AlphaVantageContainer();
         
 
         public APIResponseCallViewModel ToModel(List<APIResponseCall> APIResponseList, SearchViewModel searchViewModel)
@@ -52,11 +52,14 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> GetSearchResults(SearchViewModel searchViewModel)
         {
-            Search search = new Search()
-            {
-                Symbol = searchViewModel.Symbol,
-                Interval = searchViewModel.Interval
-            };
+            //Search search = new Search()
+            //{
+            //    Symbol = searchViewModel.Symbol,
+            //    Interval = searchViewModel.Interval
+            //};
+
+            Search search = new Search(searchViewModel.Symbol, searchViewModel.Interval, "");
+
 
             APIResponseList = await alphaVantageContainer.SearchStock(search);
 
@@ -68,12 +71,14 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddStockToAccount(SearchViewModel searchViewModel, AccountViewModel accountViewModel)
         {
-            
-            Search search = new Search()
-            {
-                Symbol = searchViewModel.Symbol,
-                Interval = searchViewModel.Interval
-            };
+
+            //Search search = new Search()
+            //{
+            //    Symbol = searchViewModel.Symbol,
+            //    Interval = searchViewModel.Interval
+            //};
+
+            Search search = new Search(searchViewModel.Symbol, searchViewModel.Interval, "");
 
             int AccountID = HttpContext.Session.GetInt32("AccountID") ?? 0;
 
@@ -81,17 +86,28 @@ namespace WebApp.Controllers
 
             if (APIResponseList.Count > 0)
             {
-                APIResponseCall aPIResponseCall = new APIResponseCall()
-                {
-                    
-                    Date = APIResponseList[APIResponseList.Count - 1].Date,
-                    Symbol = APIResponseList[APIResponseList.Count - 1].Symbol,
-                    Open = APIResponseList[APIResponseList.Count - 1].Open,
-                    High = APIResponseList[APIResponseList.Count - 1].High,
-                    Low = APIResponseList[APIResponseList.Count - 1].Low,
-                    Close = APIResponseList[APIResponseList.Count - 1].Close,
-                    Volume = APIResponseList[APIResponseList.Count - 1].Volume
-                };
+                //APIResponseCall aPIResponseCall = new APIResponseCall()
+                //{
+
+                //    Date = APIResponseList[APIResponseList.Count - 1].Date,
+                //    Symbol = APIResponseList[APIResponseList.Count - 1].Symbol,
+                //    Open = APIResponseList[APIResponseList.Count - 1].Open,
+                //    High = APIResponseList[APIResponseList.Count - 1].High,
+                //    Low = APIResponseList[APIResponseList.Count - 1].Low,
+                //    Close = APIResponseList[APIResponseList.Count - 1].Close,
+                //    Volume = APIResponseList[APIResponseList.Count - 1].Volume
+                //};
+                APIResponseCall aPIResponseCall = new APIResponseCall(
+                    null,
+                    APIResponseList[APIResponseList.Count - 1].Date,
+                    APIResponseList[APIResponseList.Count - 1].Symbol,
+                    APIResponseList[APIResponseList.Count - 1].Open,
+                    APIResponseList[APIResponseList.Count - 1].High,
+                    APIResponseList[APIResponseList.Count - 1].Low,
+                    APIResponseList[APIResponseList.Count - 1].Close,
+                    APIResponseList[APIResponseList.Count - 1].Volume
+                );
+
                 alphaVantageContainer.AddStock(aPIResponseCall, AccountID);
                 ViewBag.Message = "Stock has been added to account";
                 return View("StockIntel");

@@ -18,9 +18,5 @@ namespace Business
             Interval = interval;
             Slice = slice;
         }
-
-        public Search()
-        {
-        }
     }
 }

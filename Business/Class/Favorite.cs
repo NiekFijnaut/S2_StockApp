@@ -9,9 +9,8 @@ namespace Business.Class
     public class Favorite
     {
         public long? StockID { get; set; }
-        
         public string Symbol { get; set; }
-        public int? AccountID { get; set; }
+        public int? AccountID { get; }
 
         public Favorite(string symbol)
         {

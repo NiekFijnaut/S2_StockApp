@@ -1,5 +1,4 @@
 ﻿using Business;
-using Data;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
 
@@ -7,26 +6,27 @@ namespace WebApp.Controllers
 {
     public class HistorieController : Controller
     {
+        private HistorieContainer _historieContainer;
+
+        public HistorieController()
+        {
+            _historieContainer = new HistorieContainer();
+        }
+
         public IActionResult Historie()
         {
             return View();
         }
-
-        HistorieContainer historieContainer = new HistorieContainer(new HistorieDAL());
 
         List<Historie> historieList = new List<Historie>();
 
         [HttpPost]
         public async Task<IActionResult> GetStockHistorie(HistorieSearchViewModel historieSearchViewModel)
         {
-            Search search = new Search()
-            {
-                Symbol= historieSearchViewModel.Symbol,
-                Interval= historieSearchViewModel.Interval,
-                Slice= historieSearchViewModel.Slice
-            };
+            
+            Search search = new Search(historieSearchViewModel.Symbol, historieSearchViewModel.Interval, historieSearchViewModel.Slice);
 
-            historieList = await historieContainer.SearchHistorieStock(search);
+            historieList = await _historieContainer.SearchHistorieStock(search);
 
             HistorieViewModel historieViewModel = new HistorieViewModel(historieList, historieSearchViewModel);
 

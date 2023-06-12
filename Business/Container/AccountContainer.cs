@@ -18,7 +18,6 @@ namespace Business
         {
             _account = account;
         }
-        private AccountDAL accountDAL = new AccountDAL();
 
         public void CreateAccount(Account account)
         {
@@ -32,7 +31,7 @@ namespace Business
                 account.Region,
                 account.Interest,
                 account.Age);
-                accountDAL.AddAccount(accountDTO);
+                _account.AddAccount(accountDTO);
             }
             catch (Exception ex)
             {
@@ -45,23 +44,32 @@ namespace Business
 
         public Account GetAccount(string passwordhash, string username)
         {
-            AccountDTO accountDTO = accountDAL.Login(passwordhash, username); 
-
-            if (accountDTO != null)
+            try
             {
-                Account account = new Account(
-                    accountDTO.AccountID,
-                    accountDTO.Username,
-                    accountDTO.PasswordHash,
-                    accountDTO.Email,
-                    accountDTO.Region,
-                    accountDTO.Interest,
-                    accountDTO.Age);
-                return account; 
-            }
-            return null; 
-        }
+                AccountDTO accountDTO = _account.Login(passwordhash, username);
 
-      
+                if (accountDTO != null)
+                {
+                    Account account = new Account(
+                        accountDTO.AccountID,
+                        accountDTO.Username,
+                        accountDTO.PasswordHash,
+                        accountDTO.Email,
+                        accountDTO.Region,
+                        accountDTO.Interest,
+                        accountDTO.Age);
+                    return account;
+                }
+                return null;
+            }
+            catch(Exception ex)
+            {
+                if (ex.Message == "Account was not properly created")
+                {
+                    throw;
+                }
+                return null;
+            }
+        }
     }
 }

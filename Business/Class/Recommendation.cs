@@ -9,8 +9,8 @@ namespace Business
     public class Recommendation
     {
         public long? RecommendationID { get; set; }
-        public string Interest { get; set; }
-        public string Name { get; set; }
+        public string Interest { get; }
+        public string Name { get; }
 
         public Recommendation(long? recommendationID, string interest, string name)
         {

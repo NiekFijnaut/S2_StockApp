@@ -17,32 +17,34 @@ namespace Data.DAL
 
         public List<RecommendationDTO> GetRecommendations(string interest) 
         {
-            Sqlcon.Open();
-            List<RecommendationDTO> recommendationList = new List<RecommendationDTO>();
-            using (SqlCommand cmd1 = new("SELECT Name FROM Recommendation WHERE Interest = @Interest", Sqlcon))
+            try
             {
-                cmd1.Parameters.AddWithValue("@Interest", interest);
-
-                using (SqlDataReader reader = cmd1.ExecuteReader())
+                Sqlcon.Open();
+                List<RecommendationDTO> recommendationList = new List<RecommendationDTO>();
+                using (SqlCommand cmd1 = new("SELECT Name FROM Recommendation WHERE Interest = @Interest", Sqlcon))
                 {
-                    while (reader.Read())
+                    cmd1.Parameters.AddWithValue("@Interest", interest);
+
+                    using (SqlDataReader reader = cmd1.ExecuteReader())
                     {
-                        recommendationList.Add(
-                            new RecommendationDTO(
-                                null,
-                                interest,
-                                reader.GetString("Name")
-                                ));
+                        while (reader.Read())
+                        {
+                            recommendationList.Add(
+                                new RecommendationDTO(
+                                    null,
+                                    interest,
+                                    reader.GetString("Name")
+                                    ));
+                        }
                     }
                 }
+                Sqlcon.Close();
+                return recommendationList;
             }
-            Sqlcon.Close();
-            return recommendationList;
-        }
-
-        List<IRecommendation> IRecommendation.GetRecommendations(string interest)
-        {
-            throw new NotImplementedException();
+            catch
+            {
+                throw new Exception("Recommendation cannot be received");
+            }
         }
     }
 }

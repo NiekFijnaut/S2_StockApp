@@ -30,8 +30,5 @@ namespace Business
             Volume = volume;
         }
 
-        public APIResponseCall()
-        {
-        }
     }
 }

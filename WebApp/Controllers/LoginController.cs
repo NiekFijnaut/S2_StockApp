@@ -1,5 +1,5 @@
 ﻿using Business;
-using Data;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
@@ -8,7 +8,12 @@ namespace WebApp.Controllers
 {
     public class LoginController : Controller
     {
-        AccountContainer accountContainer = new AccountContainer(new AccountDAL());
+        private AccountContainer _accountContainer;
+
+        public LoginController()
+        {
+            _accountContainer = new AccountContainer();
+        }
 
         [HttpGet]
         public IActionResult Login()
@@ -22,7 +27,7 @@ namespace WebApp.Controllers
             string passwordhash = accountViewModel.PasswordHash;
             string username = accountViewModel.Username;
 
-            Account account = accountContainer.GetAccount(passwordhash, username);
+            Account account = _accountContainer.GetAccount(passwordhash, username);
 
             if (account != null)
             {

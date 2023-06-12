@@ -13,7 +13,7 @@ namespace WebApp.Controllers
             return View();
         }
 
-        AlphaVantageContainer alphaVantageContainer = new AlphaVantageContainer(new StockDAL());
+        AlphaVantageContainer alphaVantageContainer = new AlphaVantageContainer();
 
         [HttpGet]
         public IActionResult GetFavorite(AccountViewModel accountViewModel)
@@ -37,5 +37,12 @@ namespace WebApp.Controllers
             return RedirectToAction("AccountStock", "AccountStock");
         }
 
+        [HttpPost]
+        public IActionResult DeleteFavorite(string Symbol)
+        {
+            int AccountID = HttpContext.Session.GetInt32("AccountID") ?? 0;
+            alphaVantageContainer.DeleteFavorite(Symbol, AccountID);
+            return RedirectToAction("Favorite", "Favorite");
+        }
     }
 }

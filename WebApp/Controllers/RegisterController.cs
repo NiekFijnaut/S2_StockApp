@@ -1,6 +1,5 @@
 ﻿using Azure.Messaging;
 using Business;
-using Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using System.Text;
@@ -10,7 +9,12 @@ namespace WebApp.Controllers
 {
     public class RegisterController : Controller
     {
-        AccountContainer accountContainer = new AccountContainer(new AccountDAL());
+        private AccountContainer _accountContainer;
+
+        public RegisterController()
+        {
+            _accountContainer = new AccountContainer();
+        }
 
         [HttpGet]
         public IActionResult CreateAccount()
@@ -81,7 +85,7 @@ namespace WebApp.Controllers
                     try
                     {
                         
-                        accountContainer.CreateAccount(account);
+                        _accountContainer.CreateAccount(account);
                         //show succes message
                        
                     }
