@@ -19,40 +19,51 @@ namespace Data
 
         public void AddAccount(AccountDTO accountDTO)
         {
-
-            string UsernameQuery = "SELECT COUNT(AccountID) FROM Account WHERE Username = @Username";
-
-            using (SqlCommand cmd1 = new SqlCommand(UsernameQuery, Sqlcon))
+            try
             {
-                cmd1.Parameters.AddWithValue("@username", accountDTO.Username);
+                string UsernameQuery = "SELECT COUNT(AccountID) FROM Account WHERE Username = @Username";
 
-                Sqlcon.Open();
-
-                int count = (int)cmd1.ExecuteScalar();
-
-                Sqlcon.Close();
-
-                // If count is 0, username is uniek
-                bool isUnique = count == 0;
-                if (!isUnique)
+                using (SqlCommand cmd1 = new SqlCommand(UsernameQuery, Sqlcon))
                 {
-                    throw new Exception("Username has already been chosen");
+                    cmd1.Parameters.AddWithValue("@username", accountDTO.Username);
+
+                    Sqlcon.Open();
+
+                    int count = (int)cmd1.ExecuteScalar();
+
+                    Sqlcon.Close();
+
+                    // If count is 0, username is uniek
+                    bool isUnique = count == 0;
+                    if (!isUnique)
+                    {
+                        throw new Exception("Username has already been chosen");
+                    }
+                }
+
+                //using (SqlCommand cmd = new SqlCommand("INSERT INTO Account (Username, Email, Region, Interest, Age, StockID) VALUES (@Username, @Email, @Region, @Interest, @Age, @StockID)", Sqlcon))
+                using (SqlCommand cmd = new SqlCommand("INSERT INTO Account (Username, PasswordHash, Email, Region, Interest, Age) VALUES (@Username, @PasswordHash, @Email, @Region, @Interest, @Age)", Sqlcon))
+                {
+
+                    cmd.Parameters.AddWithValue("@Username", accountDTO.Username);
+                    cmd.Parameters.AddWithValue("@PasswordHash", accountDTO.PasswordHash);
+                    cmd.Parameters.AddWithValue("@Email", accountDTO.Email);
+                    cmd.Parameters.AddWithValue("@Region", accountDTO.Region);
+                    cmd.Parameters.AddWithValue("@Interest", accountDTO.Interest);
+                    cmd.Parameters.AddWithValue("@Age", accountDTO.Age);
+
+                    Sqlcon.Open();
+                    cmd.ExecuteNonQuery();
                 }
             }
-
-            //using (SqlCommand cmd = new SqlCommand("INSERT INTO Account (Username, Email, Region, Interest, Age, StockID) VALUES (@Username, @Email, @Region, @Interest, @Age, @StockID)", Sqlcon))
-            using (SqlCommand cmd = new SqlCommand("INSERT INTO Account (Username, PasswordHash, Email, Region, Interest, Age) VALUES (@Username, @PasswordHash, @Email, @Region, @Interest, @Age)", Sqlcon))
+            catch (Exception ex)
             {
-
-                cmd.Parameters.AddWithValue("@Username", accountDTO.Username);
-                cmd.Parameters.AddWithValue("@PasswordHash", accountDTO.PasswordHash);
-                cmd.Parameters.AddWithValue("@Email", accountDTO.Email);
-                cmd.Parameters.AddWithValue("@Region", accountDTO.Region);
-                cmd.Parameters.AddWithValue("@Interest", accountDTO.Interest);
-                cmd.Parameters.AddWithValue("@Age", accountDTO.Age);
-
-                Sqlcon.Open();
-                cmd.ExecuteNonQuery();
+                if (ex.Message == "Username has already been chosen")
+                {
+                    throw;
+                }
+                string errorMessage = $"[{DateTime.Now}] {"create account failed"}{Environment.NewLine}";
+                File.AppendAllText(@"C:\apps\StockApp\Error.txt", errorMessage);
             }
         }
 
@@ -98,7 +109,8 @@ namespace Data
             }
             catch(Exception ex) 
             { 
-                Log.Error(ex, "Login failed");
+                string errorMessage = $"[{DateTime.Now}] {"Login failed"}{Environment.NewLine}";
+                File.AppendAllText(@"C:\apps\StockApp\Error.txt", errorMessage);
                 return null;
             }
         }

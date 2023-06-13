@@ -8,8 +8,10 @@ namespace Interface
 {
     public interface IAlphaVantage
     {
+        
         Task<List<APIResponseCallDTO>> SearchStock(SearchDTO searchDTO);
         Task<List<HistorieDTO>> SearchHistorieStock(SearchDTO searchDTO);
-        
+        //List<HistorieDTO> SearchHistorieStock(SearchDTO searchDTO);
+        //List<APIResponseCallDTO> SearchStock(SearchDTO searchDTO);
     }
 }

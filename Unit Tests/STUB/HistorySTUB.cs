@@ -45,12 +45,12 @@ namespace Unit_Tests.STUB
                 12000),
         };
 
-        public List<HistorieDTO> SearchHistorieStock(SearchDTO searchDTO)
+        public Task<List<HistorieDTO>> SearchHistorieStock(SearchDTO searchDTO)
         {
-            return fakehistoryresponse;
+            return Task.FromResult(fakehistoryresponse);
         }
 
-            public Task<List<APIResponseCallDTO>> SearchStock(SearchDTO searchDTO)
+        public Task<List<APIResponseCallDTO>> SearchStock(SearchDTO searchDTO)
         {
             throw new NotImplementedException();
         }

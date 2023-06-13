@@ -15,7 +15,7 @@ namespace Unit_Tests.STUB
 
         public FavoriteDTO CreateFakeFavoriteDTO;
 
-        public void AddFavorite(FavoriteDTO favoriteDTO)
+        public void AddToFavorite(FavoriteDTO favoriteDTO)
         {
             CreateFakeFavoriteDTO = favoriteDTO;
         }

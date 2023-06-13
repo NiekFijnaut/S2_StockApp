@@ -97,7 +97,8 @@ namespace Data
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Search stock intel failed");
+                string errorMessage = $"[{DateTime.Now}] {"Search stock intel failed"}{Environment.NewLine}";
+                File.AppendAllText(@"C:\apps\StockApp\Error.txt", errorMessage);
                 return new List<APIResponseCallDTO>();
             }
         }
@@ -183,7 +184,8 @@ namespace Data
             }
             catch(Exception ex)
             {
-                Log.Error(ex, "Search histroy intel failed");
+                string errorMessage = $"[{DateTime.Now}] {"Search histroy intel failed"}{Environment.NewLine}";
+                File.AppendAllText(@"C:\apps\StockApp\Error.txt", errorMessage);
                 return new List<HistorieDTO>();
             }
         }

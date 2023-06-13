@@ -26,7 +26,6 @@ namespace WebApp.Controllers
 
         public IActionResult AddAccount(AccountViewModel accountViewModel)
         {
-            
             try
             {
                 Account account = new Account(

@@ -79,7 +79,8 @@ namespace Data
             }
             catch(Exception ex)
             {
-                Log.Error(ex, "Add stock failed");
+                string errorMessage = $"[{DateTime.Now}] {"Add stock failed"}{Environment.NewLine}";
+                File.AppendAllText(@"C:\apps\StockApp\Error.txt", errorMessage);
             }
         }
 
@@ -109,7 +110,8 @@ namespace Data
             }
             catch(Exception ex)
             {
-                Log.Error(ex, "Get account stocks failed");
+                string errorMessage = $"[{DateTime.Now}] {"Get account stocks failed"}{Environment.NewLine}";
+                File.AppendAllText(@"C:\apps\StockApp\Error.txt", errorMessage);
                 return new List<AccountStockDTO>();
             }
         }
@@ -139,7 +141,8 @@ namespace Data
             }
             catch(Exception ex)
             {
-                Log.Error(ex, "Get favorites failed");
+                string errorMessage = $"[{DateTime.Now}] {"Get favorites failed"}{Environment.NewLine}";
+                File.AppendAllText(@"C:\apps\StockApp\Error.txt", errorMessage);
                 return new List<FavoriteDTO>();
             }
         }
@@ -178,7 +181,8 @@ namespace Data
             }
             catch( Exception ex)
             {
-                Log.Error(ex, "Add favorites failed");
+                string errorMessage = $"[{DateTime.Now}] {"Add favorites failed"}{Environment.NewLine}";
+                File.AppendAllText(@"C:\apps\StockApp\Error.txt", errorMessage);
             }
         }
 
@@ -199,7 +203,8 @@ namespace Data
             }
             catch(Exception ex)
             {
-                Log.Error(ex, "Delete stock failed");
+                string errorMessage = $"[{DateTime.Now}] {"Delete stock failed"}{Environment.NewLine}";
+                File.AppendAllText(@"C:\apps\StockApp\Error.txt", errorMessage);
             }
         }
 
@@ -220,7 +225,8 @@ namespace Data
             }
             catch(Exception ex)
             {
-                Log.Error(ex, "Delete favorites failed");
+                string errorMessage = $"[{DateTime.Now}] {"Delete favorites failed"}{Environment.NewLine}";
+                File.AppendAllText(@"C:\apps\StockApp\Error.txt", errorMessage);
             }
         }
 

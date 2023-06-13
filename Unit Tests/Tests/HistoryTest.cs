@@ -19,7 +19,7 @@ namespace Unit_Tests.Tests
             SearchDTO searchDTO = new SearchDTO("AAPL", "15min", "year1month5");
             HistorySTUB historySTUB = new HistorySTUB();
             HistorieContainer historieContainer = new HistorieContainer(new HistorySTUB());
-            List<HistorieDTO> expected = historySTUB.SearchHistorieStock(searchDTO);
+            List<HistorieDTO> expected = await historySTUB.SearchHistorieStock(searchDTO);
             Search search = new Search(searchDTO.Symbol, searchDTO.Interval, searchDTO.Slice);
 
             // Act

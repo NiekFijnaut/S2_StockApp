@@ -44,7 +44,8 @@ namespace Data.DAL
             }
             catch(Exception ex)
             {
-                Log.Error(ex, "Get recommendation intel failed");
+                string errorMessage = $"[{DateTime.Now}] {"Get recommendation intel failed"}{Environment.NewLine}";
+                File.AppendAllText(@"C:\apps\StockApp\Error.txt", errorMessage);
                 return new List<RecommendationDTO>();
             }
         }

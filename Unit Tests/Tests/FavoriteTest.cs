@@ -15,9 +15,10 @@ namespace Unit_Tests.Tests
     public class FavoriteTest : IStock
     {
         [TestMethod]
-        public void GetFavoriteList(int AccountID)
+        public void GetFavoriteListTest()
         {
             // Arrange
+            int AccountID = 10;
             FavoriteSTUB favoriteSTUB = new FavoriteSTUB();
             AlphaVantageContainer alphaVantageContainer = new AlphaVantageContainer(new APIResponseCallSTUB(), favoriteSTUB);
             List<FavoriteDTO> expected = favoriteSTUB.fakeFavorites;
@@ -60,6 +61,11 @@ namespace Unit_Tests.Tests
         }
 
         public List<AccountStockDTO> GetAccountStockList(int AccountID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<FavoriteDTO> GetFavoriteList(int AccountID)
         {
             throw new NotImplementedException();
         }

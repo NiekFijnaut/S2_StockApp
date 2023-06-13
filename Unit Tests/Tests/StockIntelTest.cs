@@ -19,7 +19,7 @@ namespace Unit_Tests.Tests
             SearchDTO searchDTO = new SearchDTO("AAPL", "15min", null);
             APIResponseCallSTUB aPIResponseCallSTUB = new APIResponseCallSTUB();
             AlphaVantageContainer alphaVantageContainer = new AlphaVantageContainer(new APIResponseCallSTUB(), new AccountStockSTUB());
-            List<APIResponseCallDTO> expected = aPIResponseCallSTUB.SearchStock(searchDTO);
+            List<APIResponseCallDTO> expected = await aPIResponseCallSTUB.SearchStock(searchDTO);
             Search search = new Search(searchDTO.Symbol, searchDTO.Interval, searchDTO.Slice);
 
             // Act

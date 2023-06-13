@@ -49,16 +49,12 @@
         <label class="form-label" asp-for="Age"></label>
         <input type="date" class="form-control" asp-for="Age" />
     </div>
-    <input type="submit" class="btn btn-primary" value="Create account" id="CreateAccount" />
+    <div>
+        <input type="submit" class="btn btn-primary" value="Create account" id="CreateAccount" />
+    </div>
+
     @if (TempData["CreateAccountError"] != null)
     {
         <label class="Error">@TempData["CreateAccountError"]</label>
     }
 </form>
-
-@*@section Scripts
-<script>
-        $(document).ready(function () {
-            $("#Login").click(function (event) {
-                event.preventDefault();
-</script>*@

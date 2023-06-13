@@ -22,49 +22,60 @@ namespace Business
 
         public void CreateAccount(Account account)
         {
+            try
+            {
+                string password = account.PasswordHash;
+
+                SHA256 sha256 = SHA256.Create();
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+                byte[] hashedBytes = sha256.ComputeHash(passwordBytes);
+                string hashedPassword = Convert.ToBase64String(hashedBytes);
+
+                if (password.Length < 8)
+                {
+                    throw new Exception("Password must be more than 8 figures");
+                }
+
+                else if (!account.Email.Contains("@"))
+                {
+                    throw new Exception("Email must contain '@'");
+                }
+
+                else
+                {
+                    DateTime selectedDate = account.Age;
+                    DateTime currentDate = DateTime.Now;
+                    int age = DateTime.Today.Year - selectedDate.Year;
+                    if (selectedDate.Month > currentDate.Month || (selectedDate.Month == currentDate.Month && selectedDate.Day > currentDate.Day))
+                    {
+                        age--;
+                    }
+
+                    if (age < 18)
+                    {
+                        throw new Exception("Age must be 18 or older");
+                    }
+
+                    AccountDTO accountDTO = new AccountDTO(
+                    account.AccountID,
+                    account.Username,
+                    account.PasswordHash,
+                    account.Email,
+                    account.Region,
+                    account.Interest,
+                    account.Age);
+                    _account.AddAccount(accountDTO);
+                }
+            } 
+            catch(Exception ex)
+            {
+                if (ex.Message == "Username has already been chosen")
+                {
+                    throw;
+                }
+                throw;
+            }
             
-            string password = account.PasswordHash;
-
-            SHA256 sha256 = SHA256.Create();
-            byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
-            byte[] hashedBytes = sha256.ComputeHash(passwordBytes);
-            string hashedPassword = Convert.ToBase64String(hashedBytes);
-
-            if (password.Length < 8)
-            {
-                throw new Exception("Password must be more than 8 figures");
-            }
-
-            else if (!account.Email.Contains("@"))
-            {
-                throw new Exception("Email must contain '@'");
-            }
-
-            else
-            {
-                DateTime selectedDate = account.Age;
-                DateTime currentDate = DateTime.Now;
-                int age = DateTime.Today.Year - selectedDate.Year;
-                if (selectedDate.Month > currentDate.Month || (selectedDate.Month == currentDate.Month && selectedDate.Day > currentDate.Day))
-                {
-                    age--;
-                }
-
-                if (age < 18)
-                {
-                    throw new Exception("Age must be 18 or older");
-                }
-                    
-                AccountDTO accountDTO = new AccountDTO(
-                account.AccountID,
-                account.Username,
-                account.PasswordHash,
-                account.Email,
-                account.Region,
-                account.Interest,
-                account.Age);
-                _account.AddAccount(accountDTO);
-            }
         }
 
         public Account GetAccount(string passwordhash, string username)

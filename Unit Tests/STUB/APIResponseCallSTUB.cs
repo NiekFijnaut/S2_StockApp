@@ -64,9 +64,14 @@ namespace Unit_Tests.STUB
                 12000),
         };    
 
-        public List<APIResponseCallDTO> SearchStock(SearchDTO searchDTO)
+        public Task<List<APIResponseCallDTO>> SearchStock(SearchDTO searchDTO)
         {
-            return FakeAPIResponseCalls;
+            return Task.FromResult(FakeAPIResponseCalls);
+        }
+
+        public Task<List<HistorieDTO>> SearchHistorieStock(SearchDTO searchDTO)
+        {
+            throw new NotImplementedException();
         }
     }
 }
