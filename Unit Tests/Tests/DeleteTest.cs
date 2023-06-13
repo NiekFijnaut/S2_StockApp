@@ -12,14 +12,14 @@ namespace Unit_Tests.Tests
     public class DeleteTest
     {
         [TestMethod]
-        public void DeleteStock_StockDeletedSuccessfully()
+        public void DeleteStock()
         {
             // Arrange
             string symbol = "AAPL";
             int accountId = 10;
             AccountStockSTUB accountStockSTUB = new AccountStockSTUB();
-            AlphaVantageContainer alphaVantageContainer = new AlphaVantageContainer(new APIResponseCallSTUB(), new AccountStockSTUB());
-
+            AlphaVantageContainer alphaVantageContainer = new AlphaVantageContainer(new APIResponseCallSTUB(), accountStockSTUB);
+            
             // Act
             alphaVantageContainer.DeleteStock(symbol, accountId);
 

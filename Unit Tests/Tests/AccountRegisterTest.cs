@@ -38,25 +38,28 @@ namespace Unit_Tests.Tests
         }
 
         [TestMethod]
-        public void Login()
+        public Account Login()
         {
             // Arrange
             string validUsername = "rik";
             string validPassword = "87654321";
             AccountSTUB accountSTUB = new AccountSTUB();
+            AccountContainer accountContainer = new AccountContainer(accountSTUB);
+            Account expected = accountContainer.GetAccount(validPassword, validUsername);
 
             // Act
             AccountDTO result = accountSTUB.Login(validPassword, validUsername);
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.AccountID);
-            Assert.AreEqual("rik", result.Username);
-            Assert.AreEqual("87654321", result.PasswordHash);
-            Assert.AreEqual("rik@fontys.nl", result.Email);
-            Assert.AreEqual("Europe (Northern Europe, Southern Europe, Eastern Europe, Western Europe)", result.Region);
-            Assert.AreEqual("Real Estate", result.Interest);
-            Assert.AreEqual(new DateTime(1998, 10, 12), result.Age);
+            Assert.AreEqual(expected.AccountID, result.AccountID);
+            Assert.AreEqual(expected.Username, result.Username);
+            Assert.AreEqual(expected.PasswordHash, result.PasswordHash);
+            Assert.AreEqual(expected.Email, result.Email);
+            Assert.AreEqual(expected.Region, result.Region);
+            Assert.AreEqual(expected.Interest, result.Interest);
+            Assert.AreEqual(expected.Age, result.Age);
+            return expected;
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Unit_Tests.Tests
     public class HistoryTest
     {
         [TestMethod]
-        public async Task SearcHistorie()
+        public async Task SearchHistorieStock()
         {
             // Arrange
             SearchDTO searchDTO = new SearchDTO("AAPL", "15min", "year1month5");

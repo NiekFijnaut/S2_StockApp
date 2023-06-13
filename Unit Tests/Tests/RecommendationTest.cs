@@ -26,8 +26,14 @@ namespace Unit_Tests.Tests
             List<Recommendation> list = recommendationContainer.GetRecommandation(Interest);
 
             // Assert
-            Assert.AreEqual(expected.Count, list.Count);
-            
+            Assert.AreEqual(expected[0].Name.Trim(), list[0].Name.Trim());
+            Assert.AreEqual(expected[1].Name.Trim(), list[1].Name.Trim());
+            Assert.AreEqual(expected[2].Name.Trim(), list[2].Name.Trim());
+            Assert.AreEqual(expected[3].Name.Trim(), list[3].Name.Trim());
+            Assert.AreEqual(expected[0].Interest.Trim(), list[0].Interest.Trim());
+            Assert.AreEqual(expected[1].Interest.Trim(), list[1].Interest.Trim());
+            Assert.AreEqual(expected[2].Interest.Trim(), list[2].Interest.Trim());
+            Assert.AreEqual(expected[3].Interest.Trim(), list[3].Interest.Trim());
         }
     }
 }

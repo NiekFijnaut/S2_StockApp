@@ -17,7 +17,7 @@ namespace Unit_Tests.STUB
             new RecommendationDTO(
                 29,
                 "Financials",
-                "JPMorgan Chase & Co. (JPM)"),
+                "JPMorgan Chase & Co. (JPM) "),
             new RecommendationDTO(
                 30,
                 "Financials",

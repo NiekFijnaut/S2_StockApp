@@ -29,7 +29,6 @@ namespace Unit_Tests.Tests
         }
         
         [TestMethod]
-
         public void AddStock()
         {
             // Arrange

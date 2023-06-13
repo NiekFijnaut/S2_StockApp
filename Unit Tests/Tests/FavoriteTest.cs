@@ -27,7 +27,9 @@ namespace Unit_Tests.Tests
             List<Favorite> list = alphaVantageContainer.GetFavoriteList(AccountID);
 
             // Assert
-            Assert.AreEqual(expected.Count, list.Count);
+            Assert.AreEqual(expected[0].Symbol, list[0].Symbol);
+            Assert.AreEqual(expected[1].Symbol, list[1].Symbol);
+            Assert.AreEqual(expected[2].Symbol, list[2].Symbol);
         }
 
         public void AddToFavorite(int AccountID, string Symbol)
