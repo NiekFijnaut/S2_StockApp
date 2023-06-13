@@ -9,13 +9,13 @@ namespace Business
 {
     public class Account
     {
-        public int AccountID { get; set; }
-        public string Username { get; set; }
-        public string PasswordHash { get; set; }
-        public string Email { get; set; }
-        public string Region { get; set; }
-        public string Interest { get; set; }
-        public DateTime Age { get; set; }
+        public int AccountID { get; }
+        public string Username { get; }
+        public string PasswordHash { get; }
+        public string Email { get; }
+        public string Region { get; }
+        public string Interest { get; }
+        public DateTime Age { get; }
 
         public Account(int accountID, string username, string passwordHash, string email, string region, string interest, DateTime age)
         {

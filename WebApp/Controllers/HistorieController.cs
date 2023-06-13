@@ -1,4 +1,5 @@
 ﻿using Business;
+using Data;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
 
@@ -10,7 +11,7 @@ namespace WebApp.Controllers
 
         public HistorieController()
         {
-            _historieContainer = new HistorieContainer();
+            _historieContainer = new HistorieContainer(new AlphaVantageDAL());
         }
 
         public IActionResult Historie()
@@ -23,7 +24,6 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> GetStockHistorie(HistorieSearchViewModel historieSearchViewModel)
         {
-            
             Search search = new Search(historieSearchViewModel.Symbol, historieSearchViewModel.Interval, historieSearchViewModel.Slice);
 
             historieList = await _historieContainer.SearchHistorieStock(search);
@@ -31,6 +31,7 @@ namespace WebApp.Controllers
             HistorieViewModel historieViewModel = new HistorieViewModel(historieList, historieSearchViewModel);
 
             return PartialView("_historiestockTable", historieViewModel);
+            
         }
     }
 }

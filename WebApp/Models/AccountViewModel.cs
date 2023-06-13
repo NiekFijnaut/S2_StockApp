@@ -1,7 +1,5 @@
-﻿using Microsoft.Build.Framework;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using RequiredAttribute = Microsoft.Build.Framework.RequiredAttribute;
 
 namespace WebApp.Models
 {

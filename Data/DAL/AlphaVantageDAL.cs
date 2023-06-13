@@ -3,6 +3,7 @@ using Interface;
 using Interface.Interface;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json.Linq;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -44,8 +45,9 @@ namespace Data
                 string Interval = searchDTO.Interval;
 
                 string ApiFunction = "TIME_SERIES_INTRADAY";
-
-                string apiurl = $"{BaseUrl}?function={ApiFunction}&symbol={Symbol}&interval={Interval}&apikey={APIKEY}";
+// ik heb ervoor gekozen geen extra validatie op symbol te zetten omdat het niet te achter halen is ofdat er een juist symbool is ingevoerd,
+// vanwege de return van de api die een eroor geeft die niet speciefiek genoeg is. de method faalt en de gebruiker krijgt de error van de catch te zien.
+                string apiurl = $"{BaseUrl}?function={ApiFunction}&symbol={Symbol}&interval={Interval}&apikey={APIKEY}"; 
 
                 using (HttpClient client = new HttpClient())
                 {
@@ -93,9 +95,10 @@ namespace Data
                 }
                 return new List<APIResponseCallDTO>();
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception("StockIntel cannot be received");
+                Log.Error(ex, "Search stock intel failed");
+                return new List<APIResponseCallDTO>();
             }
         }
 
@@ -130,7 +133,7 @@ namespace Data
                 Uri queryUri = new Uri(apiurl);
 
                 CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
-                List<HistorieDTO> historielist = new List<HistorieDTO>(); // List to store the historical data
+                List<HistorieDTO> historielist = new List<HistorieDTO>(); 
 
                 using (HttpClient client = new HttpClient())
                 {
@@ -140,7 +143,7 @@ namespace Data
                         {
                             await stream.CopyToAsync(memStream);
                         }
-
+                        
                         memStream.Position = 0;
 
                         using (StreamReader reader = new StreamReader(memStream))
@@ -152,16 +155,16 @@ namespace Data
 
                                 while (csv.Read())
                                 {
-                                    DateTime date = DateTime.Parse(csv.GetField<string>("Date"));
-                                    double open = csv.GetField<double>("Open");
-                                    double high = csv.GetField<double>("High");
-                                    double low = csv.GetField<double>("Low");
-                                    double close = csv.GetField<double>("Close");
-                                    int volume = csv.GetField<int>("Volume");
+                                    DateTime time = DateTime.Parse(csv.GetField<string>("time"));
+                                    double open = Math.Round(csv.GetField<double>("open"), 2);
+                                    double high = Math.Round(csv.GetField<double>("high"), 2);
+                                    double low = Math.Round(csv.GetField<double>("low"), 2);
+                                    double close = Math.Round(csv.GetField<double>("close"), 2);
+                                    int volume = csv.GetField<int>("volume");
 
                                     HistorieDTO history = new HistorieDTO(
                                         null,
-                                        date,
+                                        time,
                                         symbol,
                                         open,
                                         high,
@@ -178,9 +181,10 @@ namespace Data
                 }
                 return historielist;
             }
-            catch
+            catch(Exception ex)
             {
-                throw new Exception("History Intel cannot be received");
+                Log.Error(ex, "Search histroy intel failed");
+                return new List<HistorieDTO>();
             }
         }
     }

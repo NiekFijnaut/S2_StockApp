@@ -8,10 +8,10 @@ namespace Business.Class
 {
     public class AccountStock
     {
-        public long? StockID { get; set; }
-        public DateTime Date { get; set; }
-        public string Symbol { get; set; }
-        public int? AccountID { get; set; }
+        public long? StockID { get; }
+        public DateTime Date { get; }
+        public string Symbol { get; }
+        public int? AccountID { get; }
 
         public AccountStock(DateTime date, string symbol)
         {

@@ -8,6 +8,7 @@ using Interface;
 using Azure;
 using Microsoft.Identity.Client;
 using System.Security.Cryptography;
+using Serilog;
 
 namespace Data
 {
@@ -15,8 +16,10 @@ namespace Data
     {
         SqlConnection Sqlcon = DataString.connection;
         //sql connection string naar een aparte functie zodat deze mee kan veranderen als het wachtwoord veranderd bijvoorbeeld en overal aangeroepen kan worden 
+
         public void AddAccount(AccountDTO accountDTO)
         {
+
             string UsernameQuery = "SELECT COUNT(AccountID) FROM Account WHERE Username = @Username";
 
             using (SqlCommand cmd1 = new SqlCommand(UsernameQuery, Sqlcon))
@@ -93,9 +96,10 @@ namespace Data
                 }
                 return null;
             }
-            catch
-            {
-                throw new Exception("Account cannot be created");
+            catch(Exception ex) 
+            { 
+                Log.Error(ex, "Login failed");
+                return null;
             }
         }
     }

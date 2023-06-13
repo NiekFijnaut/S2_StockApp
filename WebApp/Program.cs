@@ -27,4 +27,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Register}/{action=CreateAccount}/{id?}");
 
+app.UseExceptionHandler("/Home/Error"); // Add this line to handle exceptions
+
 app.Run();

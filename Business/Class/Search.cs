@@ -8,9 +8,9 @@ namespace Business
 {
     public class Search
     {
-        public string Symbol { get; set; }
-        public string Interval { get; set; }
-        public string Slice { get; set; }
+        public string Symbol { get; }
+        public string Interval { get; }
+        public string Slice { get; }
 
         public Search(string symbol, string interval, string slice)
         {

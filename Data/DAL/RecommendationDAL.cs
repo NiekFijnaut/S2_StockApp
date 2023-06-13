@@ -2,6 +2,7 @@
 using Interface.DTO;
 using Interface.Interface;
 using Microsoft.Data.SqlClient;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -41,9 +42,10 @@ namespace Data.DAL
                 Sqlcon.Close();
                 return recommendationList;
             }
-            catch
+            catch(Exception ex)
             {
-                throw new Exception("Recommendation cannot be received");
+                Log.Error(ex, "Get recommendation intel failed");
+                return new List<RecommendationDTO>();
             }
         }
     }

@@ -10,13 +10,11 @@ namespace WebApp.Controllers
 {
     public class RecommendationController : Controller
     {
-        private IRecommendation _recommendation;
         private RecommendationContainer _recommendationContainer;
 
-        public RecommendationController(IRecommendation recommendation)
+        public RecommendationController()
         {
-            _recommendation = recommendation;
-            _recommendationContainer = new RecommendationContainer(recommendation);
+            _recommendationContainer = new RecommendationContainer(new RecommendationDAL());
         }
 
         [HttpGet]
@@ -30,6 +28,7 @@ namespace WebApp.Controllers
             RecommendationViewModel recommendationViewModel = new RecommendationViewModel(null, recommendations);
 
             return PartialView("_Recommendation", recommendationViewModel);
+            
         }
     }
 }

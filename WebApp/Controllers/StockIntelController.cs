@@ -14,31 +14,11 @@ namespace WebApp.Controllers
 {
     public class StockIntelController : Controller
     {
+        private AlphaVantageContainer _alphaVantageContainer;
 
-        public IActionResult Index()
+        public StockIntelController()
         {
-            return View();
-        }
-
-        AlphaVantageContainer alphaVantageContainer = new AlphaVantageContainer();
-        
-
-        public APIResponseCallViewModel ToModel(List<APIResponseCall> APIResponseList, SearchViewModel searchViewModel)
-        {
-            APIResponseCallViewModel aPIResponseCallViewModel = new APIResponseCallViewModel(
-                APIResponseList,
-                searchViewModel
-                );
-            return aPIResponseCallViewModel;
-        }
-
-        public SearchViewModel ToModel(Search search) 
-        {
-            SearchViewModel searchModel = new SearchViewModel(
-                search.Symbol,
-                search.Interval
-                );
-            return searchModel;
+            _alphaVantageContainer = new AlphaVantageContainer(new AlphaVantageDAL(), new StockDAL());
         }
 
         [HttpGet]
@@ -52,51 +32,28 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> GetSearchResults(SearchViewModel searchViewModel)
         {
-            //Search search = new Search()
-            //{
-            //    Symbol = searchViewModel.Symbol,
-            //    Interval = searchViewModel.Interval
-            //};
-
             Search search = new Search(searchViewModel.Symbol, searchViewModel.Interval, "");
 
-
-            APIResponseList = await alphaVantageContainer.SearchStock(search);
+            APIResponseList = await _alphaVantageContainer.SearchStock(search);
 
             APIResponseCallViewModel responseViewModel = new APIResponseCallViewModel(APIResponseList, searchViewModel);
 
             return PartialView("_StockIntelTable", responseViewModel);
+           
         }
 
         [HttpPost]
         public async Task<IActionResult> AddStockToAccount(SearchViewModel searchViewModel, AccountViewModel accountViewModel)
         {
-
-            //Search search = new Search()
-            //{
-            //    Symbol = searchViewModel.Symbol,
-            //    Interval = searchViewModel.Interval
-            //};
-
             Search search = new Search(searchViewModel.Symbol, searchViewModel.Interval, "");
 
             int AccountID = HttpContext.Session.GetInt32("AccountID") ?? 0;
 
-            APIResponseList = await alphaVantageContainer.SearchStock(search);
+            APIResponseList = await _alphaVantageContainer.SearchStock(search);
 
             if (APIResponseList.Count > 0)
             {
-                //APIResponseCall aPIResponseCall = new APIResponseCall()
-                //{
 
-                //    Date = APIResponseList[APIResponseList.Count - 1].Date,
-                //    Symbol = APIResponseList[APIResponseList.Count - 1].Symbol,
-                //    Open = APIResponseList[APIResponseList.Count - 1].Open,
-                //    High = APIResponseList[APIResponseList.Count - 1].High,
-                //    Low = APIResponseList[APIResponseList.Count - 1].Low,
-                //    Close = APIResponseList[APIResponseList.Count - 1].Close,
-                //    Volume = APIResponseList[APIResponseList.Count - 1].Volume
-                //};
                 APIResponseCall aPIResponseCall = new APIResponseCall(
                     null,
                     APIResponseList[APIResponseList.Count - 1].Date,
@@ -108,15 +65,11 @@ namespace WebApp.Controllers
                     APIResponseList[APIResponseList.Count - 1].Volume
                 );
 
-                alphaVantageContainer.AddStock(aPIResponseCall, AccountID);
+                _alphaVantageContainer.AddStock(aPIResponseCall, AccountID);
                 ViewBag.Message = "Stock has been added to account";
-                return View("StockIntel");
             }
-            else
-            {
-                ViewBag.Message = "Something went wrong";
-                return View("StockIntel");
-            }
+            return View("StockIntel");
+            
         }      
     }
 }

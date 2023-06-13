@@ -10,15 +10,11 @@ namespace WebApp.Controllers
 {
     public class AccountStockController : Controller
     {
-        private IAlphaVantage _alphaVantage;
-        private IStock _stock;
         private AlphaVantageContainer _alphaVantageContainer;
 
-        public AccountStockController(IAlphaVantage alphaVantage, IStock stock)
+        public AccountStockController()
         {
-            _alphaVantage= alphaVantage;
-            _stock= stock;
-            _alphaVantageContainer = new AlphaVantageContainer(_alphaVantage, _stock);
+            _alphaVantageContainer = new AlphaVantageContainer(new AlphaVantageDAL(), new StockDAL());
         }
 
         [HttpGet]
@@ -26,35 +22,28 @@ namespace WebApp.Controllers
         {
             return View();
         }
- 
 
         [HttpGet]
         public IActionResult GetAccountStock() 
         {
-            try
-            {
-                AccountViewModel accountViewModel = new AccountViewModel();
-                int AccountID = HttpContext.Session.GetInt32("AccountID") ?? 0;
-                accountViewModel.AccountID = AccountID;
-                List<AccountStock> accountStocks = _alphaVantageContainer.GetAccountStockList(AccountID);
+            AccountViewModel accountViewModel = new AccountViewModel();
+            int AccountID = HttpContext.Session.GetInt32("AccountID") ?? 0;
+            accountViewModel.AccountID = AccountID;
+            List<AccountStock> accountStocks = _alphaVantageContainer.GetAccountStockList(AccountID);
 
-                AccountStockViewModel accountStockViewModel = new AccountStockViewModel(accountStocks);
+            AccountStockViewModel accountStockViewModel = new AccountStockViewModel(accountStocks);
 
-                return PartialView("StockAccountTable", accountStockViewModel);
-            }
-            catch(Exception ex)
-            {
-                string errorMessage = ex.Message;
-                return View("AccountStock", errorMessage);
-            }
+            return PartialView("StockAccountTable", accountStockViewModel);
         }
 
         [HttpPost]
         public IActionResult DeleteStock(string Symbol)
-        { 
+        {
+           
             int AccountID = HttpContext.Session.GetInt32("AccountID") ?? 0;
             _alphaVantageContainer.DeleteStock(Symbol, AccountID);
-            return RedirectToAction("AccountStock", "AccountStock"); 
+            return RedirectToAction("AccountStock", "AccountStock");
+            
         }  
     }
 }

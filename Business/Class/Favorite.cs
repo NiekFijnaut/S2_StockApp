@@ -8,8 +8,8 @@ namespace Business.Class
 {
     public class Favorite
     {
-        public long? StockID { get; set; }
-        public string Symbol { get; set; }
+        public long? StockID { get; }
+        public string Symbol { get; }
         public int? AccountID { get; }
 
         public Favorite(string symbol)

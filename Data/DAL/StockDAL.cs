@@ -4,6 +4,7 @@ using Interface.DTO;
 using Interface.Interface;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json.Linq;
+using Serilog;
 using System.Data;
 using System.Globalization;
 using System.Net.Http;
@@ -76,9 +77,9 @@ namespace Data
                     Sqlcon.Close();
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                throw new Exception("Stock cannot be added");
+                Log.Error(ex, "Add stock failed");
             }
         }
 
@@ -106,9 +107,10 @@ namespace Data
                     return accountStockList;
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                throw new Exception("AccountStocks cannot be received");
+                Log.Error(ex, "Get account stocks failed");
+                return new List<AccountStockDTO>();
             }
         }
 
@@ -135,9 +137,10 @@ namespace Data
                     return favoriteList;
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                throw new Exception("Favorite list cannot be received");
+                Log.Error(ex, "Get favorites failed");
+                return new List<FavoriteDTO>();
             }
         }
 
@@ -173,9 +176,9 @@ namespace Data
                     Sqlcon.Close();
                 }
             }
-            catch
+            catch( Exception ex)
             {
-                throw new Exception("Stock cannot be added to favorite");
+                Log.Error(ex, "Add favorites failed");
             }
         }
 
@@ -194,9 +197,9 @@ namespace Data
                     Sqlcon.Close();
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                throw new Exception("Stock cannot be deleted");
+                Log.Error(ex, "Delete stock failed");
             }
         }
 
@@ -215,13 +218,18 @@ namespace Data
                     Sqlcon.Close();
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                throw new Exception("Stock cannot be deleted from favorites");
+                Log.Error(ex, "Delete favorites failed");
             }
         }
 
         public Task<List<APIResponseCallDTO>> SearchStock(SearchDTO searchDTO)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<HistorieDTO>> SearchHistorieStock(SearchDTO searchDTO)
         {
             throw new NotImplementedException();
         }

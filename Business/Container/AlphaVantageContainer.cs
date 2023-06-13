@@ -27,161 +27,93 @@ namespace Business
 
         public void AddStock(APIResponseCall aPIResponseCall, int AccountID)
         {
-            try
-            {
-                APIResponseCallDTO aPIResponseCallDTO = new APIResponseCallDTO(
-                null,
-                aPIResponseCall.Date,
-                aPIResponseCall.Symbol,
-                aPIResponseCall.Open,
-                aPIResponseCall.High,
-                aPIResponseCall.Low,
-                aPIResponseCall.Close,
-                aPIResponseCall.Volume
-                );
+            APIResponseCallDTO aPIResponseCallDTO = new APIResponseCallDTO(
+            null,
+            aPIResponseCall.Date,
+            aPIResponseCall.Symbol,
+            aPIResponseCall.Open,
+            aPIResponseCall.High,
+            aPIResponseCall.Low,
+            aPIResponseCall.Close,
+            aPIResponseCall.Volume
+            );
 
-                _stock.AddStock(aPIResponseCallDTO, AccountID);
-            }
-            catch(Exception ex)
-            {
-                if(ex.Message == "Stock cannot be added")
-                {
-                    throw;
-                }
-            }            
+            _stock.AddStock(aPIResponseCallDTO, AccountID);
+                 
         }
 
         public void AddToFavorite(int AccountID, string Symbol)
         {
-            try
-            {
-                _stock.AddToFavorite(AccountID, Symbol);
-            }
-            catch(Exception ex)
-            {
-                if(ex.Message == "Stock cannot be added to favorite")
-                {
-                    throw;
-                }
-            }
+            _stock.AddToFavorite(AccountID, Symbol);
         }
 
         public List<Favorite> GetFavoriteList(int AccountID)
         {
-            try
+            
+            List<Favorite> favorites = new List<Favorite>();
+            List<FavoriteDTO> favoriteDTOs = _stock.GetFavoriteList(AccountID);
+            foreach (FavoriteDTO favoriteDTO in favoriteDTOs)
             {
-                List<Favorite> favorites = new List<Favorite>();
-                List<FavoriteDTO> favoriteDTOs = _stock.GetFavoriteList(AccountID);
-                foreach (FavoriteDTO favoriteDTO in favoriteDTOs)
-                {
-                    favorites.Add(
-                        new Favorite(
-                            favoriteDTO.Symbol
-                            ));
-                }
-                return favorites;
+                favorites.Add(
+                    new Favorite(
+                        favoriteDTO.Symbol
+                        ));
             }
-            catch(Exception ex)
-            {
-                if(ex.Message == "Favorite list cannot be received")
-                {
-                    throw;
-                }
-                return null;
-            }
+            return favorites;
+            
         }
 
         public async Task<List<APIResponseCall>> SearchStock(Search search)
         {
-            try
-            {
-                SearchDTO searchDTO = new SearchDTO(
-                search.Symbol,
-                search.Interval,
-                null);
+            
+            SearchDTO searchDTO = new SearchDTO(
+            search.Symbol,
+            search.Interval,
+            null);
 
-                List<APIResponseCall> aPIResponses = new List<APIResponseCall>();
-                List<APIResponseCallDTO> aPIResponseCallDTOs = await _alphaVantage.SearchStock(searchDTO);
-                foreach (APIResponseCallDTO aPIResponseCallDTO in aPIResponseCallDTOs)
-                {
-                    aPIResponses.Add(
-                        new APIResponseCall(
-                            null,
-                            aPIResponseCallDTO.Date,
-                            aPIResponseCallDTO.Symbol,
-                            aPIResponseCallDTO.Open,
-                            aPIResponseCallDTO.High,
-                            aPIResponseCallDTO.Low,
-                            aPIResponseCallDTO.Close,
-                            aPIResponseCallDTO.Volume
-                            ));
-                }
-                return aPIResponses;
-            }
-            catch(Exception ex)
+            List<APIResponseCall> aPIResponses = new List<APIResponseCall>();
+            List<APIResponseCallDTO> aPIResponseCallDTOs = await _alphaVantage.SearchStock(searchDTO);
+            foreach (APIResponseCallDTO aPIResponseCallDTO in aPIResponseCallDTOs)
             {
-                if (ex.Message == "StockIntel cannot be received")
-                {
-                    throw;
-                }
-                return null;
+                aPIResponses.Add(
+                    new APIResponseCall(
+                        null,
+                        aPIResponseCallDTO.Date,
+                        aPIResponseCallDTO.Symbol,
+                        aPIResponseCallDTO.Open,
+                        aPIResponseCallDTO.High,
+                        aPIResponseCallDTO.Low,
+                        aPIResponseCallDTO.Close,
+                        aPIResponseCallDTO.Volume
+                        ));
             }
+            return aPIResponses;
+            
         }
 
         public void DeleteStock(string Symbol, int AccountID)
         {
-            try
-            {
-                _stock.DeleteStock(Symbol, AccountID);
-            }
-            catch(Exception ex)
-            {
-                if (ex.Message == "Stock cannot be deleted")
-                {
-                    throw;
-                }
-            }
+             _stock.DeleteStock(Symbol, AccountID);
         }
 
         public void DeleteFavorite(string Symbol, int AccountID)
         {
-            try
-            {
-                _stock.DeleteFavorite(Symbol, AccountID);
-            }
-            catch (Exception ex)
-            {
-                if (ex.Message == "Stock cannot be deleted from favorites")
-                {
-                    throw;
-                }
-            }
+            _stock.DeleteFavorite(Symbol, AccountID);
         }
 
         public List<AccountStock> GetAccountStockList(int AccountID)
         {
-            try
+            List<AccountStock> accountStock = new List<AccountStock>();
+            List<AccountStockDTO> accountStockDTOList = _stock.GetAccountStockList(AccountID);
+            foreach (AccountStockDTO accountStockDTO in accountStockDTOList)
             {
-                List<AccountStock> accountStock = new List<AccountStock>();
-                List<AccountStockDTO> accountStockDTOList = _stock.GetAccountStockList(AccountID);
-                foreach (AccountStockDTO accountStockDTO in accountStockDTOList)
-                {
-                    accountStock.Add(
-                        new AccountStock(
-                            accountStockDTO.Date,
-                            accountStockDTO.Symbol
-                            ));
-                }
-                return accountStock;
+                accountStock.Add(
+                    new AccountStock(
+                        accountStockDTO.Date,
+                        accountStockDTO.Symbol
+                        ));
             }
-            catch(Exception ex )
-            {
-                if(ex.Message == "AccountStocks cannot be received")
-                {
-                    throw;
-                }
-                return null;
-            }
+            return accountStock;
         }
     }
 }

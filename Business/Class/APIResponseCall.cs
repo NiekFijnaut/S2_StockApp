@@ -8,14 +8,14 @@ namespace Business
 { 
     public class APIResponseCall
     {
-        public long? StockID { get; set; }
-        public DateTime Date { get; set; }
-        public string Symbol { get; set; }
-        public double Open { get; set; }
-        public double High { get; set; }
-        public double Low { get; set; }
-        public double Close { get; set; }
-        public int Volume { get; set; }
+        public long? StockID { get; }
+        public DateTime Date { get; }
+        public string Symbol { get; }
+        public double Open { get; }
+        public double High { get; }
+        public double Low { get; }
+        public double Close { get; }
+        public int Volume { get; }
 
 
         public APIResponseCall(long? stockID, DateTime date, string symbol, double open, double high, double low, double close, int volume)
