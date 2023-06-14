@@ -46,6 +46,7 @@ namespace Data.DAL
             {
                 string errorMessage = $"[{DateTime.Now}] {"Get recommendation intel failed"}{Environment.NewLine}";
                 File.AppendAllText(@"C:\apps\StockApp\Error.txt", errorMessage);
+                Sqlcon.Close();
                 return new List<RecommendationDTO>();
             }
         }

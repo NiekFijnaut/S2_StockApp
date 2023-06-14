@@ -54,6 +54,7 @@ namespace Data
 
                     Sqlcon.Open();
                     cmd.ExecuteNonQuery();
+                    Sqlcon.Close();
                 }
             }
             catch (Exception ex)
@@ -64,6 +65,7 @@ namespace Data
                 }
                 string errorMessage = $"[{DateTime.Now}] {"create account failed"}{Environment.NewLine}";
                 File.AppendAllText(@"C:\apps\StockApp\Error.txt", errorMessage);
+                Sqlcon.Close();
             }
         }
 
@@ -94,6 +96,10 @@ namespace Data
                         byte[] hashedBytes = sha256.ComputeHash(passwordBytes);
                         string enteredHash = Convert.ToBase64String(hashedBytes);
                         bool passwordMatches = (hashedPassword == enteredHash);
+                        if(!passwordMatches)
+                        {
+                            throw new Exception("Password doesn't match username");
+                        }
 
                         Sqlcon.Close();
 
@@ -111,6 +117,7 @@ namespace Data
             { 
                 string errorMessage = $"[{DateTime.Now}] {"Login failed"}{Environment.NewLine}";
                 File.AppendAllText(@"C:\apps\StockApp\Error.txt", errorMessage);
+                Sqlcon.Close();
                 return null;
             }
         }

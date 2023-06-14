@@ -81,6 +81,7 @@ namespace Data
             {
                 string errorMessage = $"[{DateTime.Now}] {"Add stock failed"}{Environment.NewLine}";
                 File.AppendAllText(@"C:\apps\StockApp\Error.txt", errorMessage);
+                Sqlcon.Close();
             }
         }
 
@@ -112,6 +113,7 @@ namespace Data
             {
                 string errorMessage = $"[{DateTime.Now}] {"Get account stocks failed"}{Environment.NewLine}";
                 File.AppendAllText(@"C:\apps\StockApp\Error.txt", errorMessage);
+                Sqlcon.Close();
                 return new List<AccountStockDTO>();
             }
         }
@@ -143,6 +145,7 @@ namespace Data
             {
                 string errorMessage = $"[{DateTime.Now}] {"Get favorites failed"}{Environment.NewLine}";
                 File.AppendAllText(@"C:\apps\StockApp\Error.txt", errorMessage);
+                Sqlcon.Close();
                 return new List<FavoriteDTO>();
             }
         }
@@ -183,6 +186,7 @@ namespace Data
             {
                 string errorMessage = $"[{DateTime.Now}] {"Add favorites failed"}{Environment.NewLine}";
                 File.AppendAllText(@"C:\apps\StockApp\Error.txt", errorMessage);
+                Sqlcon.Close();
             }
         }
 
@@ -205,6 +209,7 @@ namespace Data
             {
                 string errorMessage = $"[{DateTime.Now}] {"Delete stock failed"}{Environment.NewLine}";
                 File.AppendAllText(@"C:\apps\StockApp\Error.txt", errorMessage);
+                Sqlcon.Close();
             }
         }
 
@@ -227,6 +232,7 @@ namespace Data
             {
                 string errorMessage = $"[{DateTime.Now}] {"Delete favorites failed"}{Environment.NewLine}";
                 File.AppendAllText(@"C:\apps\StockApp\Error.txt", errorMessage);
+                Sqlcon.Close();
             }
         }
 

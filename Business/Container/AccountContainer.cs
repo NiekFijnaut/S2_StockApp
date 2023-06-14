@@ -59,7 +59,7 @@ namespace Business
                     AccountDTO accountDTO = new AccountDTO(
                     account.AccountID,
                     account.Username,
-                    account.PasswordHash,
+                    hashedPassword,
                     account.Email,
                     account.Region,
                     account.Interest,
@@ -75,26 +75,36 @@ namespace Business
                 }
                 throw;
             }
-            
         }
 
         public Account GetAccount(string passwordhash, string username)
         {
-            AccountDTO accountDTO = _account.Login(passwordhash, username);
-
-            if (accountDTO != null)
+            try
             {
-                Account account = new Account(
-                    accountDTO.AccountID,
-                    accountDTO.Username,
-                    accountDTO.PasswordHash,
-                    accountDTO.Email,
-                    accountDTO.Region,
-                    accountDTO.Interest,
-                    accountDTO.Age);
-                return account;
+                AccountDTO accountDTO = _account.Login(passwordhash, username);
+
+                if (accountDTO != null)
+                {
+                    Account account = new Account(
+                        accountDTO.AccountID,
+                        accountDTO.Username,
+                        accountDTO.PasswordHash,
+                        accountDTO.Email,
+                        accountDTO.Region,
+                        accountDTO.Interest,
+                        accountDTO.Age);
+                    return account;
+                }
+                return null;
             }
-            return null; 
+            catch (Exception ex)
+            {
+                if (ex.Message == "Password doesn't match username")
+                {
+                    throw;
+                }
+                return null;
+            }
         }
     }
 }

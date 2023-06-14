@@ -99,6 +99,7 @@ namespace Data
             {
                 string errorMessage = $"[{DateTime.Now}] {"Search stock intel failed"}{Environment.NewLine}";
                 File.AppendAllText(@"C:\apps\StockApp\Error.txt", errorMessage);
+                Sqlcon.Close();
                 return new List<APIResponseCallDTO>();
             }
         }
@@ -186,6 +187,7 @@ namespace Data
             {
                 string errorMessage = $"[{DateTime.Now}] {"Search histroy intel failed"}{Environment.NewLine}";
                 File.AppendAllText(@"C:\apps\StockApp\Error.txt", errorMessage);
+                Sqlcon.Close();
                 return new List<HistorieDTO>();
             }
         }
