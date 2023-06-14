@@ -21,9 +21,8 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetFavorite(AccountViewModel accountViewModel)
+        public IActionResult GetFavorite()
         {
-           
             int AccountID = HttpContext.Session.GetInt32("AccountID") ?? 0;
 
             List<Favorite> favorites = _alphaVantageContainer.GetFavoriteList(AccountID);
@@ -49,7 +48,9 @@ namespace WebApp.Controllers
         public IActionResult DeleteFavorite(string Symbol)
         {
             int AccountID = HttpContext.Session.GetInt32("AccountID") ?? 0;
+
             _alphaVantageContainer.DeleteFavorite(Symbol, AccountID);
+
             return RedirectToAction("Favorite", "Favorite");
            
         }

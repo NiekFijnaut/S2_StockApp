@@ -27,8 +27,11 @@ namespace WebApp.Controllers
         public IActionResult GetAccountStock() 
         {
             AccountViewModel accountViewModel = new AccountViewModel();
+
             int AccountID = HttpContext.Session.GetInt32("AccountID") ?? 0;
+
             accountViewModel.AccountID = AccountID;
+
             List<AccountStock> accountStocks = _alphaVantageContainer.GetAccountStockList(AccountID);
 
             AccountStockViewModel accountStockViewModel = new AccountStockViewModel(accountStocks);

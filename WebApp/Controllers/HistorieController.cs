@@ -24,13 +24,18 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> GetStockHistorie(HistorieSearchViewModel historieSearchViewModel)
         {
-            Search search = new Search(historieSearchViewModel.Symbol, historieSearchViewModel.Interval, historieSearchViewModel.Slice);
+            if(ModelState.IsValid)
+            {
+                Search search = new Search(historieSearchViewModel.Symbol, historieSearchViewModel.Interval, historieSearchViewModel.Slice);
 
-            historieList = await _historieContainer.SearchHistorieStock(search);
+                historieList = await _historieContainer.SearchHistorieStock(search);
 
-            HistorieViewModel historieViewModel = new HistorieViewModel(historieList, historieSearchViewModel);
+                HistorieViewModel historieViewModel = new HistorieViewModel(historieList, historieSearchViewModel);
 
-            return PartialView("_historiestockTable", historieViewModel);
+                return PartialView("_historiestockTable", historieViewModel);
+            }
+            
+            return View("Historie");
             
         }
     }

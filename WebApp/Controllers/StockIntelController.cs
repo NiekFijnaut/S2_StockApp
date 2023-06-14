@@ -32,44 +32,50 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> GetSearchResults(SearchViewModel searchViewModel)
         {
-            Search search = new Search(searchViewModel.Symbol, searchViewModel.Interval, "");
+            if(ModelState.IsValid)
+            {
+                Search search = new Search(searchViewModel.Symbol, searchViewModel.Interval, "");
 
-            APIResponseList = await _alphaVantageContainer.SearchStock(search);
+                APIResponseList = await _alphaVantageContainer.SearchStock(search);
 
-            APIResponseCallViewModel responseViewModel = new APIResponseCallViewModel(APIResponseList, searchViewModel);
-
-            return PartialView("_StockIntelTable", responseViewModel);
+                APIResponseCallViewModel responseViewModel = new APIResponseCallViewModel(APIResponseList, searchViewModel);
+               
+                return PartialView("_StockIntelTable", responseViewModel);
+            }
+            return View("StockIntel");
            
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddStockToAccount(SearchViewModel searchViewModel, AccountViewModel accountViewModel)
+        public async Task<IActionResult> AddStockToAccount(SearchViewModel searchViewModel)
         {
-            Search search = new Search(searchViewModel.Symbol, searchViewModel.Interval, "");
-
-            int AccountID = HttpContext.Session.GetInt32("AccountID") ?? 0;
-
-            APIResponseList = await _alphaVantageContainer.SearchStock(search);
-
-            if (APIResponseList.Count > 0)
+            if (ModelState.IsValid)
             {
+                Search search = new Search(searchViewModel.Symbol, searchViewModel.Interval, "");
 
-                APIResponseCall aPIResponseCall = new APIResponseCall(
-                    null,
-                    APIResponseList[APIResponseList.Count - 1].Date,
-                    APIResponseList[APIResponseList.Count - 1].Symbol,
-                    APIResponseList[APIResponseList.Count - 1].Open,
-                    APIResponseList[APIResponseList.Count - 1].High,
-                    APIResponseList[APIResponseList.Count - 1].Low,
-                    APIResponseList[APIResponseList.Count - 1].Close,
-                    APIResponseList[APIResponseList.Count - 1].Volume
-                );
+                int AccountID = HttpContext.Session.GetInt32("AccountID") ?? 0;
 
-                _alphaVantageContainer.AddStock(aPIResponseCall, AccountID);
-                ViewBag.Message = "Stock has been added to account";
+                APIResponseList = await _alphaVantageContainer.SearchStock(search);
+
+                if (APIResponseList.Count > 0)
+                {
+
+                    APIResponseCall aPIResponseCall = new APIResponseCall(
+                        null,
+                        APIResponseList[APIResponseList.Count - 1].Date,
+                        APIResponseList[APIResponseList.Count - 1].Symbol,
+                        APIResponseList[APIResponseList.Count - 1].Open,
+                        APIResponseList[APIResponseList.Count - 1].High,
+                        APIResponseList[APIResponseList.Count - 1].Low,
+                        APIResponseList[APIResponseList.Count - 1].Close,
+                        APIResponseList[APIResponseList.Count - 1].Volume
+                    );
+
+                    _alphaVantageContainer.AddStock(aPIResponseCall, AccountID);
+                    ViewBag.Message = "Stock has been added to account";
+                }
             }
             return View("StockIntel");
-            
         }      
     }
 }

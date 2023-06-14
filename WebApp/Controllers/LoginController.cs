@@ -22,24 +22,26 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult UserLogin(AccountViewModel accountViewModel)
+        public IActionResult UserLogin(LoginViewModel loginViewModel)
         {
-            string passwordhash = accountViewModel.PasswordHash;
-            string username = accountViewModel.Username;
-
-            Account account = _accountContainer.GetAccount(passwordhash, username);
-
-            if (account != null)
+            if(ModelState.IsValid)
             {
-                HttpContext.Session.SetString("IsLoggedIn", "true");
-                HttpContext.Session.SetString("Username", account.Username);
-                HttpContext.Session.SetString("Interest", account.Interest);
-                HttpContext.Session.SetInt32("AccountID", account.AccountID);
+                string passwordhash = loginViewModel.PasswordHash;
+                string username = loginViewModel.Username;
 
-                // Redirect to the desired page
-                return RedirectToAction("Index", "Home");
+                Account account = _accountContainer.GetAccount(passwordhash, username);
+
+                if (account != null)
+                {
+                    HttpContext.Session.SetString("IsLoggedIn", "true");
+                    HttpContext.Session.SetString("Username", account.Username);
+                    HttpContext.Session.SetString("Interest", account.Interest);
+                    HttpContext.Session.SetInt32("AccountID", account.AccountID);
+
+                    // Redirect to the desired page
+                    return RedirectToAction("Index", "Home");
+                }
             }
-            
             return RedirectToAction("Login", "Login");
         }
     }

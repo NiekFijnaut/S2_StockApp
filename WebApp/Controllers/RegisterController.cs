@@ -28,17 +28,20 @@ namespace WebApp.Controllers
         {
             try
             {
-                Account account = new Account(
-                accountViewModel.AccountID,
-                accountViewModel.Username,
-                accountViewModel.PasswordHash,
-                accountViewModel.Email,
-                accountViewModel.Region,
-                accountViewModel.Interest,
-                accountViewModel.Age
-                );
-                _accountContainer.CreateAccount(account);
-                ViewBag.Message = "Account has been created";
+                if (ModelState.IsValid)
+                {
+                    Account account = new Account(
+                       accountViewModel.AccountID,
+                       accountViewModel.Username,
+                       accountViewModel.PasswordHash,
+                       accountViewModel.Email,
+                       accountViewModel.Region,
+                       accountViewModel.Interest,
+                       accountViewModel.Age
+                       );
+                    _accountContainer.CreateAccount(account);
+                    ViewBag.Message = "Account has been created";
+                }
             }
             catch (Exception ex)
             {
