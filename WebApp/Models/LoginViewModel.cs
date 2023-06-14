@@ -7,6 +7,7 @@ namespace WebApp.Models
     {
         [Required]
         public string Username { get; set; }
+
         [Required]
         [DisplayName("Password")]
         public string PasswordHash { get; set; }
