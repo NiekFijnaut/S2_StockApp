@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 namespace Interface.DTO
 {
     public record FavoriteDTO(
-        long? StockID,
-        
+        long StockID,
         string Symbol,
-        long? AccountID);
+        int AccountID);
 }

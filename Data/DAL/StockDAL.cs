@@ -49,7 +49,7 @@ namespace Data
                 string symbol = string.Empty;
                 using (SqlCommand getDateTimeCmd = new SqlCommand("SELECT [Date], Symbol FROM APIResponseCall WHERE StockID = @StockID", Sqlcon))
                 {
-                    getDateTimeCmd.Parameters.AddWithValue("@StockID", stockID); // Use stockID as parameter value for ID
+                    getDateTimeCmd.Parameters.AddWithValue("@StockID", stockID); 
                     Sqlcon.Open();
                     using (SqlDataReader reader = getDateTimeCmd.ExecuteReader())
                     {
@@ -63,13 +63,11 @@ namespace Data
                 }
                 
                 string insertQuery =
-                @"IF NOT EXISTS (SELECT 1 FROM AccountStock WHERE Symbol = @Symbol AND AccountID = @AccountID) 
-                BEGIN INSERT INTO AccountStock (StockID, Date, Symbol, AccountID) VALUES (@StockID, @Date, @Symbol, @AccountID) END";
+                @"IF NOT EXISTS (SELECT 1 FROM AccountStock WHERE StockID = @StockID AND AccountID = @AccountID) 
+                BEGIN INSERT INTO AccountStock (StockID, AccountID) VALUES (@StockID, @AccountID) END";
                 using (SqlCommand cmd5 = new SqlCommand(insertQuery, Sqlcon))
                 {
                     cmd5.Parameters.AddWithValue("@StockID", stockID);
-                    cmd5.Parameters.AddWithValue("@Date", date);
-                    cmd5.Parameters.AddWithValue("@Symbol", symbol);
                     cmd5.Parameters.AddWithValue("@AccountID", AccountID);
 
                     Sqlcon.Open();
@@ -91,7 +89,7 @@ namespace Data
             {
                 Sqlcon.Open();
                 List<AccountStockDTO> accountStockList = new();
-                using (SqlCommand cmd1 = new("SELECT Date, Symbol FROM AccountStock WHERE AccountID = @AccountID", Sqlcon))
+                using (SqlCommand cmd1 = new("SELECT api.StockID, api.Symbol, api.Date FROM AccountStock AS accountstock JOIN APIResponseCall AS api ON accountstock.StockID = api.StockID WHERE accountstock.AccountID = @AccountID", Sqlcon))
                 {
                     cmd1.Parameters.AddWithValue("@AccountID", AccountID);
 
@@ -100,7 +98,7 @@ namespace Data
                     {
                         accountStockList.Add(
                         new AccountStockDTO(
-                            null,
+                            reader1.GetInt64("StockID"),
                             reader1.GetDateTime("Date"),
                             reader1.GetString("Symbol"),
                             AccountID));
@@ -124,7 +122,7 @@ namespace Data
             {
                 Sqlcon.Open();
                 List<FavoriteDTO> favoriteList = new();
-                using (SqlCommand cmd1 = new("SELECT Symbol FROM Favorite WHERE AccountID = @AccountID", Sqlcon))
+                using (SqlCommand cmd1 = new("SELECT api.StockID, api.Symbol FROM Favorite AS favorite JOIN APIResponseCall AS api ON favorite.StockID = api.StockID WHERE favorite.AccountID = @AccountID", Sqlcon))
                 {
                     cmd1.Parameters.AddWithValue("@AccountID", AccountID);
 
@@ -133,7 +131,7 @@ namespace Data
                     {
                         favoriteList.Add(
                         new FavoriteDTO(
-                            null,
+                            reader1.GetInt64("StockID"),
                             reader1.GetString("Symbol"),
                             AccountID));
                     }
@@ -150,32 +148,30 @@ namespace Data
             }
         }
 
-        long StockID;
-        public void AddToFavorite(int AccountID, string Symbol)
+        public void AddToFavorite(FavoriteDTO favoriteDTO)
         {
             try
             {
-                string SelectStockID = "SELECT StockID From AccountStock WHERE AccountID = @AccountID AND Symbol = @Symbol";
-                using (SqlCommand cmd2 = new(SelectStockID, Sqlcon))
-                {
-                    cmd2.Parameters.AddWithValue("@AccountID", AccountID);
-                    cmd2.Parameters.AddWithValue("@Symbol", Symbol);
-                    Sqlcon.Open();
-                    using SqlDataReader reader = cmd2.ExecuteReader(); //TODO is null
-                    while (reader.Read())
-                    {
-                        StockID = reader.GetInt64(0);
-                    }
-                    Sqlcon.Close();
-                }
+                //string SelectStockID = "SELECT Symbol From AccountStock WHERE AccountID = @AccountID AND StockID = @StockID";// TODO
+                //using (SqlCommand cmd2 = new(SelectStockID, Sqlcon))
+                //{
+                //    cmd2.Parameters.AddWithValue("@AccountID", favoriteDTO.AccountID);
+                //    cmd2.Parameters.AddWithValue("@Symbol", favoriteDTO.StockID);
+                //    Sqlcon.Open();
+                //    using SqlDataReader reader = cmd2.ExecuteReader(); 
+                //    while (reader.Read())
+                //    {
+                //        Symbol = reader.GetString(0);
+                //    }
+                //    Sqlcon.Close();
+                //}
 
-                string Favoritequery = "IF NOT EXISTS (SELECT 1 FROM Favorite WHERE Symbol = @Symbol AND AccountID = @AccountID) " +
-                    "BEGIN INSERT INTO Favorite (StockID, Symbol, AccountID) VALUES (@StockID, @Symbol, @AccountID) END";
+                string Favoritequery = "IF NOT EXISTS (SELECT 1 FROM Favorite WHERE StockID = @StockID AND AccountID = @AccountID) " +
+                    "BEGIN INSERT INTO Favorite (StockID, AccountID) VALUES (@StockID, @AccountID) END";
                 using (SqlCommand cmd3 = new(Favoritequery, Sqlcon))
                 {
-                    cmd3.Parameters.AddWithValue("@StockID", StockID);
-                    cmd3.Parameters.AddWithValue("@Symbol", Symbol);
-                    cmd3.Parameters.AddWithValue("@AccountID", AccountID);
+                    cmd3.Parameters.AddWithValue("@StockID", favoriteDTO.StockID);
+                    cmd3.Parameters.AddWithValue("@AccountID", favoriteDTO.AccountID);
 
                     Sqlcon.Open();
                     cmd3.ExecuteNonQuery();
@@ -190,15 +186,15 @@ namespace Data
             }
         }
 
-        public void DeleteStock(string symbol, int AccountID)
+        public void DeleteStock(AccountStockDTO accountStockDTO)
         {
             try
             {
-                string deletequery = "DELETE FROM AccountStock WHERE Symbol = @Symbol AND AccountID = @AccountID";
+                string deletequery = "DELETE FROM AccountStock WHERE StockID = @StockID AND AccountID = @AccountID";
                 using (SqlCommand cmd4 = new SqlCommand(deletequery, Sqlcon))
                 {
-                    cmd4.Parameters.AddWithValue("@Symbol", symbol);
-                    cmd4.Parameters.AddWithValue("@AccountID", AccountID);
+                    cmd4.Parameters.AddWithValue("@StockID", accountStockDTO.StockID);
+                    cmd4.Parameters.AddWithValue("@AccountID", accountStockDTO.AccountID);
 
                     Sqlcon.Open();
                     cmd4.ExecuteNonQuery();
@@ -213,15 +209,15 @@ namespace Data
             }
         }
 
-        public void DeleteFavorite(string symbol, int AccountID)
+        public void DeleteFavorite(FavoriteDTO favoriteDTO)
         {
             try
             {
-                string deletequery = "DELETE FROM Favorite WHERE Symbol = @Symbol AND AccountID = @AccountID";
+                string deletequery = "DELETE FROM Favorite WHERE StockID = @StockID AND AccountID = @AccountID";
                 using (SqlCommand cmd4 = new SqlCommand(deletequery, Sqlcon))
                 {
-                    cmd4.Parameters.AddWithValue("@Symbol", symbol);
-                    cmd4.Parameters.AddWithValue("@AccountID", AccountID);
+                    cmd4.Parameters.AddWithValue("@StockID", favoriteDTO.StockID);
+                    cmd4.Parameters.AddWithValue("@AccountID", favoriteDTO.AccountID);
 
                     Sqlcon.Open();
                     cmd4.ExecuteNonQuery();

@@ -42,9 +42,14 @@ namespace Business
                  
         }
 
-        public void AddToFavorite(int AccountID, string Symbol)
+        public void AddToFavorite(Favorite favorite)
         {
-            _stock.AddToFavorite(AccountID, Symbol);
+            FavoriteDTO favoriteDTO = new FavoriteDTO(
+                favorite.StockID,
+                favorite.Symbol,
+                favorite.AccountID
+                );
+            _stock.AddToFavorite(favoriteDTO);
         }
 
         public List<Favorite> GetFavoriteList(int AccountID)
@@ -56,7 +61,9 @@ namespace Business
             {
                 favorites.Add(
                     new Favorite(
-                        favoriteDTO.Symbol
+                        favoriteDTO.StockID,
+                        favoriteDTO.Symbol,
+                        favoriteDTO.AccountID
                         ));
             }
             return favorites;
@@ -91,14 +98,23 @@ namespace Business
             
         }
 
-        public void DeleteStock(string Symbol, int AccountID)
+        public void DeleteStock(AccountStock accountStock)
         {
-             _stock.DeleteStock(Symbol, AccountID);
+            AccountStockDTO accountStockDTO = new AccountStockDTO(
+                accountStock.StockID,
+                accountStock.Date,
+                accountStock.Symbol,
+                accountStock.AccountID);
+             _stock.DeleteStock(accountStockDTO);
         }
 
-        public void DeleteFavorite(string Symbol, int AccountID)
+        public void DeleteFavorite(Favorite favorite)
         {
-            _stock.DeleteFavorite(Symbol, AccountID);
+            FavoriteDTO favoriteDTO = new FavoriteDTO(
+                favorite.StockID,
+                favorite.Symbol,
+                favorite.AccountID);
+            _stock.DeleteFavorite(favoriteDTO);
         }
 
         public List<AccountStock> GetAccountStockList(int AccountID)
@@ -109,8 +125,10 @@ namespace Business
             {
                 accountStock.Add(
                     new AccountStock(
+                        accountStockDTO.StockID,
                         accountStockDTO.Date,
-                        accountStockDTO.Symbol
+                        accountStockDTO.Symbol,
+                        accountStockDTO.AccountID
                         ));
             }
             return accountStock;

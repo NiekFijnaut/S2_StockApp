@@ -51,9 +51,9 @@ namespace Unit_Tests.STUB
                 10)
         };
 
-        public void DeleteStock(string symbol, int accountID)
+        public void DeleteStock(AccountStockDTO accountStockDTO)
         {
-            AccountStockDTO stock = FakeAccountStocks.FirstOrDefault(s => s.Symbol == symbol && s.AccountID == accountID);
+            AccountStockDTO stock = FakeAccountStocks.FirstOrDefault(s => s.Symbol == accountStockDTO.Symbol && s.AccountID == accountStockDTO.AccountID && s.StockID == accountStockDTO.StockID && s.Date == accountStockDTO.Date);
             if (stock != null)
             {
                 FakeAccountStocks.Remove(stock);
@@ -70,7 +70,7 @@ namespace Unit_Tests.STUB
             throw new NotImplementedException();
         }
 
-        public void AddToFavorite(int AccountID, string Symbol)
+        public void AddToFavorite(FavoriteDTO favoriteDTO)
         {
             throw new NotImplementedException();
         }
@@ -80,7 +80,7 @@ namespace Unit_Tests.STUB
             throw new NotImplementedException();
         }
 
-        public void DeleteFavorite(string Symbol, int AccountID)
+        public void DeleteFavorite(FavoriteDTO favoriteDTO)
         {
             throw new NotImplementedException();
         }

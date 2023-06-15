@@ -69,10 +69,6 @@ namespace Business
             } 
             catch(Exception ex)
             {
-                if (ex.Message == "Username has already been chosen")
-                {
-                    throw;
-                }
                 throw;
             }
         }

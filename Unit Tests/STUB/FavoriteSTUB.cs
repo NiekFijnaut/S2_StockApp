@@ -41,12 +41,12 @@ namespace Unit_Tests.STUB
             return fakeFavorites;
         }
 
-        public void DeleteFavorite(string symbol, int accountID)
+        public void DeleteFavorite(FavoriteDTO favoriteDTO)
         {
-            FavoriteDTO stock = fakeFavorites.FirstOrDefault(s => s.Symbol == symbol && s.AccountID == accountID);
-            if (stock != null)
+            FavoriteDTO favorite = fakeFavorites.FirstOrDefault(s => s.StockID == favoriteDTO.StockID && s.Symbol == favoriteDTO.Symbol && s.AccountID == favoriteDTO.AccountID);
+            if (favorite != null)
             {
-                fakeFavorites.Remove(stock);
+                fakeFavorites.Remove(favorite);
             }
         }
 
@@ -60,7 +60,7 @@ namespace Unit_Tests.STUB
             throw new NotImplementedException();
         }
 
-        public void DeleteStock(string symbol, int AcountID)
+        public void DeleteStock(AccountStockDTO accountStockDTO)
         {
             throw new NotImplementedException();
         }

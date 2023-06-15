@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Business.Class
+﻿namespace WebApp.Model
 {
-    public class Favorite
+    public class FavoriteModel
     {
         public long StockID { get; }
         public string Symbol { get; }
         public int AccountID { get; }
 
-        public Favorite(long stockID, string symbol, int accountID)
+        public FavoriteModel()
+        {
+
+        }
+        public FavoriteModel(long stockID, string symbol, int accountID)
         {
             StockID = stockID;
             Symbol = symbol;

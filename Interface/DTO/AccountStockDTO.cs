@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace Interface
 {
     public record AccountStockDTO(
-        long? StockID,
+        long StockID,
         DateTime Date,
         string Symbol,
-        long? AccountID);
+        int AccountID);
 }

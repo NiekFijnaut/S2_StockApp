@@ -12,7 +12,9 @@ namespace WebApp.Controllers
 
         public LoginController()
         {
+
             _accountContainer = new AccountContainer(new AccountDAL());
+
         }
 
         [HttpGet]

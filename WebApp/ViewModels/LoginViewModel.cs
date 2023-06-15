@@ -18,5 +18,9 @@ namespace WebApp.Models
             PasswordHash = passwordHash;
         }
 
+        public LoginViewModel()
+        {
+                
+        }
     }
 }

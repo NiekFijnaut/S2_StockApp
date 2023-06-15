@@ -8,6 +8,7 @@ using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
 using System.Reflection;
+using WebApp.Model;
 using WebApp.Models;
 
 namespace WebApp.Controllers
@@ -24,7 +25,34 @@ namespace WebApp.Controllers
         [HttpGet]
         public IActionResult StockIntel()
         {
-            return View();
+            if (HttpContext.Session.GetString("Username") != null)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Login");
+            }
+        }
+
+        public List<APIResponseCallModel> ToModel(List<APIResponseCall> aPIResponseCalls)
+        {
+            List<APIResponseCallModel> aPIResponseCallModels= new List<APIResponseCallModel>();
+
+            foreach(var aPIResponsecall in aPIResponseCalls)
+            {
+                APIResponseCallModel aPIResponseCallModel = new APIResponseCallModel(
+                    aPIResponsecall.StockID,
+                    aPIResponsecall.Date,
+                    aPIResponsecall.Symbol,
+                    aPIResponsecall.Open,
+                    aPIResponsecall.High,
+                    aPIResponsecall.Low,
+                    aPIResponsecall.Close,
+                    aPIResponsecall.Volume);
+                aPIResponseCallModels.Add(aPIResponseCallModel);
+            }
+            return aPIResponseCallModels;
         }
 
         List<APIResponseCall> APIResponseList = new List<APIResponseCall>();
@@ -36,9 +64,11 @@ namespace WebApp.Controllers
             {
                 Search search = new Search(searchViewModel.Symbol, searchViewModel.Interval, "");
 
-                APIResponseList = await _alphaVantageContainer.SearchStock(search);
+                List<APIResponseCall> APIResponseList = await _alphaVantageContainer.SearchStock(search);
 
-                APIResponseCallViewModel responseViewModel = new APIResponseCallViewModel(APIResponseList, searchViewModel);
+                List<APIResponseCallModel> aPIResponseCallModels = ToModel(APIResponseList);
+                
+                APIResponseCallViewModel responseViewModel = new APIResponseCallViewModel(aPIResponseCallModels, searchViewModel);
                
                 return PartialView("_StockIntelTable", responseViewModel);
             }

@@ -23,7 +23,6 @@ namespace WebApp.Controllers
             return View();
         }
 
-
         public IActionResult AddAccount(AccountViewModel accountViewModel)
         {
             try

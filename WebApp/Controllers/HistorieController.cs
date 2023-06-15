@@ -1,6 +1,7 @@
 ﻿using Business;
 using Data;
 using Microsoft.AspNetCore.Mvc;
+using WebApp.Model;
 using WebApp.Models;
 
 namespace WebApp.Controllers
@@ -16,7 +17,32 @@ namespace WebApp.Controllers
 
         public IActionResult Historie()
         {
-            return View();
+            if (HttpContext.Session.GetString("Username") != null)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Login"); 
+            }
+        }
+        public List<HistorieModel> ToModel(List<Historie> histories)
+        {
+            List<HistorieModel> historieModels = new List<HistorieModel>();
+
+            foreach (var historie in histories)
+            {
+                HistorieModel historieModel = new HistorieModel(
+                    historie.Date,
+                    historie.Symbol,
+                    historie.Open,
+                    historie.High,
+                    historie.Low,
+                    historie.Close,
+                    historie.Volume);
+                historieModels.Add(historieModel);
+            }
+            return historieModels;
         }
 
         List<Historie> historieList = new List<Historie>();
@@ -28,9 +54,11 @@ namespace WebApp.Controllers
             {
                 Search search = new Search(historieSearchViewModel.Symbol, historieSearchViewModel.Interval, historieSearchViewModel.Slice);
 
-                historieList = await _historieContainer.SearchHistorieStock(search);
+                List<Historie> historieList = await _historieContainer.SearchHistorieStock(search);
 
-                HistorieViewModel historieViewModel = new HistorieViewModel(historieList, historieSearchViewModel);
+                List<HistorieModel> historieModels = ToModel(historieList);
+
+                HistorieViewModel historieViewModel = new HistorieViewModel(historieModels, historieSearchViewModel);
 
                 return PartialView("_historiestockTable", historieViewModel);
             }

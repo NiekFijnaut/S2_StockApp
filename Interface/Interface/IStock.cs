@@ -11,9 +11,9 @@ namespace Interface
     {
         void AddStock(APIResponseCallDTO aPIResponseCallDTO, int AccountID);
         List<AccountStockDTO> GetAccountStockList(int AccountID);
-        void DeleteStock(string symbol, int AcountID);
-        void AddToFavorite(int AccountID, string Symbol);
+        void DeleteStock(AccountStockDTO accountStockDTO);
+        void AddToFavorite(FavoriteDTO favoriteDTO);
         List<FavoriteDTO> GetFavoriteList(int AccountID);
-        void DeleteFavorite(string Symbol, int AccountID);
+        void DeleteFavorite(FavoriteDTO favoriteDTO);
     }
 }

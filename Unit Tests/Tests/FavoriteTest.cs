@@ -32,14 +32,18 @@ namespace Unit_Tests.Tests
             Assert.AreEqual(expected[2].Symbol, list[2].Symbol);
         }
 
-        public void AddToFavorite(int AccountID, string Symbol)
+        public void AddToFavorite(FavoriteDTO favoriteDTO)
         {
             // Arrange
+            Favorite favorite = new Favorite(
+                favoriteDTO.StockID,
+                favoriteDTO.Symbol,
+                favoriteDTO.AccountID);
             FavoriteSTUB favoriteSTUB = new FavoriteSTUB();
             AlphaVantageContainer alphaVantageContainer = new AlphaVantageContainer(new APIResponseCallSTUB(), favoriteSTUB);
 
             // Act
-            alphaVantageContainer.AddToFavorite(AccountID, Symbol);
+            alphaVantageContainer.AddToFavorite(favorite);
 
             // Assert
             Assert.AreEqual(1, favoriteSTUB.CreateFakeFavoriteDTO.StockID);
@@ -47,7 +51,7 @@ namespace Unit_Tests.Tests
             Assert.AreEqual(10, favoriteSTUB.CreateFakeFavoriteDTO.AccountID);
         }
 
-        public void DeleteFavorite(string Symbol, int AccountID)
+        public void DeleteFavorite(FavoriteDTO favoriteDTO)
         {
             throw new NotImplementedException();
         }
@@ -57,7 +61,7 @@ namespace Unit_Tests.Tests
             throw new NotImplementedException();
         }      
 
-        public void DeleteStock(string symbol, int AcountID)
+        public void DeleteStock(AccountStockDTO accountStockDTO)
         {
             throw new NotImplementedException();
         }
