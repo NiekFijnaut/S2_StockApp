@@ -28,11 +28,6 @@ namespace Unit_Tests.STUB
             }
         }
 
-        SearchDTO SearchDTO = new SearchDTO(
-            "AAPL",
-            "15min",
-            null);
-
         List<APIResponseCallDTO> FakeAPIResponseCalls = new List<APIResponseCallDTO>()
         {
             new APIResponseCallDTO(
@@ -69,9 +64,45 @@ namespace Unit_Tests.STUB
             return Task.FromResult(FakeAPIResponseCalls);
         }
 
+        SearchDTO searchDTO = new SearchDTO(
+           "AAPL",
+           "15min",
+           "year1month5");
+
+        List<HistorieDTO> fakehistoryresponse = new List<HistorieDTO>()
+        {
+            new HistorieDTO(
+                1,
+                new DateTime(2023, 01, 12, 11, 30, 30),
+                "AAPL",
+                182.56,
+                186.56,
+                180.56,
+                182.65,
+                12000),
+            new HistorieDTO(
+                1,
+                new DateTime(2023, 01, 12, 11, 15, 30),
+                "AAPL",
+                182.56,
+                186.56,
+                180.56,
+                182.65,
+                12000),
+            new HistorieDTO(
+                1,
+                new DateTime(2023, 01, 12, 10, 00, 30),
+                "AAPL",
+                182.56,
+                186.56,
+                180.56,
+                182.65,
+                12000),
+        };
+
         public Task<List<HistorieDTO>> SearchHistorieStock(SearchDTO searchDTO)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(fakehistoryresponse);
         }
     }
 }
