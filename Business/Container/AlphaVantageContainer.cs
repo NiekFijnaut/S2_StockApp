@@ -27,7 +27,9 @@ namespace Business
 
         public void AddStock(APIResponseCall aPIResponseCall, int AccountID)
         {
-            APIResponseCallDTO aPIResponseCallDTO = new APIResponseCallDTO(
+            try
+            {
+                APIResponseCallDTO aPIResponseCallDTO = new APIResponseCallDTO(
             null,
             aPIResponseCall.Date,
             aPIResponseCall.Symbol,
@@ -38,18 +40,30 @@ namespace Business
             aPIResponseCall.Volume
             );
 
-            _stock.AddStock(aPIResponseCallDTO, AccountID);
+                _stock.AddStock(aPIResponseCallDTO, AccountID);
+            }
+            catch
+            {
+                throw new Exception("Cannot add stock to account");
+            }
                  
         }
 
         public void AddToFavorite(Favorite favorite)
         {
-            FavoriteDTO favoriteDTO = new FavoriteDTO(
+            try
+            {
+                FavoriteDTO favoriteDTO = new FavoriteDTO(
                 favorite.StockID,
                 favorite.Symbol,
                 favorite.AccountID
                 );
-            _stock.AddToFavorite(favoriteDTO);
+                _stock.AddToFavorite(favoriteDTO);
+            }
+            catch
+            {
+                throw new Exception("Cannot add stock to favorite");
+            }
         }
 
         public List<Favorite> GetFavoriteList(int AccountID)
@@ -72,40 +86,47 @@ namespace Business
 
         public async Task<List<APIResponseCall>> SearchStock(Search search)
         {
-            
-            SearchDTO searchDTO = new SearchDTO(
+            try
+            {
+                SearchDTO searchDTO = new SearchDTO(
             search.Symbol,
             search.Interval,
             null);
 
-            List<APIResponseCall> aPIResponses = new List<APIResponseCall>();
-            List<APIResponseCallDTO> aPIResponseCallDTOs = await _alphaVantage.SearchStock(searchDTO);
-            foreach (APIResponseCallDTO aPIResponseCallDTO in aPIResponseCallDTOs)
-            {
-                aPIResponses.Add(
-                    new APIResponseCall(
-                        null,
-                        aPIResponseCallDTO.Date,
-                        aPIResponseCallDTO.Symbol,
-                        aPIResponseCallDTO.Open,
-                        aPIResponseCallDTO.High,
-                        aPIResponseCallDTO.Low,
-                        aPIResponseCallDTO.Close,
-                        aPIResponseCallDTO.Volume
-                        ));
+                List<APIResponseCall> aPIResponses = new List<APIResponseCall>();
+                List<APIResponseCallDTO> aPIResponseCallDTOs = await _alphaVantage.SearchStock(searchDTO);
+                foreach (APIResponseCallDTO aPIResponseCallDTO in aPIResponseCallDTOs)
+                {
+                    aPIResponses.Add(
+                        new APIResponseCall(
+                            null,
+                            aPIResponseCallDTO.Date,
+                            aPIResponseCallDTO.Symbol,
+                            aPIResponseCallDTO.Open,
+                            aPIResponseCallDTO.High,
+                            aPIResponseCallDTO.Low,
+                            aPIResponseCallDTO.Close,
+                            aPIResponseCallDTO.Volume
+                            ));
+                }
+                return aPIResponses;
             }
-            return aPIResponses;
+            catch
+            {
+                throw new Exception("cannot search stock intel");
+            }
             
         }
 
         public void DeleteStock(AccountStock accountStock)
         {
             AccountStockDTO accountStockDTO = new AccountStockDTO(
-                accountStock.StockID,
-                accountStock.Date,
-                accountStock.Symbol,
-                accountStock.AccountID);
-             _stock.DeleteStock(accountStockDTO);
+            accountStock.StockID,
+            accountStock.Date,
+            accountStock.Symbol,
+            accountStock.AccountID);
+            _stock.DeleteStock(accountStockDTO);
+            
         }
 
         public void DeleteFavorite(Favorite favorite)

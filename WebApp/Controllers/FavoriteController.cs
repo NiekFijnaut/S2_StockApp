@@ -2,8 +2,7 @@
 using Business;
 using Data;
 using Microsoft.AspNetCore.Mvc;
-using WebApp.Models;
-using WebApp.Model;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
@@ -27,13 +26,13 @@ namespace WebApp.Controllers
                 return RedirectToAction("Login", "Login"); 
             }
         }
-        public List<FavoriteModel> ToModel(List<Favorite> favorites)
+        public List<FavoriteViewModel> ToModel(List<Favorite> favorites)
         {
-            List<FavoriteModel> favoriteModels = new List<FavoriteModel>();
+            List<FavoriteViewModel> favoriteModels = new List<FavoriteViewModel>();
 
             foreach (var favorite in favorites)
             {
-                FavoriteModel favoriteModel = new FavoriteModel(
+                FavoriteViewModel favoriteModel = new FavoriteViewModel(
                     favorite.StockID,
                     favorite.Symbol,
                     favorite.AccountID);
@@ -51,32 +50,37 @@ namespace WebApp.Controllers
 
             List<Favorite> favorites = _alphaVantageContainer.GetFavoriteList(AccountID);
 
-            List<FavoriteModel> favoriteModels = ToModel(favorites);
+            List<FavoriteViewModel> favoriteModels = ToModel(favorites);
 
-            FavoriteViewModel favoriteViewModel = new FavoriteViewModel(favoriteModels);
+            FavoriteViewModelList favoriteViewModel = new FavoriteViewModelList(favoriteModels);
 
             return PartialView("FavoriteTable", favoriteViewModel);
             
         }
 
         [HttpPost]
-        public IActionResult AddToFavorite(FavoriteModel favoriteModel)
+        public IActionResult AddToFavorite(FavoriteViewModel favoriteModel)
         {
-            int AccountID = HttpContext.Session.GetInt32("AccountID") ?? 0;
+            try
+            {
+                int AccountID = HttpContext.Session.GetInt32("AccountID") ?? 0;
 
-            Favorite favorite = new Favorite(
-                favoriteModel.StockID,
-                favoriteModel.Symbol,
-                AccountID);
+                Favorite favorite = new Favorite(
+                    favoriteModel.StockID,
+                    favoriteModel.Symbol,
+                    AccountID);
 
-            _alphaVantageContainer.AddToFavorite(favorite);
-
+                _alphaVantageContainer.AddToFavorite(favorite);
+            }
+            catch (Exception ex)
+            {
+                TempData["AddToFavoriteError"] = ex.Message;
+            }
             return RedirectToAction("AccountStock", "AccountStock");
-           
         }
 
         [HttpPost]
-        public IActionResult DeleteFavorite(FavoriteModel favoriteModel)
+        public IActionResult DeleteFavorite(FavoriteViewModel favoriteModel)
         {
             int AccountID = HttpContext.Session.GetInt32("AccountID") ?? 0;
 
@@ -88,7 +92,7 @@ namespace WebApp.Controllers
             _alphaVantageContainer.DeleteFavorite(favorite);
 
             return RedirectToAction("Favorite", "Favorite");
-           
+            
         }
     }
 }

@@ -4,7 +4,7 @@ using Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using System.Text;
-using WebApp.Models;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {

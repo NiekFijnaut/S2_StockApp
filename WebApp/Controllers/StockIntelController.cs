@@ -8,8 +8,7 @@ using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
 using System.Reflection;
-using WebApp.Model;
-using WebApp.Models;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
@@ -35,13 +34,13 @@ namespace WebApp.Controllers
             }
         }
 
-        public List<APIResponseCallModel> ToModel(List<APIResponseCall> aPIResponseCalls)
+        public List<APIResponseCallViewModel> ToModel(List<APIResponseCall> aPIResponseCalls)
         {
-            List<APIResponseCallModel> aPIResponseCallModels= new List<APIResponseCallModel>();
+            List<APIResponseCallViewModel> aPIResponseCallModels= new List<APIResponseCallViewModel>();
 
             foreach(var aPIResponsecall in aPIResponseCalls)
             {
-                APIResponseCallModel aPIResponseCallModel = new APIResponseCallModel(
+                APIResponseCallViewModel aPIResponseCallModel = new APIResponseCallViewModel(
                     aPIResponsecall.StockID,
                     aPIResponsecall.Date,
                     aPIResponsecall.Symbol,
@@ -62,17 +61,24 @@ namespace WebApp.Controllers
         {
             if(ModelState.IsValid)
             {
-                Search search = new Search(searchViewModel.Symbol, searchViewModel.Interval, "");
+                try
+                {
+                    Search search = new Search(searchViewModel.Symbol, searchViewModel.Interval, "");
 
-                List<APIResponseCall> APIResponseList = await _alphaVantageContainer.SearchStock(search);
+                    List<APIResponseCall> APIResponseList = await _alphaVantageContainer.SearchStock(search);
 
-                List<APIResponseCallModel> aPIResponseCallModels = ToModel(APIResponseList);
-                
-                APIResponseCallViewModel responseViewModel = new APIResponseCallViewModel(aPIResponseCallModels, searchViewModel);
-               
-                return PartialView("_StockIntelTable", responseViewModel);
+                    List<APIResponseCallViewModel> aPIResponseCallModels = ToModel(APIResponseList);
+
+                    APIResponseCallViewModelList responseViewModel = new APIResponseCallViewModelList(aPIResponseCallModels, searchViewModel);
+
+                    return PartialView("_StockIntelTable", responseViewModel);
+                }
+                catch (Exception ex)
+                {
+                    TempData["SearchStockError"] = ex.Message;
+                }
             }
-            return View("StockIntel");
+            return View();
            
         }
 
@@ -81,28 +87,35 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                Search search = new Search(searchViewModel.Symbol, searchViewModel.Interval, "");
-
-                int AccountID = HttpContext.Session.GetInt32("AccountID") ?? 0;
-
-                APIResponseList = await _alphaVantageContainer.SearchStock(search);
-
-                if (APIResponseList.Count > 0)
+                try
                 {
+                    Search search = new Search(searchViewModel.Symbol, searchViewModel.Interval, "");
 
-                    APIResponseCall aPIResponseCall = new APIResponseCall(
-                        null,
-                        APIResponseList[APIResponseList.Count - 1].Date,
-                        APIResponseList[APIResponseList.Count - 1].Symbol,
-                        APIResponseList[APIResponseList.Count - 1].Open,
-                        APIResponseList[APIResponseList.Count - 1].High,
-                        APIResponseList[APIResponseList.Count - 1].Low,
-                        APIResponseList[APIResponseList.Count - 1].Close,
-                        APIResponseList[APIResponseList.Count - 1].Volume
-                    );
+                    int AccountID = HttpContext.Session.GetInt32("AccountID") ?? 0;
 
-                    _alphaVantageContainer.AddStock(aPIResponseCall, AccountID);
-                    ViewBag.Message = "Stock has been added to account";
+                    APIResponseList = await _alphaVantageContainer.SearchStock(search);
+
+                    if (APIResponseList.Count > 0)
+                    {
+
+                        APIResponseCall aPIResponseCall = new APIResponseCall(
+                            null,
+                            APIResponseList[APIResponseList.Count - 1].Date,
+                            APIResponseList[APIResponseList.Count - 1].Symbol,
+                            APIResponseList[APIResponseList.Count - 1].Open,
+                            APIResponseList[APIResponseList.Count - 1].High,
+                            APIResponseList[APIResponseList.Count - 1].Low,
+                            APIResponseList[APIResponseList.Count - 1].Close,
+                            APIResponseList[APIResponseList.Count - 1].Volume
+                        );
+
+                        _alphaVantageContainer.AddStock(aPIResponseCall, AccountID);
+                        ViewBag.Message = "Stock has been added to account";
+                    }
+                }
+                catch(Exception ex)
+                {
+                    TempData["AddToAccountError"] = ex.Message;
                 }
             }
             return View("StockIntel");

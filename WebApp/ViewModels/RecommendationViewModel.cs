@@ -1,21 +1,17 @@
-﻿using WebApp.Model;
-
-namespace WebApp.Models
+﻿namespace WebApp.ViewModels
 {
     public class RecommendationViewModel
     {
-        public long? RecommendationID { get; set; }
-        public List<RecommendationModel> Recommendations { get; set; }
+        public long? RecommendationID { get; }
+        public string Interest { get; }
+        public string Name { get; }
 
-        public RecommendationViewModel()
-        {
 
-        }
-
-        public RecommendationViewModel(long? recommendationID, List<RecommendationModel> recommendations)
+        public RecommendationViewModel(long? recommendationID, string interest, string name)
         {
             RecommendationID = recommendationID;
-            Recommendations = recommendations;
+            Interest = interest;
+            Name = name;
         }
     }
 }

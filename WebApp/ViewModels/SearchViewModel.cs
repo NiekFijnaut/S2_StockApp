@@ -1,5 +1,4 @@
-﻿using Business;
-using Microsoft.Build.Framework;
+﻿using Microsoft.Build.Framework;
 
 namespace WebApp
 {

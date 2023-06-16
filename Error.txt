@@ -25,3 +25,6 @@
 [15/06/2023 22:31:56] Get favorites failed
 [15/06/2023 22:32:04] Get favorites failed
 [15/06/2023 22:34:13] Get favorites failed
+[16/06/2023 09:14:35] Login failed
+[16/06/2023 09:15:23] Login failed
+[16/06/2023 11:24:28] Add favorites failed

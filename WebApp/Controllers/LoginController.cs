@@ -2,7 +2,7 @@
 using Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using WebApp.Models;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
@@ -12,9 +12,7 @@ namespace WebApp.Controllers
 
         public LoginController()
         {
-
             _accountContainer = new AccountContainer(new AccountDAL());
-
         }
 
         [HttpGet]

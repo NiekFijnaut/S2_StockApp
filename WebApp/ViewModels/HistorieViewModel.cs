@@ -1,18 +1,26 @@
-﻿using WebApp.Model;
-
-namespace WebApp.Models
+﻿namespace WebApp.ViewModels
 {
     public class HistorieViewModel
     {
-        public List<HistorieModel> HistorieModels { get; set; }
-        public HistorieSearchViewModel HistorieSearchViewModel { get; set; }
+        public long? HistorieID { get; set; }
+        public DateTime Date { get; }
+        public string Symbol { get; }
+        public double Open { get; }
+        public double High { get; }
+        public double Low { get; }
+        public double Close { get; }
+        public int Volume { get; }
 
-        public HistorieViewModel() { }
 
-        public HistorieViewModel(List<HistorieModel> historieModel, HistorieSearchViewModel historieSearch)
+        public HistorieViewModel(DateTime date, string symbol, double open, double high, double low, double close, int volume)
         {
-            
-            HistorieSearchViewModel = historieSearch;
+            Date = date;
+            Symbol = symbol;
+            Open = open;
+            High = high;
+            Low = low;
+            Close = close;
+            Volume = volume;
         }
     }
 }

@@ -1,8 +1,7 @@
 ﻿using Business;
 using Data;
 using Microsoft.AspNetCore.Mvc;
-using WebApp.Model;
-using WebApp.Models;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
@@ -26,13 +25,13 @@ namespace WebApp.Controllers
                 return RedirectToAction("Login", "Login"); 
             }
         }
-        public List<HistorieModel> ToModel(List<Historie> histories)
+        public List<HistorieViewModel> ToModel(List<Historie> histories)
         {
-            List<HistorieModel> historieModels = new List<HistorieModel>();
+            List<HistorieViewModel> historieModels = new List<HistorieViewModel>();
 
             foreach (var historie in histories)
             {
-                HistorieModel historieModel = new HistorieModel(
+                HistorieViewModel historieModel = new HistorieViewModel(
                     historie.Date,
                     historie.Symbol,
                     historie.Open,
@@ -56,9 +55,9 @@ namespace WebApp.Controllers
 
                 List<Historie> historieList = await _historieContainer.SearchHistorieStock(search);
 
-                List<HistorieModel> historieModels = ToModel(historieList);
+                List<HistorieViewModel> historieModels = ToModel(historieList);
 
-                HistorieViewModel historieViewModel = new HistorieViewModel(historieModels, historieSearchViewModel);
+                HistorieViewModelList historieViewModel = new HistorieViewModelList(historieModels, historieSearchViewModel);
 
                 return PartialView("_historiestockTable", historieViewModel);
             }

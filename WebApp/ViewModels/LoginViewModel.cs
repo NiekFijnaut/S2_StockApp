@@ -1,7 +1,7 @@
 ﻿using Microsoft.Build.Framework;
 using System.ComponentModel;
 
-namespace WebApp.Models
+namespace WebApp.ViewModels
 {
     public class LoginViewModel
     {
@@ -10,6 +10,7 @@ namespace WebApp.Models
 
         [Required]
         [DisplayName("Password")]
+        
         public string PasswordHash { get; set; }
 
         public LoginViewModel(string username, string passwordHash)

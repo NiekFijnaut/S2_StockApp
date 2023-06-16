@@ -1,4 +1,5 @@
-﻿@model APIResponseCallViewModel
+﻿@using WebApp.ViewModels;
+@model APIResponseCallViewModelList
 
 @{
     ViewData["Title"] = "StockIntel";
@@ -26,6 +27,17 @@
     <br />
     <input type="button" class="btn btn-primary" value="Search" id="Search"/>
 </form>
+
+@if (TempData["SearchStockError"] != null)
+{
+    <label class="Error">@TempData["SearchStockError"]</label>
+}
+
+@if (TempData["AddToAccountError"] != null)
+{
+    <label class="Error">@TempData["AddToAccountError"]</label>
+}
+
 <br />
 <div  id="stockIntelTableContainer">
     @*hier komt de table*@

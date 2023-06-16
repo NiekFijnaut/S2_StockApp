@@ -152,22 +152,8 @@ namespace Data
         {
             try
             {
-                //string SelectStockID = "SELECT Symbol From AccountStock WHERE AccountID = @AccountID AND StockID = @StockID";// TODO
-                //using (SqlCommand cmd2 = new(SelectStockID, Sqlcon))
-                //{
-                //    cmd2.Parameters.AddWithValue("@AccountID", favoriteDTO.AccountID);
-                //    cmd2.Parameters.AddWithValue("@Symbol", favoriteDTO.StockID);
-                //    Sqlcon.Open();
-                //    using SqlDataReader reader = cmd2.ExecuteReader(); 
-                //    while (reader.Read())
-                //    {
-                //        Symbol = reader.GetString(0);
-                //    }
-                //    Sqlcon.Close();
-                //}
 
-                string Favoritequery = "IF NOT EXISTS (SELECT 1 FROM Favorite WHERE StockID = @StockID AND AccountID = @AccountID) " +
-                    "BEGIN INSERT INTO Favorite (StockID, AccountID) VALUES (@StockID, @AccountID) END";
+                string Favoritequery = "INSERT INTO Favorite (StockID, AccountID) VALUES (@StockID, @AccountID)";
                 using (SqlCommand cmd3 = new(Favoritequery, Sqlcon))
                 {
                     cmd3.Parameters.AddWithValue("@StockID", favoriteDTO.StockID);

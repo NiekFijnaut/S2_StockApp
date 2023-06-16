@@ -1,6 +1,6 @@
 ﻿using Microsoft.Build.Framework;
 
-namespace WebApp.Models
+namespace WebApp.ViewModels
 {
     public class HistorieSearchViewModel
     {

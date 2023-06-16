@@ -1,19 +1,20 @@
-﻿using WebApp.Model;
-
-namespace WebApp.Models
+﻿namespace WebApp.ViewModels
 {
     public class FavoriteViewModel
     {
-        public List<FavoriteModel> FavoriteModels { get; }
+        public long StockID { get; set; }
+        public string Symbol { get; set; }
+        public int AccountID { get; set; }
 
         public FavoriteViewModel()
         {
 
         }
-
-        public FavoriteViewModel(List<FavoriteModel> favoriteModels)
+        public FavoriteViewModel(long stockID, string symbol, int accountID)
         {
-            FavoriteModels = favoriteModels;
+            StockID = stockID;
+            Symbol = symbol;
+            AccountID = accountID;
         }
     }
 }

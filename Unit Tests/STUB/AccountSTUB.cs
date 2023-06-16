@@ -20,7 +20,7 @@ namespace Unit_Tests.STUB
 
         public AccountDTO Login(string passwordhash, string username)
         {
-            if (username == "rik" && passwordhash == "87654321")
+            if (username == "jaap" && passwordhash == "87654321")
             {
                 return new AccountDTO(1, 
                     username, 
@@ -32,6 +32,6 @@ namespace Unit_Tests.STUB
             }
 
             return null;
-        }
+        }        
     }
 }

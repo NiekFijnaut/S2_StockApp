@@ -4,8 +4,7 @@ using Data.DAL;
 using Interface;
 using Interface.Interface;
 using Microsoft.AspNetCore.Mvc;
-using WebApp.Model;
-using WebApp.Models;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
@@ -18,13 +17,13 @@ namespace WebApp.Controllers
             _recommendationContainer = new RecommendationContainer(new RecommendationDAL());
         }
 
-        public List<RecommendationModel> ToModel(List<Recommendation> recommendations)
+        public List<RecommendationViewModel> ToModel(List<Recommendation> recommendations)
         {
-            List<RecommendationModel> recommendationModels = new List<RecommendationModel>();
+            List<RecommendationViewModel> recommendationModels = new List<RecommendationViewModel>();
 
             foreach (var recommendation in recommendations)
             {
-                RecommendationModel recommendationModel = new RecommendationModel(
+                RecommendationViewModel recommendationModel = new RecommendationViewModel(
                 recommendation.RecommendationID,
                 recommendation.Interest,
                 recommendation.Name);
@@ -42,9 +41,9 @@ namespace WebApp.Controllers
             accountViewModel.Interest = interest;
             List<Recommendation> recommendations = _recommendationContainer.GetRecommandation(interest);
 
-            List<RecommendationModel> recommendationModels = ToModel(recommendations);
+            List<RecommendationViewModel> recommendationModels = ToModel(recommendations);
 
-            RecommendationViewModel recommendationViewModel = new RecommendationViewModel(null, recommendationModels);
+            RecommendationViewModelList recommendationViewModel = new RecommendationViewModelList(null, recommendationModels);
 
             return PartialView("_Recommendation", recommendationViewModel);
             

@@ -1,17 +1,22 @@
-﻿
-using WebApp.Model;
-
-namespace WebApp.Models
+﻿namespace WebApp.ViewModels
 {
     public class AccountStockViewModel
     {
-        public List<AccountStockModel> AccountStockModels { get; set; }
+        public long StockID { get; set; }
+        public DateTime Date { get; set; }
+        public string Symbol { get; set; }
+        public int AccountID { get; set; }
 
-        public AccountStockViewModel() { }
-
-        public AccountStockViewModel(List<AccountStockModel> accountStockModels)
+        public AccountStockViewModel()
         {
-            AccountStockModels = accountStockModels;
+
+        }
+        public AccountStockViewModel(long stockID, DateTime date, string symbol, int accountID)
+        {
+            StockID = stockID;
+            Date = date;
+            Symbol = symbol;
+            AccountID = accountID;
         }
     }
 }

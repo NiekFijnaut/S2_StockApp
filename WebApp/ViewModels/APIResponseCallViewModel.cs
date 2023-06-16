@@ -1,21 +1,28 @@
-﻿using WebApp.Model;
-
-namespace WebApp.Models
+﻿namespace WebApp.ViewModels
 {
     public class APIResponseCallViewModel
     {
-        public List<APIResponseCallModel> APIResponseCallModels { get; set; }
-        public SearchViewModel SearchViewModel { get; set; }
+        public long? StockID { get; }
+        public DateTime Date { get; }
+        public string Symbol { get; }
+        public double Open { get; }
+        public double High { get; }
+        public double Low { get; }
+        public double Close { get; }
+        public int Volume { get; }
 
-        public APIResponseCallViewModel()
+
+
+        public APIResponseCallViewModel(long? stockID, DateTime date, string symbol, double open, double high, double low, double close, int volume)
         {
-
-        }
-
-        public APIResponseCallViewModel(List<APIResponseCallModel> aPIResponseCallModels, SearchViewModel searchViewModel)
-        {
-            APIResponseCallModels = aPIResponseCallModels;
-            SearchViewModel = searchViewModel;
+            StockID = stockID;
+            Date = date;
+            Symbol = symbol;
+            Open = open;
+            High = high;
+            Low = low;
+            Close = close;
+            Volume = volume;
         }
     }
 }

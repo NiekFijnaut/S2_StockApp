@@ -4,8 +4,7 @@ using Data;
 using Interface;
 using Interface.Interface;
 using Microsoft.AspNetCore.Mvc;
-using WebApp.Model;
-using WebApp.Models;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
@@ -31,13 +30,13 @@ namespace WebApp.Controllers
             }
         }
 
-        public List<AccountStockModel> ToModel(List<AccountStock> accountStocks)
+        public List<AccountStockViewModel> ToModel(List<AccountStock> accountStocks)
         {
-            List<AccountStockModel> accountStockModels = new List<AccountStockModel>();
+            List<AccountStockViewModel> accountStockModels = new List<AccountStockViewModel>();
 
             foreach (var accountStock in accountStocks)
             {
-                AccountStockModel accountStockModel = new AccountStockModel(
+                AccountStockViewModel accountStockModel = new AccountStockViewModel(
                     accountStock.StockID,
                     accountStock.Date,
                     accountStock.Symbol,
@@ -58,27 +57,30 @@ namespace WebApp.Controllers
 
             List<AccountStock> accountStocks = _alphaVantageContainer.GetAccountStockList(AccountID);
 
-            List<AccountStockModel> accountStockModels = ToModel(accountStocks);
+            List<AccountStockViewModel> accountStockModels = ToModel(accountStocks);
 
-            AccountStockViewModel accountStockViewModel = new AccountStockViewModel(accountStockModels);
+            AccountStockViewModelList accountStockViewModel = new AccountStockViewModelList(accountStockModels);
 
             return PartialView("StockAccountTable", accountStockViewModel);
         }
 
         [HttpPost]
-        public IActionResult DeleteStock(AccountStockModel accountStockModel)
+        public IActionResult DeleteStock(AccountStockViewModel accountStockModel)
         {
-            int AccountID = HttpContext.Session.GetInt32("AccountID") ?? 0;
+            if(ModelState.IsValid)
+            {
+                int AccountID = HttpContext.Session.GetInt32("AccountID") ?? 0;
 
-            AccountStock accountStock = new AccountStock(
-                accountStockModel.StockID,
-                accountStockModel.Date,
-                accountStockModel.Symbol,
-                AccountID);
+                AccountStock accountStock = new AccountStock(
+                    accountStockModel.StockID,
+                    accountStockModel.Date,
+                    accountStockModel.Symbol,
+                    AccountID);
 
-            _alphaVantageContainer.DeleteStock(accountStock);
+                _alphaVantageContainer.DeleteStock(accountStock);
+                
+            }
             return RedirectToAction("AccountStock", "AccountStock");
-            
         }  
     }
 }

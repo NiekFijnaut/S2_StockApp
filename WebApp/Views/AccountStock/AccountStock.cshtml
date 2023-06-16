@@ -1,4 +1,6 @@
-﻿@model AccountStockViewModel
+﻿@using WebApp.ViewModels;
+
+@model AccountStockViewModelList
 @{
     ViewData["Title"] = "AccountStock";
 }
@@ -8,6 +10,11 @@
 <div id="accountStockTableContainer">
     @*hier komt de table*@
 </div>
+
+@if (TempData["AddToFavoriteError"] != null)
+{
+    <label class="Error">@TempData["AddToFavoriteError"]</label>
+}
 
 @section Scripts{
     <script>
