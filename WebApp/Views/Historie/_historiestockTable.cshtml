@@ -1,0 +1,32 @@
+﻿@using WebApp.ViewModels;
+@model HistorieViewModelList
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<table class="custom-table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Open</th>
+            <th>High</th>
+            <th>Low</th>
+            <th>Close</th>
+            <th>Volume</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.HistorieModels)
+        {
+            <tr>
+                <td>@item.Date</td>
+                <td>@item.Open</td>
+                <td>@item.High</td>
+                <td>@item.Low</td>
+                <td>@item.Close</td>
+                <td>@item.Volume</td>
+            </tr>
+        }
+    </tbody>
+</table>

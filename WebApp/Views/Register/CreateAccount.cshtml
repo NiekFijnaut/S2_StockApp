@@ -1,0 +1,61 @@
+﻿@using WebApp.ViewModels;
+@model AccountViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<form id="CreateAccount" asp-action="AddAccount">
+    <div class="mb-3">
+        <label class="form-label" asp-for="Username"></label>
+        <input class="form-control" asp-for="Username" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="PasswordHash"></label>
+        <input type="password" class="form-control" asp-for="PasswordHash" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Email"></label>
+        <input class="form-control" asp-for="Email" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Interest"></label>
+        <select asp-for="Interest" class="form-control">
+            <option value="">--Select an Interest--</option>
+            <option value="Energy">Energy</option>
+            <option value="Materials">Materials</option>
+            <option value="Industrials">Industrials</option>
+            <option value="Consumer Discretionary">Consumer Discretionary</option>
+            <option value="Consumer Staples">Consumer Staples</option>
+            <option value="Health Care">Health Care</option>
+            <option value="Financials">Financials</option>
+            <option value="Information Technology">Information Technology</option>
+            <option value="Telecommunication Services">Telecommunication Services</option>
+            <option value="Utilities">Utilities</option>
+            <option value="Real Estate">Real Estate</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Region"></label>
+        <select asp-for="Region" class="form-control">
+            <option value="">--Select a Region--</option>
+            <option value="Americas (North America, South America, Central America, Caribbean)">Americas (North America, South America, Central America, Caribbean)</option>
+            <option value="Asia Pacific (Central & South Asia, Northeastern Asia, Southeastern Asia, Australia and Oceania)">Asia Pacific (Central & South Asia, Northeastern Asia, Southeastern Asia, Australia and Oceania)</option>
+            <option value="Europe (Northern Europe, Southern Europe, Eastern Europe, Western Europe)">Europe (Northern Europe, Southern Europe, Eastern Europe, Western Europe)</option>
+            <option value="Middle East/Africa (Middle East, Northern Africa, Southern Africa)">Middle East/Africa (Middle East, Northern Africa, Southern Africa)</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Age"></label>
+        <input type="date" class="form-control" asp-for="Age" />
+    </div>
+    <div>
+        <input type="submit" class="btn btn-primary" value="Create account" id="CreateAccount" />
+    </div>
+
+    @if (TempData["CreateAccountError"] != null)
+    {
+        <label class="Error">@TempData["CreateAccountError"]</label>
+    }
+</form>

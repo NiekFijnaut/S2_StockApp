@@ -1,0 +1,37 @@
+﻿@using WebApp.ViewModels;
+
+@model AccountStockViewModelList
+@{
+    ViewData["Title"] = "AccountStock";
+}
+
+<h1>AccountStock</h1>
+
+<div id="accountStockTableContainer">
+    @*hier komt de table*@
+</div>
+
+@if (TempData["AddToFavoriteError"] != null)
+{
+    <label class="Error">@TempData["AddToFavoriteError"]</label>
+}
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '/AccountStock/GetAccountStock',
+                type: 'GET',
+                success: function (response) {
+                    $("#accountStockTableContainer").html(response);
+                    console.log(response);
+                },
+                error: function (xhr, status, error) {
+                    alert("Oops, something went wrong");
+                    console.log(error);
+                }
+            });
+        });
+
+    </script>
+}

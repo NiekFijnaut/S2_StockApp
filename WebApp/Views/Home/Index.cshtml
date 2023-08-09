@@ -1,0 +1,113 @@
+﻿@using WebApp.ViewModels;
+@model AccountViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h1>Hello @Model.Username </h1>
+
+
+<div>
+    <input type="button" class="custom-buttonrec" value="Recommendations" id="GetRecommendationbtn" />
+</div>
+<br />
+<div id="Recommendation">
+    @*hier komt de table*@
+</div>
+<br />
+<div>
+    <input type="button" class="custom-buttonint" value="Stock Intel" id="StockIntelbtn" />
+</div>
+<br />
+<div>
+    <input type="button" class="custom-buttonacc" value="Account Stock" id="AccountStockbtn" />
+</div>
+<br />
+<div>
+    <input type="button" class="custom-buttonfav" value="Favorite" id="Favoritebtn" />
+</div>
+<br />
+<div>
+    <input type="button" class="custom-buttonhis" value="History" id="Historybtn" />
+</div>
+
+
+
+@section Scripts{
+<script>
+    $(document).ready(function () {
+        $("#GetRecommendationbtn").click(function () {
+            $.ajax({
+                url: '/Recommendation/GetRecommendation',
+                type: 'GET',
+                success: function (response) {
+                    $("#Recommendation").html(response);
+                    console.log(response);
+                },
+                error: function (xhr, status, error) {
+                    alert("Oops, something went wrong");
+                    console.log(error);
+                }
+            });
+        });
+        $("#StockIntelbtn").click(function () {
+            $.ajax({
+                    url: '/StockIntel/StockIntel',
+                type: 'GET',
+                success: function (response) {
+                    // Redirect to the new page
+                    window.location.href = '/StockIntel/StockIntel';
+                },
+                error: function (xhr, status, error) {
+                    alert("Oops, something went wrong");
+                    console.log(error);
+                }
+            });
+        });
+        $("#AccountStockbtn").click(function () {
+            $.ajax({
+                    url: '/AccountStock/AccountStock',
+                type: 'GET',
+                success: function (response) {
+                    // Redirect to the new page
+                    window.location.href = '/AccountStock/AccountStock';
+                },
+                error: function (xhr, status, error) {
+                    alert("Oops, something went wrong");
+                    console.log(error);
+                }
+            });
+        });
+        $("#Favoritebtn").click(function () {
+            $.ajax({
+                url: '/Favorite/Favorite',
+                type: 'GET',
+                success: function (response) {
+                    // Redirect to the new page
+                    window.location.href = '/Favorite/Favorite';
+                },
+                error: function (xhr, status, error) {
+                    alert("Oops, something went wrong");
+                    console.log(error);
+                }
+            });
+        });
+
+        $("#Historybtn").click(function () {
+            $.ajax({
+                url: '/Historie/Historie',
+                type: 'GET',
+               success: function (response) {
+                    // Redirect to the new page
+                        window.location.href = '/Historie/Historie';
+                },
+                error: function (xhr, status, error) {
+                    alert("Oops, something went wrong");
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>
+}

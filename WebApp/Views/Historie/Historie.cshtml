@@ -1,0 +1,96 @@
+﻿@using WebApp.ViewModels;
+@model HistorieViewModelList
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<h1>History</h1>
+
+<form id="historiesearchForm" asp-action="GetStockHistorie">
+    <div class="mb-3" id="searchSymbol">
+        <label class="form-label" asp-for="HistorieSearchViewModel.Symbol"></label>
+        <input class="form-control" asp-for="HistorieSearchViewModel.Symbol" />
+        <span asp-validation-for="HistorieSearchViewModel.Symbol" class="text-danger"></span>
+    </div>
+    <div class="form-group" id="searchInterval">
+        <label asp-for="HistorieSearchViewModel.Interval">Interval</label>
+        <select asp-for="HistorieSearchViewModel.Interval" class="form-control">
+            <option value="">--Select an interval--</option>
+            <option value="1min">1 min</option>
+            <option value="5min">5 min</option>
+            <option value="15min">15 min</option>
+            <option value="30min">30 min</option>
+            <option value="60min">60 min</option>
+        </select>
+    </div>
+    <div class="form-group" id="searchSlice">
+        <label asp-for="HistorieSearchViewModel.Slice">Slice</label>
+        <select asp-for="HistorieSearchViewModel.Slice" class="form-control">
+            <option value="">--Select a slice</option>
+            <option value="year1month1">year1 month1</option>
+            <option value="year1month2">year1 month2</option>
+            <option value="year1month3">year1 month3</option>
+            <option value="year1month4">year1 month4</option>
+            <option value="year1month5">year1 month5</option>
+            <option value="year1month6">year1 month6</option>
+            <option value="year1month7">year1 month7</option>
+            <option value="year1month8">year1 month8</option>
+            <option value="year1month9">year1 month9</option>
+            <option value="year1month10">year1 month10</option>
+            <option value="year1month11">year1 month11</option>
+            <option value="year1month12">year1 month12</option>
+            <option value="year2month1">year2 month1</option>
+            <option value="year2month2">year2 month2</option>
+            <option value="year2month3">year2 month3</option>
+            <option value="year2month4">year2 month4</option>
+            <option value="year2month5">year2 month5</option>
+            <option value="year2month6">year2 month6</option>
+            <option value="year2month7">year2 month7</option>
+            <option value="year2month8">year2 month8</option>
+            <option value="year2month9">year2 month9</option>
+            <option value="year2month10">year2 month10</option>
+            <option value="year2month11">year2 month11</option>
+            <option value="year2month12">year2 month12</option>
+        </select>
+    </div>
+    <br />
+    <input type="button" class="btn btn-primary" value="Search" id="Search" />
+
+</form>
+<br />
+<div id="historiestockTableContainer">
+    @*hier komt de table*@
+</div>
+@section Scripts
+    {
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $("#Search").click(function (event) {
+                event.preventDefault();
+
+                $("#historiesearchForm").submit(function (event) {
+                    event.preventDefault();
+
+                    $.ajax({
+                        url: '/Historie/GetStockHistorie',
+                        type: 'POST',
+                        data: $(this).serialize(),
+                        success: function (response) {
+                            $("#historiestockTableContainer").html(response);
+                        },
+                        error: function (xhr, status, error) {
+                            alert("Oops something went wrong");
+                            console.log(error);
+                        }
+                    });
+                });
+
+                $("#historiesearchForm").submit();
+            });
+        });
+    </script>
+}
